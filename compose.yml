@@ -9,8 +9,8 @@ services:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=ugzQyMRkAOcqeWYWCOIeeDvCRzyYwwda
       - POSTGRES_DB=exchbook_db
-      #volumes:
-      #- postgres_data:/var/lib/postgresql/data
+    volumes:
+      - ./src/main/resources/init-db.sql:/docker-entrypoint-initdb.d/intit-db.sql
     ports:
       - "5432:5432"
     healthcheck:
