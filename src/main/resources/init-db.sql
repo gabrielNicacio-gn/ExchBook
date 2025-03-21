@@ -29,7 +29,12 @@ CREATE TABLE book_author(
     id_author INTEGER NOT NULL,
     FOREIGN KEY (id_book) REFERENCES book(id_book),
     FOREIGN KEY (id_author) REFERENCES author(id_author)
+    id_book INT PRIMARY KEY,
+    title VARCHAR(100) NOT NULL,
+    author VARCHAR(100) NOT NULL
 );
+
+CREATE INDEX ON book(title);
 
 CREATE TABLE book_copy(
     id_book_copy SERIAL PRIMARY KEY,
