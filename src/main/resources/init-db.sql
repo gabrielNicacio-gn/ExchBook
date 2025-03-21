@@ -30,11 +30,21 @@ CREATE TABLE book_author(
     FOREIGN KEY (id_book) REFERENCES book(id_book),
     FOREIGN KEY (id_author) REFERENCES author(id_author)
     id_book INT PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
-    author VARCHAR(100) NOT NULL
+    title VARCHAR(100) NOT NULL
+);
+CREATE INDEX ON book(title);
+
+CREATE TABLE author(
+    id_author INT PRIMARY KEY,
+    name VARCHAR(100)
 );
 
-CREATE INDEX ON book(title);
+CREATE TABLE book_author(
+    id_book INT NOT NULL,
+    id_author INT NOT NULL,
+    FOREIGN KEY (id_book) REFERENCES book(id_book),
+    FOREIGN KEY (id_author) REFERENCES author(id_author)
+);
 
 CREATE TABLE book_copy(
     id_book_copy SERIAL PRIMARY KEY,
