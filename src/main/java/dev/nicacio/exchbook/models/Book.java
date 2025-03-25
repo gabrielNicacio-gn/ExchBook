@@ -1,4 +1,4 @@
-package dev.nicacio.Exchbook.models;
+package dev.nicacio.exchbook.models;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
