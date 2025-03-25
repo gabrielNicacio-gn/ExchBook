@@ -1,11 +1,9 @@
-package dev.nicacio.Exchbook.models;
+package dev.nicacio.exchbook.models;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 @Setter
 @Getter
