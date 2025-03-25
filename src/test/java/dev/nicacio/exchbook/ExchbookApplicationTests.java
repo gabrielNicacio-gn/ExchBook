@@ -1,4 +1,4 @@
-package dev.nicacio.Exchbook;
+package dev.nicacio.exchbook;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

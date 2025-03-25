@@ -1,6 +1,6 @@
-package dev.nicacio.Exchbook.models;
+package dev.nicacio.exchbook.models;
 
-import dev.nicacio.Exchbook.enums.Condition;
+import dev.nicacio.exchbook.enums.Condition;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
