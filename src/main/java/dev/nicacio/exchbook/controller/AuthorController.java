@@ -17,18 +17,18 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("v1/")
+@RequestMapping("/v1")
 @RequiredArgsConstructor
 public class AuthorController {
 
     private final AuthorService authorService;
-    @PostMapping("/book")
+    @PostMapping("/author")
     public ResponseEntity<CreateAuthorResponseDto> addAuthor(@RequestBody CreateAuthorRequestDto create){
         HttpHeaders headers = new HttpHeaders();
         var response = authorService.registerAuthor(create);
         headers.setLocation(UriComponentsBuilder
                 .newInstance()
-                .path("v1/copy/{id}")
+                .path("v1/author/{id}")
                 .buildAndExpand(response.IdAuthor())
                 .toUri());
         return new ResponseEntity<>(response,headers, HttpStatus.CREATED);
