@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("v1/")
+@RequestMapping("/v1")
 @RequiredArgsConstructor
 public class BookCopyController {
     private final BookCopyService bookCopyServices;
