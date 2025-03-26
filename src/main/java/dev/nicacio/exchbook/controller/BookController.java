@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("v1/")
+@RequestMapping("/v1")
 @RequiredArgsConstructor
 public class BookController {
 
@@ -26,7 +26,7 @@ public class BookController {
         var response = bookService.registerBook(create);
         headers.setLocation(UriComponentsBuilder
                 .newInstance()
-                .path("v1/copy/{id}")
+                .path("v1/book/{id}")
                 .buildAndExpand(response.idBook())
                 .toUri());
         return new ResponseEntity<>(response,headers,HttpStatus.CREATED);
