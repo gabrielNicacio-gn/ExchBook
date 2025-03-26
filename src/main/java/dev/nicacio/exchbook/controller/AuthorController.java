@@ -1,8 +1,10 @@
 package dev.nicacio.exchbook.controller;
 
+import dev.nicacio.exchbook.dtos.request.CreateAuthorRequestDto;
 import dev.nicacio.exchbook.dtos.request.CreateBookRequestDto;
+import dev.nicacio.exchbook.dtos.response.CreateAuthorResponseDto;
 import dev.nicacio.exchbook.dtos.response.CreateBookResponseDto;
-import dev.nicacio.exchbook.models.Book;
+import dev.nicacio.exchbook.services.AuthorService;
 import dev.nicacio.exchbook.services.BookService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -15,20 +17,20 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("/v1")
+@RequestMapping("v1/")
 @RequiredArgsConstructor
-public class BookController {
+public class AuthorController {
 
-    private final BookService bookService;
+    private final AuthorService authorService;
     @PostMapping("/book")
-    public ResponseEntity<CreateBookResponseDto> addBook(@RequestBody CreateBookRequestDto create){
+    public ResponseEntity<CreateAuthorResponseDto> addAuthor(@RequestBody CreateAuthorRequestDto create){
         HttpHeaders headers = new HttpHeaders();
-        var response = bookService.registerBook(create);
+        var response = authorService.registerAuthor(create);
         headers.setLocation(UriComponentsBuilder
                 .newInstance()
-                .path("v1/book/{id}")
-                .buildAndExpand(response.idBook())
+                .path("v1/copy/{id}")
+                .buildAndExpand(response.IdAuthor())
                 .toUri());
-        return new ResponseEntity<>(response,headers,HttpStatus.CREATED);
+        return new ResponseEntity<>(response,headers, HttpStatus.CREATED);
     }
 }
