@@ -44,8 +44,8 @@ public class Book {
         editions.add(edition);
         edition.setBook(this);
     }
-    public void addAuthors(Author author){
-        authors.add(author);
+    public void addAuthors(List<Author> authors){
+        this.authors.addAll(authors);
     }
     public void addCopies(CopyBook copyBook){
         copies.add(copyBook);

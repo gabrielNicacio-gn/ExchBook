@@ -14,7 +14,7 @@ public class BookCopyService {
 
     private final BookRepository bookRepository;
     private final CopyBookRepository copyBookRepository;
-    public CreateBookCopyResponseDto RegisterBookCopy(CreateBookCopyRequestDto createBook){
+    public CreateBookCopyResponseDto registerBookCopy(CreateBookCopyRequestDto createBook){
 
         var book = bookRepository.findAll().get(createBook.IdBook());
 
