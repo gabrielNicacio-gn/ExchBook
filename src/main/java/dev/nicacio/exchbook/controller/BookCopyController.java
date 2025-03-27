@@ -20,11 +20,16 @@ public class BookCopyController {
     @PostMapping("/copy")
     public ResponseEntity<CreateBookCopyResponseDto> addBookCopy(CreateBookCopyRequestDto request){
         HttpHeaders headers = new HttpHeaders();
-        var response = bookCopyServices.registerBookCopy(request);
+        CreateBookCopyResponseDto response = bookCopyServices.registerBookCopy(request);
+      
+        if(!response.getErrors().isEmpty()){
+            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
+        }
+       
         headers.setLocation(UriComponentsBuilder
                 .newInstance()
                 .path("v1/copy/{id}")
-                .buildAndExpand(response.IdCopy())
+                .buildAndExpand(response.getIdCopy())
                 .toUri());
         return new ResponseEntity<>(response,headers,HttpStatus.CREATED);
     }
