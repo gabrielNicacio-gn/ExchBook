@@ -16,7 +16,6 @@ public class Book {
 
     @Id @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id_book")
-    @Setter(AccessLevel.NONE)
     private int idBook;
 
     @Column(name = "title")
@@ -38,7 +37,7 @@ public class Book {
     List<EditionBook> editions = new ArrayList<>();
 
     @OneToMany(mappedBy = "book")
-    private List<CopyBook> copies = new ArrayList<>();
+    private List<BookCopy> copies = new ArrayList<>();
 
     public void addEditions(EditionBook edition){
         editions.add(edition);
@@ -47,7 +46,7 @@ public class Book {
     public void addAuthors(Author author){
         authors.add(author);
     }
-    public void addCopies(CopyBook copyBook){
+    public void addCopies(BookCopy copyBook){
         copies.add(copyBook);
         copyBook.setBook(this);
     }
