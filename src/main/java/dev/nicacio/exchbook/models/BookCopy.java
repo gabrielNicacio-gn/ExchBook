@@ -10,11 +10,10 @@ import lombok.Setter;
 @Getter
 @Entity
 @Table(name = "copy_book")
-public class CopyBook {
+public class BookCopy {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_copy_bok")
-    @Setter(AccessLevel.NONE)
     private int idCopy;
 
     @Column(name = "condition")
