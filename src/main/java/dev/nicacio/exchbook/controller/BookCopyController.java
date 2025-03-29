@@ -4,6 +4,7 @@ import dev.nicacio.exchbook.dtos.request.CreateBookCopyRequestDto;
 import dev.nicacio.exchbook.dtos.response.CreateBookCopyResponseDto;
 import dev.nicacio.exchbook.services.BookCopyService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,15 +22,10 @@ public class BookCopyController {
     public ResponseEntity<CreateBookCopyResponseDto> addBookCopy(CreateBookCopyRequestDto request){
         HttpHeaders headers = new HttpHeaders();
         CreateBookCopyResponseDto response = bookCopyServices.registerBookCopy(request);
-      
-        if(!response.getErrors().isEmpty()){
-            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
-        }
-       
         headers.setLocation(UriComponentsBuilder
                 .newInstance()
                 .path("v1/copy/{id}")
-                .buildAndExpand(response.getIdCopy())
+                .buildAndExpand(response.idCopy())
                 .toUri());
         return new ResponseEntity<>(response,headers,HttpStatus.CREATED);
     }
