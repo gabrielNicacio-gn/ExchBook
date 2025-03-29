@@ -9,6 +9,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -19,18 +20,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class BookCopyController {
     private final BookCopyService bookCopyServices;
     @PostMapping("/copy")
-    public ResponseEntity<CreateBookCopyResponseDto> addBookCopy(CreateBookCopyRequestDto request){
+    public ResponseEntity<CreateBookCopyResponseDto> addBookCopy(@RequestBody CreateBookCopyRequestDto request){
         HttpHeaders headers = new HttpHeaders();
         CreateBookCopyResponseDto response = bookCopyServices.registerBookCopy(request);
 
-        if(!response.getErrors().isEmpty()){
-            return new ResponseEntity<>(response,HttpStatus.BAD_REQUEST);
-        }
-
         headers.setLocation(UriComponentsBuilder
                 .newInstance()
-                .path("v1/copy/{id}")
-                .buildAndExpand(response.getIdCopy())
+                .path("/v1/copy/{id}")
+                .buildAndExpand(response.idCopy())
                 .toUri());
         return new ResponseEntity<>(response,headers,HttpStatus.CREATED);
     }
