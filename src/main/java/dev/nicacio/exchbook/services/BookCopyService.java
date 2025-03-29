@@ -20,12 +20,10 @@ public class BookCopyService {
     private final CopyBookRepository copyBookRepository;
     public CreateBookCopyResponseDto registerBookCopy(CreateBookCopyRequestDto createBook){
 
-        CreateBookCopyResponseDto response = new CreateBookCopyResponseDto();
-        Optional<Book> bookOptional = bookRepository.findById(createBook.IdBook());
+        Optional<Book> bookOptional = bookRepository.findById(createBook.idBook());
 
         if(bookOptional.isEmpty()){
-            response.addErros("Book not found, it is not possible create a copy");
-            return response;
+            throw new IllegalArgumentException("Book not found, cannot create a copy");
         }
 
         Book book = bookOptional.get();
@@ -33,10 +31,6 @@ public class BookCopyService {
         newCopy.setBook(book);
         newCopy.setCondition(createBook.condition());
         copyBookRepository.save(newCopy);
-
-        response.setIdCopy(newCopy.getIdCopy());
-        response.setCondition(newCopy.getCondition());
-        response.setTitle(book.getTitle());
-        return response;
+        return new CreateBookCopyResponseDto(newCopy.getIdCopy(),newCopy.getCondition(),book.getTitle());
     }
 }

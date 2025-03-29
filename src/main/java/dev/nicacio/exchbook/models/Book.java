@@ -21,10 +21,6 @@ public class Book {
     @Column(name = "title")
     private String title;
 
-    private String author;
-
-    private String edition;
-
     @ManyToMany
     @JoinTable(
             name = "book_author",
