@@ -14,7 +14,7 @@ import java.util.List;
 @Table(name = "author")
 public class Author {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_author")
     @Setter(AccessLevel.NONE)
     private int idAuthor;

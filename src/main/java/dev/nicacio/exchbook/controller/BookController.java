@@ -23,10 +23,10 @@ public class BookController {
     @PostMapping("/book")
     public ResponseEntity<CreateBookResponseDto> addBook(@RequestBody CreateBookRequestDto create){
         HttpHeaders headers = new HttpHeaders();
-        var response = bookService.registerBook(create);
+        CreateBookResponseDto response = bookService.registerBook(create);
         headers.setLocation(UriComponentsBuilder
                 .newInstance()
-                .path("v1/book/{id}")
+                .path("/v1/book/{id}")
                 .buildAndExpand(response.idBook())
                 .toUri());
         return new ResponseEntity<>(response,headers,HttpStatus.CREATED);
