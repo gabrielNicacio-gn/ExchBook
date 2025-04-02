@@ -15,6 +15,7 @@ public class AuthorService {
     public CreateAuthorResponseDto registerAuthor(CreateAuthorRequestDto createAuthor){
         Author author = new Author();
         author.setName(createAuthor.name());
-        return new CreateAuthorResponseDto(author.getIdAuthor(),author.getName());
+        Author savedAuthor = authorRepository.save(author);
+        return new CreateAuthorResponseDto(savedAuthor.getIdAuthor(),savedAuthor.getName());
     }
 }
