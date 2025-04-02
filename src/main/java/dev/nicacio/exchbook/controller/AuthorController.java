@@ -25,10 +25,10 @@ public class AuthorController {
     @PostMapping("/author")
     public ResponseEntity<CreateAuthorResponseDto> addAuthor(@RequestBody CreateAuthorRequestDto create){
         HttpHeaders headers = new HttpHeaders();
-        var response = authorService.registerAuthor(create);
+        CreateAuthorResponseDto response = authorService.registerAuthor(create);
         headers.setLocation(UriComponentsBuilder
                 .newInstance()
-                .path("v1/author/{id}")
+                .path("/v1/author/{id}")
                 .buildAndExpand(response.IdAuthor())
                 .toUri());
         return new ResponseEntity<>(response,headers, HttpStatus.CREATED);
