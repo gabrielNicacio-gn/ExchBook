@@ -11,7 +11,10 @@ import dev.nicacio.exchbook.repository.EditionBookRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -21,17 +24,23 @@ public class BookService {
     private final EditionBookRepository editionBookRepository;
     private final AuthorRepository authorRepository;
 
-    public CreateBookResponseDto registerBook(CreateBookRequestDto createBookDto){
-        List<Author> authors = authorRepository.findAllById(createBookDto.authorIds());
+        public CreateBookResponseDto registerBook(CreateBookRequestDto createBookDto){
+            List<Integer> authorIds = createBookDto.authorIds()
+                    != null ? createBookDto.authorIds(): Collections.emptyList();
 
-        if(authors.isEmpty()){
-            throw new IllegalArgumentException("No Author found, can't create a book");
+            List<Author> authors = authorRepository.findAllById(authorIds);
+
+            if(authors.isEmpty()){
+                throw new IllegalArgumentException("No Author found, can't create a book");
+            }
+
+            Book book = new Book();
+            book.setTitle(createBookDto.title());
+            book.addAuthors(authors);
+            Book savedBook = bookRepository.save(book);
+
+            List<String> names = authors.stream().map(Author::getName).collect(Collectors.toList());
+
+            return new CreateBookResponseDto(savedBook.getIdBook(),savedBook.getTitle(),names);
         }
-
-        Book book = new Book();
-        book.setTitle(createBookDto.title());
-        book.addAuthors(authors);
-
-        return new CreateBookResponseDto(book.getIdBook(),book.getTitle());
     }
-}
