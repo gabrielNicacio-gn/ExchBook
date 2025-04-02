@@ -34,10 +34,10 @@ CREATE TABLE book_author(
 CREATE TABLE book_copy(
     id_book_copy SERIAL PRIMARY KEY,
     id_book INTEGER NOT NULL,
-    id_user_owner INTEGER NOT NULL,
+    --id_user_owner INTEGER NOT NULL,
     condition VARCHAR(30),
-    FOREIGN KEY (id_book) REFERENCES book(id_book),
-    FOREIGN KEY (id_user_owner) REFERENCES user_owner(id_user)
+    FOREIGN KEY (id_book) REFERENCES book(id_book)
+    --FOREIGN KEY (id_user_owner) REFERENCES user_owner(id_user)
 );
 
 CREATE TABLE book_review(
