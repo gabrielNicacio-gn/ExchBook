@@ -13,7 +13,7 @@ public class AuthorService {
     private final AuthorRepository authorRepository;
 
     public CreateAuthorResponseDto registerAuthor(CreateAuthorRequestDto createAuthor){
-        var author = new Author();
+        Author author = new Author();
         author.setName(createAuthor.name());
         return new CreateAuthorResponseDto(author.getIdAuthor(),author.getName());
     }
