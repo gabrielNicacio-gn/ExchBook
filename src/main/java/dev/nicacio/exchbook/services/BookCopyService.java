@@ -30,7 +30,7 @@ public class BookCopyService {
         BookCopy newCopy = new BookCopy();
         newCopy.setBook(book);
         newCopy.setCondition(createBook.condition());
-        copyBookRepository.save(newCopy);
-        return new CreateBookCopyResponseDto(newCopy.getIdCopy(),newCopy.getCondition(),book.getTitle());
+        BookCopy savedCopy = copyBookRepository.save(newCopy);
+        return new CreateBookCopyResponseDto(savedCopy.getIdCopy(),savedCopy.getCondition(),book.getTitle());
     }
 }

@@ -9,11 +9,11 @@ import lombok.Setter;
 @Setter
 @Getter
 @Entity
-@Table(name = "copy_book")
+@Table(name = "book_copy")
 public class BookCopy {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id_copy_bok")
+    @Column(name = "id_book_copy")
     private int idCopy;
 
     @Column(name = "condition")
