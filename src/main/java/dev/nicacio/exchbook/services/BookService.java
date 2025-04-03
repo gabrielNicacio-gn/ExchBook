@@ -4,14 +4,12 @@ import dev.nicacio.exchbook.dtos.request.CreateBookRequestDto;
 import dev.nicacio.exchbook.dtos.response.CreateBookResponseDto;
 import dev.nicacio.exchbook.models.Author;
 import dev.nicacio.exchbook.models.Book;
-import dev.nicacio.exchbook.models.EditionBook;
 import dev.nicacio.exchbook.repository.AuthorRepository;
 import dev.nicacio.exchbook.repository.BookRepository;
-import dev.nicacio.exchbook.repository.EditionBookRepository;
+import dev.nicacio.exchbook.repository.BookEditionRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +19,6 @@ import java.util.stream.Collectors;
 public class BookService {
 
     private final BookRepository bookRepository;
-    private final EditionBookRepository editionBookRepository;
     private final AuthorRepository authorRepository;
 
         public CreateBookResponseDto registerBook(CreateBookRequestDto createBookDto){

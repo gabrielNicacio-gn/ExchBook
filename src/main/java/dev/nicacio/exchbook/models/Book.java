@@ -1,7 +1,6 @@
 package dev.nicacio.exchbook.models;
 
 import jakarta.persistence.*;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -30,15 +29,11 @@ public class Book {
     private List<Author> authors = new ArrayList<>();
 
     @OneToMany(mappedBy = "book")
-    List<EditionBook> editions = new ArrayList<>();
+    private List<BookEdition> editions = new ArrayList<>();
 
     @OneToMany(mappedBy = "book")
     private List<BookCopy> copies = new ArrayList<>();
 
-    public void addEditions(EditionBook edition){
-        editions.add(edition);
-        edition.setBook(this);
-    }
     public void addAuthors(List<Author> authors){
         this.authors.addAll(authors);
     }
