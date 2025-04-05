@@ -34,6 +34,9 @@ public class Book {
     @OneToMany(mappedBy = "book")
     private List<BookCopy> copies = new ArrayList<>();
 
+    @OneToMany(mappedBy = "bookDesired")
+    private List<ExchangeOffer> offers = new ArrayList<>();
+
     public void addAuthors(List<Author> authors){
         this.authors.addAll(authors);
     }

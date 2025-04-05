@@ -5,9 +5,8 @@ import dev.nicacio.exchbook.dtos.response.CreateBookCopyResponseDto;
 import dev.nicacio.exchbook.models.Book;
 import dev.nicacio.exchbook.models.BookCopy;
 import dev.nicacio.exchbook.repository.BookRepository;
-import dev.nicacio.exchbook.repository.CopyBookRepository;
+import dev.nicacio.exchbook.repository.BookCopyRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.ObjectNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,7 +16,7 @@ import java.util.Optional;
 public class BookCopyService {
 
     private final BookRepository bookRepository;
-    private final CopyBookRepository copyBookRepository;
+    private final BookCopyRepository copyBookRepository;
     public CreateBookCopyResponseDto registerBookCopy(CreateBookCopyRequestDto createBook){
 
         Optional<Book> bookOptional = bookRepository.findById(createBook.idBook());

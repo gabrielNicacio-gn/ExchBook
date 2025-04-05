@@ -6,6 +6,9 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Setter
 @Getter
 @Entity
@@ -22,6 +25,9 @@ public class BookCopy {
     @ManyToOne()
     @JoinColumn(name = "id_book")
     private Book book;
+
+    @OneToMany(mappedBy = "copyOffered")
+    private List<ExchangeOffer> offers = new ArrayList<>();
 
     //@ManyToOne
     //@JoinColumn(name = "id_user_owner")
