@@ -23,9 +23,6 @@ public class Author {
     private String name;
 
     @ManyToMany(mappedBy = "authors")
+    @Setter(AccessLevel.NONE)
     private List<Book> books = new ArrayList<>();
-
-    public void addBooks(Book book){
-        books.add(book);
-    }
 }
