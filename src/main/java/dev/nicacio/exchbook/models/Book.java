@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.models;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,6 +16,7 @@ public class Book {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_book")
+    @Setter(AccessLevel.NONE)
     private int idBook;
 
     @Column(name = "title")
@@ -29,12 +31,15 @@ public class Book {
     private List<Author> authors = new ArrayList<>();
 
     @OneToMany(mappedBy = "book")
+    @Setter(AccessLevel.NONE)
     private List<BookEdition> editions = new ArrayList<>();
 
     @OneToMany(mappedBy = "book")
+    @Setter(AccessLevel.NONE)
     private List<BookCopy> copies = new ArrayList<>();
 
     @OneToMany(mappedBy = "bookDesired")
+    @Setter(AccessLevel.NONE)
     private List<ExchangeOffer> offers = new ArrayList<>();
 
     public void addAuthors(List<Author> authors){
