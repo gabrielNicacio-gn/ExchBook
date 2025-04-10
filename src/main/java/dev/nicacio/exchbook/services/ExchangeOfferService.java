@@ -3,6 +3,7 @@ package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateExchangeOfferDto;
 import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
+import dev.nicacio.exchbook.mapper.ExchangeOfferMapper;
 import dev.nicacio.exchbook.models.Book;
 import dev.nicacio.exchbook.models.BookCopy;
 import dev.nicacio.exchbook.models.ExchangeOffer;
@@ -20,25 +21,11 @@ public class ExchangeOfferService {
     private final ExchangeOfferRepository exchangeOfferRepository;
     private final BookRepository bookRepository;
     private final BookCopyRepository bookCopyRepository;
+    private final ExchangeOfferMapper exchangeOfferMapper;
 
-    public ExchangeOfferDto registerExchangeOffer(CreateExchangeOfferDto createExchangeOfferDto){
-        Optional<BookCopy> bookCopyOptional = bookCopyRepository.findById(createExchangeOfferDto.idCopyOffered());
-        Optional<Book> bookOptional = bookRepository.findById(createExchangeOfferDto.idBookDesired());
-
-        if(bookOptional.isEmpty() || bookCopyOptional.isEmpty()){
-            throw new IllegalArgumentException("Book or Copy not found, can't create a exchange offer");
-        }
-        Book book = bookOptional.get();
-        BookCopy copy = bookCopyOptional.get();
-
-        ExchangeOffer offer = new ExchangeOffer();
-        offer.setCopyOffered(copy);
-        offer.setBookDesired(book);
+    public int registerExchangeOffer(CreateExchangeOfferDto createExchangeOffer){
+        ExchangeOffer offer = exchangeOfferMapper.toExchangeOffer(createExchangeOffer,bookRepository,bookCopyRepository);
         ExchangeOffer savedOffer = exchangeOfferRepository.save(offer);
-        return new ExchangeOfferDto(savedOffer.getIdExchangeOffer(),
-                savedOffer.getCopyOffered().getBook().getTitle()
-                ,savedOffer.getBookDesired().getTitle(),
-               savedOffer.getDateOfOffer(),
-                savedOffer.getStatusExchange());
+        return savedOffer.getIdExchangeOffer();
     }
 }
