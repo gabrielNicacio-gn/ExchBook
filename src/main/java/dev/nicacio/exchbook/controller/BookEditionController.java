@@ -1,7 +1,7 @@
 package dev.nicacio.exchbook.controller;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookEditionRequestDto;
-import dev.nicacio.exchbook.dtos.response.CreateBookEditionResponseDto;
+import dev.nicacio.exchbook.dtos.response.BookEditionDto;
 import dev.nicacio.exchbook.services.BookEditionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
@@ -16,16 +16,15 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class BookEditionController {
     private final BookEditionService bookEditionService;
     @PostMapping("/edition")
-    public ResponseEntity<CreateBookEditionResponseDto> addBookEdition(@RequestBody CreateBookEditionRequestDto createEdition){
+    public ResponseEntity addBookEdition(@RequestBody CreateBookEditionRequestDto createEdition){
         HttpHeaders headers = new HttpHeaders();
-
-        CreateBookEditionResponseDto response = bookEditionService.registerEdition(createEdition);
+        int response = bookEditionService.registerEdition(createEdition);
 
         headers.setLocation(UriComponentsBuilder
                 .newInstance()
                 .path("/v1/edition/{id}")
-                .buildAndExpand(response.idEdition())
+                .buildAndExpand(response)
                 .toUri());
-        return new ResponseEntity<>(response,headers, HttpStatus.CREATED);
+        return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
 }
