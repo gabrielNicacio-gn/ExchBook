@@ -16,6 +16,7 @@ import java.util.List;
 public interface BookMapper {
     @Mapping(target = "authors", source = "authorIds")
     Book toBook (CreateBookRequestDto createBook, @Context AuthorRepository authorRepository);
+
     default List<Author> mapAuthorsIdsToAuthors(List<Integer> authorIds, @Context AuthorRepository authorRepository){
       List<Author> authors =authorIds != null ? authorRepository.findAllById(authorIds): Collections.emptyList();
       if(authors.isEmpty()){

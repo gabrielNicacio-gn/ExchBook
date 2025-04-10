@@ -1,7 +1,8 @@
 package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookCopyRequestDto;
-import dev.nicacio.exchbook.dtos.response.CreateBookCopyResponseDto;
+import dev.nicacio.exchbook.dtos.response.BookCopyDto;
+import dev.nicacio.exchbook.mapper.BookCopyMapper;
 import dev.nicacio.exchbook.models.Book;
 import dev.nicacio.exchbook.models.BookCopy;
 import dev.nicacio.exchbook.repository.BookRepository;
@@ -17,19 +18,11 @@ public class BookCopyService {
 
     private final BookRepository bookRepository;
     private final BookCopyRepository copyBookRepository;
-    public CreateBookCopyResponseDto registerBookCopy(CreateBookCopyRequestDto createBook){
+    private final BookCopyMapper bookCopyMapper;
 
-        Optional<Book> bookOptional = bookRepository.findById(createBook.idBook());
-
-        if(bookOptional.isEmpty()){
-            throw new IllegalArgumentException("Book not found, cannot create a copy");
-        }
-
-        Book book = bookOptional.get();
-        BookCopy newCopy = new BookCopy();
-        newCopy.setBook(book);
-        newCopy.setCondition(createBook.condition());
+    public int registerBookCopy(CreateBookCopyRequestDto createBook) {
+        BookCopy newCopy = bookCopyMapper.toBookCopy(createBook, bookRepository);
         BookCopy savedCopy = copyBookRepository.save(newCopy);
-        return new CreateBookCopyResponseDto(savedCopy.getIdCopy(),savedCopy.getCondition(),book.getTitle());
+        return savedCopy.getIdCopy();
     }
 }
