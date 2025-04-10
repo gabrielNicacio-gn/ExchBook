@@ -17,6 +17,7 @@ public class BookCopy {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_book_copy")
+    @Setter(AccessLevel.NONE)
     private int idCopy;
 
     @Column(name = "condition")
@@ -27,6 +28,7 @@ public class BookCopy {
     private Book book;
 
     @OneToMany(mappedBy = "copyOffered")
+    @Setter(AccessLevel.NONE)
     private List<ExchangeOffer> offers = new ArrayList<>();
 
     //@ManyToOne
