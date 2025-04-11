@@ -1,6 +1,6 @@
 package dev.nicacio.exchbook.mapper;
 
-import dev.nicacio.exchbook.dtos.request.CreateExchangeOfferDto;
+import dev.nicacio.exchbook.dtos.request.CreateExchangeOfferRequestDto;
 import dev.nicacio.exchbook.models.Book;
 import dev.nicacio.exchbook.models.BookCopy;
 import dev.nicacio.exchbook.models.ExchangeOffer;
@@ -15,7 +15,7 @@ public interface ExchangeOfferMapper {
 
     @Mapping(target = "bookDesired", source = "idBookDesired")
     @Mapping(target = "copyOffered", source = "idCopyOffered")
-    ExchangeOffer toExchangeOffer(CreateExchangeOfferDto createExchangeOffer, @Context BookRepository bookRepository
+    ExchangeOffer toExchangeOffer(CreateExchangeOfferRequestDto createExchangeOffer, @Context BookRepository bookRepository
             , @Context BookCopyRepository bookCopyRepository);
 
     default Book mapIdBookToBook(int idBook,@Context BookRepository bookRepository){

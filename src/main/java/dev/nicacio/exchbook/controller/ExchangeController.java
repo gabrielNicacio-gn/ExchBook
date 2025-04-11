@@ -1,8 +1,7 @@
 package dev.nicacio.exchbook.controller;
 
-import dev.nicacio.exchbook.dtos.request.CreateExchangeOfferRequestDto;
-import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
-import dev.nicacio.exchbook.services.ExchangeOfferService;
+import dev.nicacio.exchbook.dtos.request.CreateExchangeRequestDto;
+import dev.nicacio.exchbook.services.ExchangeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -14,21 +13,20 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.util.UriComponentsBuilder;
 
 @RestController
-@RequestMapping("/v1")
 @RequiredArgsConstructor
-public class ExchangeOfferController {
-    private final ExchangeOfferService exchangeOfferService;
-
-    @PostMapping("/offer")
-    public ResponseEntity<ExchangeOfferDto> addExchangeOffer(@RequestBody CreateExchangeOfferRequestDto create){
+@RequestMapping("/v1")
+public class ExchangeController {
+    private final ExchangeService exchangeService;
+    @PostMapping("/exchange")
+    public ResponseEntity addExchange(@RequestBody CreateExchangeRequestDto create){
         HttpHeaders headers = new HttpHeaders();
-        int response = exchangeOfferService.registerExchangeOffer(create);
-
+        int response = exchangeService.registerExchange(create);
         headers.setLocation(UriComponentsBuilder
                 .newInstance()
-                .path("/v1/offer/{id}")
+                .path("/v1/exchange/{id}")
                 .buildAndExpand(response)
                 .toUri());
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+        return new ResponseEntity(headers,HttpStatus.CREATED);
     }
+
 }

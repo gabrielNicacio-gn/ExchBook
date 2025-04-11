@@ -19,7 +19,7 @@ public class ExchangeOffer {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_exchange_offer")
     @Setter(AccessLevel.NONE)
-    private int IdExchangeOffer;
+    private int idExchangeOffer;
 
     @ManyToOne
     @JoinColumn(name = "id_copy_offered")
@@ -34,6 +34,10 @@ public class ExchangeOffer {
 
     @Column(name ="date_of_offer")
     private Date dateOfOffer;
+
+    @OneToOne(mappedBy = "exchangeOffer")
+    @Setter(AccessLevel.NONE)
+    private Exchange exchange;
 
     public ExchangeOffer(){
         statusExchange = StatusExchange.ABERTA;
