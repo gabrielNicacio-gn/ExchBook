@@ -1,4 +1,7 @@
 package dev.nicacio.exchbook.repository;
 
-public interface ExchangeRepository {
+import dev.nicacio.exchbook.models.Exchange;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ExchangeRepository extends JpaRepository<Exchange,Integer> {
 }

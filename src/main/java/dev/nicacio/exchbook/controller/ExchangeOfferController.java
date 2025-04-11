@@ -1,6 +1,6 @@
 package dev.nicacio.exchbook.controller;
 
-import dev.nicacio.exchbook.dtos.request.CreateExchangeOfferDto;
+import dev.nicacio.exchbook.dtos.request.CreateExchangeOfferRequestDto;
 import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
 import dev.nicacio.exchbook.services.ExchangeOfferService;
 import lombok.RequiredArgsConstructor;
@@ -20,13 +20,13 @@ public class ExchangeOfferController {
     private final ExchangeOfferService exchangeOfferService;
 
     @PostMapping("/offer")
-    public ResponseEntity<ExchangeOfferDto> addExchangeOffer(@RequestBody CreateExchangeOfferDto create){
+    public ResponseEntity<ExchangeOfferDto> addExchangeOffer(@RequestBody CreateExchangeOfferRequestDto create){
         HttpHeaders headers = new HttpHeaders();
         int response = exchangeOfferService.registerExchangeOffer(create);
 
         headers.setLocation(UriComponentsBuilder
                 .newInstance()
-                .path("/v1/edition/{id}")
+                .path("/v1/offer/{id}")
                 .buildAndExpand(response)
                 .toUri());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);

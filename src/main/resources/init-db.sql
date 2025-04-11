@@ -77,7 +77,7 @@ CREATE TABLE exchange(
    -- id_user_accepted INTEGER NOT NULL,
     id_exchange_offer INTEGER NOT NULL,
     is_approved BOOLEAN NOT NULL,
-    date_of_offer TIMESTAMP NOT NULL,
+    date_of_exchange TIMESTAMP NOT NULL,
    -- FOREIGN KEY (id_user_accepted) REFERENCES user_owner(id_user),
     FOREIGN KEY (id_exchange_offer) REFERENCES exchange_offer(id_exchange_offer)
 );
