@@ -29,13 +29,13 @@ class AuthorServiceTest {
     @Test
     public void shouldRegisterAnAuthor(){
         CreateAuthorRequestDto create = new CreateAuthorRequestDto("NameAuthorOne");
-        Author mappedAuthor = new Author();
-        mappedAuthor.setName("NameAuthorOne");
+
         Author savedAuthor = new Author();
+        savedAuthor.setIdAuthor(1);
         savedAuthor.setName("NameAuthorOne");
 
-        when(authorMapper.toAuthor(create)).thenReturn(mappedAuthor);
-        when(authorRepository.save(mappedAuthor)).thenReturn(savedAuthor);
+        when(authorMapper.toAuthor(create)).thenReturn(savedAuthor);
+        when(authorRepository.save(any(Author.class))).thenReturn(savedAuthor);
 
         int createdAuthor = authorService.registerAuthor(create);
 
