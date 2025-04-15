@@ -16,7 +16,6 @@ public class Book {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_book")
-    @Setter(AccessLevel.NONE)
     private int idBook;
 
     @Column(name = "title")
