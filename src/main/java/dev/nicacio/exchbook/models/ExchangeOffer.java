@@ -18,7 +18,6 @@ public class ExchangeOffer {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id_exchange_offer")
-    @Setter(AccessLevel.NONE)
     private int idExchangeOffer;
 
     @ManyToOne
