@@ -37,9 +37,10 @@ class AuthorServiceTest {
         when(authorMapper.toAuthor(create)).thenReturn(savedAuthor);
         when(authorRepository.save(any(Author.class))).thenReturn(savedAuthor);
 
-        int createdAuthor = authorService.registerAuthor(create);
+        int idCreatedAuthor = authorService.registerAuthor(create);
 
         verify(authorRepository,times(1)).save(any());
         assertEquals("NameAuthorOne",savedAuthor.getName());
+        assertEquals(savedAuthor.getIdAuthor(),idCreatedAuthor);
     }
 }

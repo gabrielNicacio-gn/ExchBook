@@ -16,7 +16,6 @@ public class Exchange {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_exchange")
-    @Setter(AccessLevel.NONE)
     private int idExchange;
 
     @OneToOne

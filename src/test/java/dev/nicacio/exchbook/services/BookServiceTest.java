@@ -53,12 +53,13 @@ class BookServiceTest {
         when(bookRepository.save(any(Book.class))).thenReturn(savedBook);
         when(authorRepository.findAllById(List.of(1))).thenReturn(List.of(author.get()));
 
-        int idBook = bookService.registerBook(create);
+        int idCreatedBook = bookService.registerBook(create);
 
         verify(authorRepository,times(1)).findAllById(authorsIds);
         verify(bookRepository,times(1)).save(any());
 
         assertEquals("BookOne",savedBook.getTitle());
+        assertEquals(savedBook.getIdBook(),idCreatedBook);
     }
   
 }

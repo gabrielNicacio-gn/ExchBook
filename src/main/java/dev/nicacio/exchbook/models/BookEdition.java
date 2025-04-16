@@ -13,7 +13,6 @@ public class BookEdition {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_book_edition")
-    @Setter(AccessLevel.NONE)
     private int IdEditionBook;
 
     @Column(name = "year_of_publication")
