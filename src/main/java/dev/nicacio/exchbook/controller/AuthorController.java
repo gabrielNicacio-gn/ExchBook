@@ -5,6 +5,7 @@ import dev.nicacio.exchbook.dtos.response.AuthorDto;
 import dev.nicacio.exchbook.models.Author;
 import dev.nicacio.exchbook.services.AuthorService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,5 +28,11 @@ public class AuthorController {
                 .buildAndExpand(idAuthor)
                 .toUri());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/author/{id}")
+    public ResponseEntity<AuthorDto> returnAuthorById(@PathVariable("id") int idAuthor) throws ChangeSetPersister.NotFoundException {
+        AuthorDto response = authorService.getAuthorById(idAuthor);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
