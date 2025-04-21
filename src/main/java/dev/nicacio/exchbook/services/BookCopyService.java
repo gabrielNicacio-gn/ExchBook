@@ -8,6 +8,8 @@ import dev.nicacio.exchbook.models.BookCopy;
 import dev.nicacio.exchbook.repository.BookRepository;
 import dev.nicacio.exchbook.repository.BookCopyRepository;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Not;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,12 +19,17 @@ import java.util.Optional;
 public class BookCopyService {
 
     private final BookRepository bookRepository;
-    private final BookCopyRepository copyBookRepository;
+    private final BookCopyRepository bookCopyRepository;
     private final BookCopyMapper bookCopyMapper;
 
     public int registerBookCopy(CreateBookCopyRequestDto createBook) {
         BookCopy newCopy = bookCopyMapper.toBookCopy(createBook, bookRepository);
-        BookCopy savedCopy = copyBookRepository.save(newCopy);
+        BookCopy savedCopy = bookCopyRepository.save(newCopy);
         return savedCopy.getIdCopy();
+    }
+    public BookCopyDto getBookCopyById(int idBookCopy) throws ChangeSetPersister.NotFoundException {
+        BookCopy bookCopy = bookCopyRepository.findById(idBookCopy)
+                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+        return bookCopyMapper.toBookCopyDto(bookCopy);
     }
 }

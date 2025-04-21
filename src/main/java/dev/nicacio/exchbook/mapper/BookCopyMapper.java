@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.mapper;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookCopyRequestDto;
+import dev.nicacio.exchbook.dtos.response.BookCopyDto;
 import dev.nicacio.exchbook.models.Book;
 import dev.nicacio.exchbook.models.BookCopy;
 import dev.nicacio.exchbook.repository.BookRepository;
@@ -23,4 +24,6 @@ public interface BookCopyMapper {
         }
         return bookOptional.get();
     }
+
+    BookCopyDto toBookCopyDto(BookCopy copy);
 }
