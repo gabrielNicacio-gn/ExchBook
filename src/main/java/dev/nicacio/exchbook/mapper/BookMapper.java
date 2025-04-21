@@ -24,4 +24,5 @@ public interface BookMapper {
       }
       return authors;
     }
+    BookDto toBookDto(Book book);
 }
