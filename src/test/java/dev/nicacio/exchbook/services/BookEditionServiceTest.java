@@ -1,6 +1,8 @@
 package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookEditionRequestDto;
+import dev.nicacio.exchbook.dtos.response.BookDto;
+import dev.nicacio.exchbook.dtos.response.BookEditionDto;
 import dev.nicacio.exchbook.mapper.BookEditionMapper;
 import dev.nicacio.exchbook.models.Book;
 import dev.nicacio.exchbook.models.BookEdition;
@@ -12,7 +14,9 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.crossstore.ChangeSetPersister;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -57,4 +61,33 @@ class BookEditionServiceTest {
         assertEquals(bookEdition.getIdEditionBook(),idCreatedEditionBook);
 
     }
+
+    @Test
+    public void shouldGetBookEditionById() throws ChangeSetPersister.NotFoundException {
+        Book book = new Book();
+        book.setIdBook(1);
+        book.setTitle("MyBook");
+        book.addAuthors(new ArrayList<>());
+
+        BookDto bookDto = new BookDto(book.getIdBook(),book.getTitle(),new ArrayList<>());
+
+        Optional<BookEdition> bookEdition = Optional.of(new BookEdition());
+        bookEdition.get().setIdEditionBook(1);
+        bookEdition.get().setNumberEdition("2");
+        bookEdition.get().setFormat("Hardcover");
+        bookEdition.get().setYearOfPublication("2025");
+        bookEdition.get().setBook(book);
+
+        BookEditionDto expectedBookEditionDto = new BookEditionDto(bookEdition.get().getIdEditionBook(),bookEdition.get().getYearOfPublication()
+                ,bookEdition.get().getNumberEdition(),bookEdition.get().getFormat(),bookDto);
+
+        when(editionBookRepository.findById(1)).thenReturn(bookEdition);
+
+        BookEditionDto bookEditionDto = bookEditionService.getBookEditionById(1);
+
+        verify(editionBookRepository,times(1)).findById(1);
+
+        assertEquals(expectedBookEditionDto,bookEditionDto);
+    }
+
 }

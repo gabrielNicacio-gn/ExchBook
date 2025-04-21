@@ -4,6 +4,7 @@ import dev.nicacio.exchbook.dtos.request.CreateBookEditionRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookEditionDto;
 import dev.nicacio.exchbook.services.BookEditionService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,5 +27,11 @@ public class BookEditionController {
                 .buildAndExpand(response)
                 .toUri());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
+    }
+
+    @GetMapping("/edition/{id}")
+    public  ResponseEntity<BookEditionDto> returnBookEditionById(@PathVariable("id") int idBookEdition) throws ChangeSetPersister.NotFoundException {
+        BookEditionDto response = bookEditionService.getBookEditionById(idBookEdition);
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

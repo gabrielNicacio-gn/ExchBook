@@ -8,6 +8,7 @@ import dev.nicacio.exchbook.models.BookEdition;
 import dev.nicacio.exchbook.repository.BookEditionRepository;
 import dev.nicacio.exchbook.repository.BookRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -24,4 +25,10 @@ public class BookEditionService {
         BookEdition savedEdition = editionBookRepository.save(edition);
         return savedEdition.getIdEditionBook();
     }
+    public BookEditionDto getBookEditionById(int idBookEdition) throws ChangeSetPersister.NotFoundException {
+        BookEdition bookEdition = editionBookRepository.findById(idBookEdition)
+                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+        return bookEditionMapper.toBookEditionDto(bookEdition);
+    }
+
 }
