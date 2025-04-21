@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.mapper;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookEditionRequestDto;
+import dev.nicacio.exchbook.dtos.response.BookEditionDto;
 import dev.nicacio.exchbook.models.Book;
 import dev.nicacio.exchbook.models.BookEdition;
 import dev.nicacio.exchbook.repository.BookRepository;
@@ -22,4 +23,5 @@ public interface BookEditionMapper {
         }
         return  optionalBook.get();
     }
+    BookEditionDto toBookEditionDto (BookEdition bookEdition);
 }
