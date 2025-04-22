@@ -1,6 +1,8 @@
 package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateExchangeRequestDto;
+import dev.nicacio.exchbook.dtos.response.ExchangeDto;
+import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
 import dev.nicacio.exchbook.enums.StatusExchange;
 import dev.nicacio.exchbook.mapper.ExchangeMapper;
 import dev.nicacio.exchbook.models.Exchange;
@@ -13,6 +15,7 @@ import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.crossstore.ChangeSetPersister;
 
 import javax.swing.text.html.Option;
 
@@ -60,5 +63,28 @@ class ExchangeServiceTest {
         assertEquals(StatusExchange.ACEITA,exchangeOffer.get().getStatusExchange());
     }
 
+    @Test
+    public void shouldGetExchangeById() throws ChangeSetPersister.NotFoundException {
+
+        int idExchange = 1;
+        ExchangeOffer exchangeOffer = new ExchangeOffer();
+        exchangeOffer.setIdExchangeOffer(1);
+
+        Optional<Exchange> exchange = Optional.of(new Exchange());
+        exchange.get().setIdExchange(1);
+        exchange.get().setExchangeOffer(exchangeOffer);
+
+        ExchangeOfferDto exchangeOfferDto = new ExchangeOfferDto(exchangeOffer.getIdExchangeOffer(),null,null,exchangeOffer.getDateOfOffer()
+                ,exchangeOffer.getStatusExchange());
+        ExchangeDto expectedExchangeDto = new ExchangeDto(exchange.get().getIdExchange(),exchange.get().getDateOfExchange(),exchangeOfferDto);
+
+        when(exchangeRepository.findById(idExchange)).thenReturn(exchange);
+
+        ExchangeDto exchangeDto = exchangeService.getExchangeById(idExchange);
+
+        verify(exchangeRepository,times(1)).findById(idExchange);
+
+        assertEquals(expectedExchangeDto,exchangeDto);
+    }
 
 }

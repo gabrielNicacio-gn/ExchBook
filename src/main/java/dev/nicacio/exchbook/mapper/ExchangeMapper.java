@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.mapper;
 
 import dev.nicacio.exchbook.dtos.request.CreateExchangeRequestDto;
+import dev.nicacio.exchbook.dtos.response.ExchangeDto;
 import dev.nicacio.exchbook.models.Exchange;
 import dev.nicacio.exchbook.models.ExchangeOffer;
 import dev.nicacio.exchbook.repository.ExchangeOfferRepository;
@@ -17,4 +18,6 @@ public interface ExchangeMapper {
         return exchangeOfferRepository.findById(idExchangeOffer)
                 .orElseThrow(()-> new IllegalArgumentException("Exchange not found, can't create a exchange"));
     }
+
+    ExchangeDto toExchangeDto(Exchange exchange);
 }
