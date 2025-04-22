@@ -1,6 +1,9 @@
 package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateExchangeOfferRequestDto;
+import dev.nicacio.exchbook.dtos.response.BookCopyDto;
+import dev.nicacio.exchbook.dtos.response.BookDto;
+import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
 import dev.nicacio.exchbook.enums.Condition;
 import dev.nicacio.exchbook.enums.StatusExchange;
 import dev.nicacio.exchbook.mapper.ExchangeOfferMapper;
@@ -18,7 +21,9 @@ import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.data.crossstore.ChangeSetPersister;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 import static org.hamcrest.Matchers.any;
@@ -71,5 +76,36 @@ class ExchangeOfferServiceTest {
 
         assertEquals(savedExchangeOffer.getIdExchangeOffer(),idCreatedExchangeOffer);
     }
+    @Test
+    public void shouldGetExchangeOfferById() throws ChangeSetPersister.NotFoundException {
+        int idExchangeOffer = 1;
 
+        Book bookDesired = new Book();
+        bookDesired.setIdBook(2);
+        bookDesired.setTitle("My Second Book");
+
+        BookCopy bookCopyOffered = new BookCopy();
+        bookCopyOffered.setIdCopy(1);
+        bookCopyOffered.setCondition(Condition.NOVO);
+
+        BookDto bookDto = new BookDto(bookDesired.getIdBook(),bookDesired.getTitle(),new ArrayList<>());
+        BookCopyDto bookCopyDto = new BookCopyDto(bookCopyOffered.getIdCopy(),bookCopyOffered.getCondition(),null);
+
+        Optional<ExchangeOffer> exchangeOffer = Optional.of(new ExchangeOffer());
+        exchangeOffer.get().setIdExchangeOffer(1);
+        exchangeOffer.get().setStatusExchange(StatusExchange.ABERTA);
+        exchangeOffer.get().setBookDesired(bookDesired);
+        exchangeOffer.get().setCopyOffered(bookCopyOffered);
+
+        ExchangeOfferDto expectedExchangeOfferDto = new ExchangeOfferDto(exchangeOffer.get().getIdExchangeOffer(),bookCopyDto,bookDto,
+                exchangeOffer.get().getDateOfOffer(),exchangeOffer.get().getStatusExchange());
+
+        when(exchangeOfferRepository.findById(idExchangeOffer)).thenReturn(exchangeOffer);
+
+        ExchangeOfferDto exchangeOfferDto = exchangeOfferService.getExchangeOfferById(idExchangeOffer);
+
+        verify(exchangeOfferRepository,times(1)).findById(idExchangeOffer);
+
+        assertEquals(expectedExchangeOfferDto,exchangeOfferDto);
+    }
 }

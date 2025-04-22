@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.mapper;
 
 import dev.nicacio.exchbook.dtos.request.CreateExchangeOfferRequestDto;
+import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
 import dev.nicacio.exchbook.models.Book;
 import dev.nicacio.exchbook.models.BookCopy;
 import dev.nicacio.exchbook.models.ExchangeOffer;
@@ -26,4 +27,5 @@ public interface ExchangeOfferMapper {
         return bookCopyRepository.findById(idBookCopy)
                 .orElseThrow(()-> new IllegalArgumentException("Book or Copy not found, can't create a exchange offer"));
     }
+    ExchangeOfferDto toExchangeOfferDto(ExchangeOffer offer);
 }
