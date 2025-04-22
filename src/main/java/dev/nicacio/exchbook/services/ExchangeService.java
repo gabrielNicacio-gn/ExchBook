@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateExchangeRequestDto;
+import dev.nicacio.exchbook.dtos.response.ExchangeDto;
 import dev.nicacio.exchbook.enums.StatusExchange;
 import dev.nicacio.exchbook.mapper.ExchangeMapper;
 import dev.nicacio.exchbook.models.Exchange;
@@ -9,6 +10,7 @@ import dev.nicacio.exchbook.repository.ExchangeOfferRepository;
 import dev.nicacio.exchbook.repository.ExchangeRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,4 +32,11 @@ public class ExchangeService {
 
         return savedExchange.getIdExchange();
     }
+
+    public ExchangeDto getExchangeById(int idExchange) throws ChangeSetPersister.NotFoundException {
+        Exchange exchange = exchangeRepository.findById(idExchange)
+                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+        return exchangeMapper.toExchangeDto(exchange);
+    }
+
 }
