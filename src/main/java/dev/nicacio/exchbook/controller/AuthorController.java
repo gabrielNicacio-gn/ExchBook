@@ -12,6 +12,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
@@ -34,5 +36,11 @@ public class AuthorController {
     public ResponseEntity<AuthorDto> returnAuthorById(@PathVariable("id") int idAuthor) throws ChangeSetPersister.NotFoundException {
         AuthorDto response = authorService.getAuthorById(idAuthor);
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/authors")
+    public ResponseEntity<List<AuthorDto>> returnAllAuthors(){
+        List<AuthorDto> response = authorService.getAllAuthors();
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

@@ -10,6 +10,8 @@ import org.hibernate.ObjectNotFoundException;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -28,5 +30,9 @@ public class AuthorService {
         Author author = authorRepository.findById(idAuthor)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
         return authorMapper.toAuthorDto(author);
+    }
+
+    public List<AuthorDto> getAllAuthors(){
+        return authorRepository.findAll().stream().map(authorMapper::toAuthorDto).toList();
     }
 }
