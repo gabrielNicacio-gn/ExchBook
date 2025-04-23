@@ -34,4 +34,9 @@ public class BookService {
                     .orElseThrow(ChangeSetPersister.NotFoundException::new);
             return bookMapper.toBookDto(book);
         }
+
+        public List<BookDto> getAllBooks(){
+            return bookRepository.findAll().stream().map(bookMapper::toBookDto).toList();
+        }
+
     }

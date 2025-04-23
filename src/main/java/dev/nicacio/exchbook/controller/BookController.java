@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/v1")
 @RequiredArgsConstructor
@@ -32,6 +34,12 @@ public class BookController {
     @GetMapping("/book/{id}")
     public ResponseEntity<BookDto> returnBookById(@PathVariable("id") int idBook) throws ChangeSetPersister.NotFoundException {
         BookDto response = bookService.getBookById(idBook);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @GetMapping("/books")
+    public ResponseEntity<List<BookDto>> returnAllBooks(){
+        List<BookDto> response = bookService.getAllBooks();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

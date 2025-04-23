@@ -98,4 +98,35 @@ class BookServiceTest {
         assertEquals(expectedBookDto.title(),bookDto.title());
         assertEquals(expectedBookDto.authors(),bookDto.authors());
     }
+
+    @Test
+    public void shouldGetAllBooks(){
+        Book bookA = new Book();
+        bookA.setIdBook(1);
+        bookA.setTitle("BookA");
+        bookA.addAuthors(new ArrayList<>());
+
+        Book bookB = new Book();
+        bookB.setIdBook(2);
+        bookB.setTitle("BookB");
+        bookB.addAuthors(new ArrayList<>());
+
+        Book bookC = new Book();
+        bookC.setIdBook(1);
+        bookC.setTitle("BookC");
+        bookC.addAuthors(new ArrayList<>());
+        List<Book> bookList = List.of(bookA,bookB,bookC);
+
+        BookDto bookADto = new BookDto(bookA.getIdBook(),bookA.getTitle(),new ArrayList<>());
+        BookDto bookBDto = new BookDto(bookB.getIdBook(),bookB.getTitle(),new ArrayList<>());
+        BookDto bookCDto = new BookDto(bookC.getIdBook(),bookC.getTitle(),new ArrayList<>());
+        List<BookDto> expectedResult = List.of(bookADto,bookBDto,bookCDto);
+
+        when(bookRepository.findAll()).thenReturn(bookList);
+
+        List<BookDto> result = bookService.getAllBooks();
+
+        verify(bookRepository,times(1)).findAll();
+        assertEquals(expectedResult,result);
+    }
 }
