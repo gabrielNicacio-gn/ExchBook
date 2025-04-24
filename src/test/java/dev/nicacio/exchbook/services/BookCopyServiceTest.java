@@ -90,4 +90,37 @@ class BookCopyServiceTest {
         assertEquals(expectedBookCopyDto.book(),bookCopyDto.book());
 
     }
+
+    @Test
+    public void shouldGetBookCopies(){
+        BookCopy copyA = new BookCopy();
+        copyA.setIdCopy(1);
+        copyA.setCondition(Condition.NOVO);
+        copyA.setBook(new Book());
+
+        BookCopy copyB = new BookCopy();
+        copyA.setIdCopy(1);
+        copyA.setCondition(Condition.NOVO);
+        copyA.setBook(new Book());
+
+        BookCopy copyC = new BookCopy();
+        copyA.setIdCopy(1);
+        copyA.setCondition(Condition.NOVO);
+        copyA.setBook(new Book());
+
+        List<BookCopy> copyList = List.of(copyA,copyB,copyC);
+
+        BookCopyDto bookCopyADto = bookCopyMapper.toBookCopyDto(copyA);
+        BookCopyDto bookCopyBDto = bookCopyMapper.toBookCopyDto(copyB);
+        BookCopyDto bookCopyCDto = bookCopyMapper.toBookCopyDto(copyC);
+
+        List<BookCopyDto> expectedResult = List.of(bookCopyADto,bookCopyBDto,bookCopyCDto);
+
+        when(copyBookRepository.findAll()).thenReturn(copyList);
+
+        List<BookCopyDto> result = bookCopyService.getAllBookCopies();
+
+        verify(copyBookRepository,times(1)).findAll();
+        assertEquals(expectedResult,result);
+    }
 }

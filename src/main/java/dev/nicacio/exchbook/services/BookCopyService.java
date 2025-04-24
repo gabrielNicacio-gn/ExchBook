@@ -12,6 +12,7 @@ import org.aspectj.weaver.ast.Not;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,5 +32,9 @@ public class BookCopyService {
         BookCopy bookCopy = bookCopyRepository.findById(idBookCopy)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
         return bookCopyMapper.toBookCopyDto(bookCopy);
+    }
+
+    public List<BookCopyDto> getAllBookCopies(){
+        return bookCopyRepository.findAll().stream().map(bookCopyMapper::toBookCopyDto).toList();
     }
 }
