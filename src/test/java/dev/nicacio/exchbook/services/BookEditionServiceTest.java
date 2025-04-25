@@ -17,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.crossstore.ChangeSetPersister;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -88,6 +89,42 @@ class BookEditionServiceTest {
         verify(editionBookRepository,times(1)).findById(1);
 
         assertEquals(expectedBookEditionDto,bookEditionDto);
+    }
+
+    @Test
+    public void shouldGetAllBookEdition(){
+        BookEdition bookEditionA = new BookEdition();
+        bookEditionA.setIdEditionBook(1);
+        bookEditionA.setNumberEdition("4");
+        bookEditionA.setFormat("Hardcover");
+        bookEditionA.setYearOfPublication("2024");
+
+        BookEdition bookEditionB = new BookEdition();
+        bookEditionB.setIdEditionBook(2);
+        bookEditionB.setNumberEdition("5");
+        bookEditionB.setFormat("Hardcover");
+        bookEditionB.setYearOfPublication("2014");
+
+        BookEdition bookEditionC = new BookEdition();
+        bookEditionC.setIdEditionBook(3);
+        bookEditionC.setNumberEdition("2");
+        bookEditionC.setFormat("Hardcover");
+        bookEditionC.setYearOfPublication("2008");
+
+        List<BookEdition> bookEditionList = List.of(bookEditionA,bookEditionB,bookEditionC);
+
+        BookEditionDto bookEditionADto = bookEditionMapper.toBookEditionDto(bookEditionA);
+        BookEditionDto bookEditionBDto = bookEditionMapper.toBookEditionDto(bookEditionB);
+        BookEditionDto bookEditionCDto = bookEditionMapper.toBookEditionDto(bookEditionC);
+
+        List<BookEditionDto> expectedResult = List.of(bookEditionADto,bookEditionBDto,bookEditionCDto);
+
+        when(editionBookRepository.findAll()).thenReturn(bookEditionList);
+
+        List<BookEditionDto> result = bookEditionService.getAllBookEdition();
+
+        verify(editionBookRepository,times(1)).findAll();
+        assertEquals(expectedResult,result);
     }
 
 }

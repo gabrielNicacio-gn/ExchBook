@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -30,5 +31,7 @@ public class BookEditionService {
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
         return bookEditionMapper.toBookEditionDto(bookEdition);
     }
-
+    public List<BookEditionDto> getAllBookEdition(){
+        return editionBookRepository.findAll().stream().map(bookEditionMapper::toBookEditionDto).toList();
+    }
 }
