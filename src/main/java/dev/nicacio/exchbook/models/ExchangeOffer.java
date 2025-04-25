@@ -1,9 +1,8 @@
 package dev.nicacio.exchbook.models;
 
-import dev.nicacio.exchbook.enums.StatusExchange;
+import dev.nicacio.exchbook.enums.StatusExchangeOffer;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.Generated;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -29,7 +28,8 @@ public class ExchangeOffer {
     private Book bookDesired;
 
     @Column(name = "status_exchange")
-    private StatusExchange statusExchange;
+    @Enumerated(EnumType.STRING)
+    private StatusExchangeOffer statusExchangeOffer;
 
     @Column(name ="date_of_offer")
     private Date dateOfOffer;
@@ -39,7 +39,7 @@ public class ExchangeOffer {
     private Exchange exchange;
 
     public ExchangeOffer(){
-        statusExchange = StatusExchange.ABERTA;
+        statusExchangeOffer = StatusExchangeOffer.OPEN;
         dateOfOffer = Calendar.getInstance().getTime();
     }
 }

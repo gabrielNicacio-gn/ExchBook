@@ -3,7 +3,7 @@ package dev.nicacio.exchbook.services;
 import dev.nicacio.exchbook.dtos.request.CreateExchangeRequestDto;
 import dev.nicacio.exchbook.dtos.response.ExchangeDto;
 import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
-import dev.nicacio.exchbook.enums.StatusExchange;
+import dev.nicacio.exchbook.enums.StatusExchangeOffer;
 import dev.nicacio.exchbook.mapper.ExchangeMapper;
 import dev.nicacio.exchbook.models.Exchange;
 import dev.nicacio.exchbook.models.ExchangeOffer;
@@ -16,8 +16,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.crossstore.ChangeSetPersister;
-
-import javax.swing.text.html.Option;
 
 import java.util.Optional;
 
@@ -60,7 +58,7 @@ class ExchangeServiceTest {
         verify(exchangeOfferRepository,times(1)).save(any(ExchangeOffer.class));
 
         assertEquals(exchange.getIdExchange(),idCreatedExchange);
-        assertEquals(StatusExchange.ACEITA,exchangeOffer.get().getStatusExchange());
+        assertEquals(StatusExchangeOffer.CLOSED,exchangeOffer.get().getStatusExchangeOffer());
     }
 
     @Test
@@ -75,7 +73,7 @@ class ExchangeServiceTest {
         exchange.get().setExchangeOffer(exchangeOffer);
 
         ExchangeOfferDto exchangeOfferDto = new ExchangeOfferDto(exchangeOffer.getIdExchangeOffer(),null,null,exchangeOffer.getDateOfOffer()
-                ,exchangeOffer.getStatusExchange());
+                ,exchangeOffer.getStatusExchangeOffer());
         ExchangeDto expectedExchangeDto = new ExchangeDto(exchange.get().getIdExchange(),exchange.get().getDateOfExchange(),exchangeOfferDto);
 
         when(exchangeRepository.findById(idExchange)).thenReturn(exchange);

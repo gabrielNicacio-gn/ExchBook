@@ -3,6 +3,7 @@ package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateExchangeOfferRequestDto;
 import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
+import dev.nicacio.exchbook.enums.StatusExchangeOffer;
 import dev.nicacio.exchbook.mapper.ExchangeOfferMapper;
 import dev.nicacio.exchbook.models.ExchangeOffer;
 import dev.nicacio.exchbook.repository.BookCopyRepository;
@@ -11,6 +12,8 @@ import dev.nicacio.exchbook.repository.ExchangeOfferRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +33,13 @@ public class ExchangeOfferService {
         ExchangeOffer exchangeOffer = exchangeOfferRepository.findById(idExchangeOffer)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
         return exchangeOfferMapper.toExchangeOfferDto(exchangeOffer);
+    }
+
+    public List<ExchangeOfferDto> getAllExchangeOffer(StatusExchangeOffer status){
+        List<ExchangeOffer> list = status==null
+                ? exchangeOfferRepository.findAll()
+                : exchangeOfferRepository.findByStatusExchangeOffer(status);
+
+        return list.stream().map(exchangeOfferMapper::toExchangeOfferDto).toList();
     }
 }

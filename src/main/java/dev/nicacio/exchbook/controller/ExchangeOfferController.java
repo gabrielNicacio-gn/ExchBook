@@ -2,6 +2,7 @@ package dev.nicacio.exchbook.controller;
 
 import dev.nicacio.exchbook.dtos.request.CreateExchangeOfferRequestDto;
 import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
+import dev.nicacio.exchbook.enums.StatusExchangeOffer;
 import dev.nicacio.exchbook.services.ExchangeOfferService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -10,6 +11,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/v1")
@@ -29,10 +32,15 @@ public class ExchangeOfferController {
                 .toUri());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
-
     @GetMapping("/offer/{id}")
     public ResponseEntity<ExchangeOfferDto> returnExchangeOfferById(@PathVariable("id") int idExchangeOffer) throws ChangeSetPersister.NotFoundException {
         ExchangeOfferDto response = exchangeOfferService.getExchangeOfferById(idExchangeOffer);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+    @GetMapping("/offers")
+    public ResponseEntity<List<ExchangeOfferDto>> returnAllOffers(@RequestParam(required = false) String status){
+        StatusExchangeOffer statusOffer = StatusExchangeOffer.valueOf(status.toUpperCase());
+        List<ExchangeOfferDto> response = exchangeOfferService.getAllExchangeOffer(statusOffer);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

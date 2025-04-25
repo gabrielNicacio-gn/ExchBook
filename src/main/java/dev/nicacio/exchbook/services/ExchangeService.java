@@ -2,7 +2,7 @@ package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateExchangeRequestDto;
 import dev.nicacio.exchbook.dtos.response.ExchangeDto;
-import dev.nicacio.exchbook.enums.StatusExchange;
+import dev.nicacio.exchbook.enums.StatusExchangeOffer;
 import dev.nicacio.exchbook.mapper.ExchangeMapper;
 import dev.nicacio.exchbook.models.Exchange;
 import dev.nicacio.exchbook.models.ExchangeOffer;
@@ -27,12 +27,11 @@ public class ExchangeService {
 
        ExchangeOffer currentExchangeOffer = exchangeOfferRepository
                .findById(exchange.getExchangeOffer().getIdExchangeOffer()).get();
-       currentExchangeOffer.setStatusExchange(StatusExchange.ACEITA);
+       currentExchangeOffer.setStatusExchangeOffer(StatusExchangeOffer.CLOSED);
        exchangeOfferRepository.save(currentExchangeOffer);
 
         return savedExchange.getIdExchange();
     }
-
     public ExchangeDto getExchangeById(int idExchange) throws ChangeSetPersister.NotFoundException {
         Exchange exchange = exchangeRepository.findById(idExchange)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
