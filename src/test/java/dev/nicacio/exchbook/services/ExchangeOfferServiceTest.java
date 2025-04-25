@@ -5,7 +5,7 @@ import dev.nicacio.exchbook.dtos.response.BookCopyDto;
 import dev.nicacio.exchbook.dtos.response.BookDto;
 import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
 import dev.nicacio.exchbook.enums.Condition;
-import dev.nicacio.exchbook.enums.StatusExchange;
+import dev.nicacio.exchbook.enums.StatusExchangeOffer;
 import dev.nicacio.exchbook.mapper.ExchangeOfferMapper;
 import dev.nicacio.exchbook.models.Book;
 import dev.nicacio.exchbook.models.BookCopy;
@@ -15,7 +15,6 @@ import dev.nicacio.exchbook.repository.BookRepository;
 import dev.nicacio.exchbook.repository.ExchangeOfferRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.Mapper;
 import org.mapstruct.factory.Mappers;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
@@ -24,9 +23,9 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.crossstore.ChangeSetPersister;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-import static org.hamcrest.Matchers.any;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
@@ -60,7 +59,7 @@ class ExchangeOfferServiceTest {
 
         ExchangeOffer savedExchangeOffer = new ExchangeOffer();
         savedExchangeOffer.setIdExchangeOffer(1);
-        savedExchangeOffer.setStatusExchange(StatusExchange.ABERTA);
+        savedExchangeOffer.setStatusExchangeOffer(StatusExchangeOffer.OPEN);
         savedExchangeOffer.setBookDesired(bookDesired.get());
         savedExchangeOffer.setCopyOffered(bookCopyOffered.get());
 
@@ -93,12 +92,12 @@ class ExchangeOfferServiceTest {
 
         Optional<ExchangeOffer> exchangeOffer = Optional.of(new ExchangeOffer());
         exchangeOffer.get().setIdExchangeOffer(1);
-        exchangeOffer.get().setStatusExchange(StatusExchange.ABERTA);
+        exchangeOffer.get().setStatusExchangeOffer(StatusExchangeOffer.OPEN);
         exchangeOffer.get().setBookDesired(bookDesired);
         exchangeOffer.get().setCopyOffered(bookCopyOffered);
 
         ExchangeOfferDto expectedExchangeOfferDto = new ExchangeOfferDto(exchangeOffer.get().getIdExchangeOffer(),bookCopyDto,bookDto,
-                exchangeOffer.get().getDateOfOffer(),exchangeOffer.get().getStatusExchange());
+                exchangeOffer.get().getDateOfOffer(),exchangeOffer.get().getStatusExchangeOffer());
 
         when(exchangeOfferRepository.findById(idExchangeOffer)).thenReturn(exchangeOffer);
 
@@ -107,5 +106,58 @@ class ExchangeOfferServiceTest {
         verify(exchangeOfferRepository,times(1)).findById(idExchangeOffer);
 
         assertEquals(expectedExchangeOfferDto,exchangeOfferDto);
+    }
+
+    @Test
+    public void shouldGetAllExchangeOffer_whenStatusIsNull(){
+        ExchangeOffer exchangeOfferA = new ExchangeOffer();
+        exchangeOfferA.setIdExchangeOffer(1);
+        exchangeOfferA.setStatusExchangeOffer(StatusExchangeOffer.OPEN);
+
+        ExchangeOffer exchangeOfferB = new ExchangeOffer();
+        exchangeOfferB.setIdExchangeOffer(2);
+        exchangeOfferB.setStatusExchangeOffer(StatusExchangeOffer.CLOSED);
+        List<ExchangeOffer> offersList = List.of(exchangeOfferA,exchangeOfferB);
+
+        ExchangeOfferDto exchangeOfferADto = exchangeOfferMapper.toExchangeOfferDto(exchangeOfferA);
+        ExchangeOfferDto exchangeOfferBDto = exchangeOfferMapper.toExchangeOfferDto(exchangeOfferB);
+        List<ExchangeOfferDto> expectedResult = List.of(exchangeOfferADto,exchangeOfferBDto);
+
+        when(exchangeOfferRepository.findAll()).thenReturn(offersList);
+
+        List<ExchangeOfferDto> result = exchangeOfferService.getAllExchangeOffer(null);
+
+        verify(exchangeOfferRepository,times(1)).findAll();
+        verify(exchangeOfferRepository,never()).findByStatusExchangeOffer(any());
+        assertEquals(expectedResult,result);
+    }
+    @Test
+    public void shouldGetAllExchangeOffer_whenStatusIsProvide(){
+        ExchangeOffer exchangeOfferA = new ExchangeOffer();
+        exchangeOfferA.setIdExchangeOffer(1);
+        exchangeOfferA.setStatusExchangeOffer(StatusExchangeOffer.OPEN);
+
+        ExchangeOffer exchangeOfferB = new ExchangeOffer();
+        exchangeOfferB.setIdExchangeOffer(2);
+        exchangeOfferB.setStatusExchangeOffer(StatusExchangeOffer.CLOSED);
+
+        ExchangeOffer exchangeOfferC = new ExchangeOffer();
+        exchangeOfferC.setIdExchangeOffer(3);
+        exchangeOfferC.setStatusExchangeOffer(StatusExchangeOffer.OPEN);
+
+        List<ExchangeOffer> offersList = List.of(exchangeOfferA,exchangeOfferC);
+
+        ExchangeOfferDto exchangeOfferADto = exchangeOfferMapper.toExchangeOfferDto(exchangeOfferA);
+        ExchangeOfferDto exchangeOfferCDto = exchangeOfferMapper.toExchangeOfferDto(exchangeOfferC);
+
+        List<ExchangeOfferDto> expectedResult = List.of(exchangeOfferADto,exchangeOfferCDto);
+
+        when(exchangeOfferRepository.findByStatusExchangeOffer(StatusExchangeOffer.OPEN)).thenReturn(offersList);
+
+        List<ExchangeOfferDto> result = exchangeOfferService.getAllExchangeOffer(StatusExchangeOffer.OPEN);
+
+        verify(exchangeOfferRepository,never()).findAll();
+        verify(exchangeOfferRepository,times(1)).findByStatusExchangeOffer(any());
+        assertEquals(expectedResult,result);
     }
 }
