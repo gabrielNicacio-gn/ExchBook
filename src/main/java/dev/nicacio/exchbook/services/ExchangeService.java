@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ExchangeService {
@@ -37,5 +39,10 @@ public class ExchangeService {
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
         return exchangeMapper.toExchangeDto(exchange);
     }
+
+    public List<ExchangeDto> getAllExchanges(){
+        return exchangeRepository.findAll().stream().map(exchangeMapper::toExchangeDto).toList();
+    }
+
 
 }

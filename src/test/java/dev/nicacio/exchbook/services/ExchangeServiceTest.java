@@ -17,6 +17,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.crossstore.ChangeSetPersister;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -83,6 +84,31 @@ class ExchangeServiceTest {
         verify(exchangeRepository,times(1)).findById(idExchange);
 
         assertEquals(expectedExchangeDto,exchangeDto);
+    }
+
+    @Test
+    public void shouldGetAllExchanges(){
+        Exchange exchangeA = new Exchange();
+        exchangeA.setIdExchange(1);
+        exchangeA.setExchangeOffer(new ExchangeOffer());
+
+        Exchange exchangeB = new Exchange();
+        exchangeB.setIdExchange(2);
+        exchangeB.setExchangeOffer(new ExchangeOffer());
+
+        List<Exchange> exchangeList = List.of(exchangeA,exchangeB);
+
+        ExchangeDto exchangeADto = exchangeMapper.toExchangeDto(exchangeA);
+        ExchangeDto exchangeBDto = exchangeMapper.toExchangeDto(exchangeB);
+
+        List<ExchangeDto> expectedResult = List.of(exchangeADto,exchangeBDto);
+
+        when(exchangeRepository.findAll()).thenReturn(exchangeList);
+
+        List<ExchangeDto> result = exchangeService.getAllExchanges();
+
+        verify(exchangeRepository,times(1)).findAll();
+        assertEquals(expectedResult,result);
     }
 
 }
