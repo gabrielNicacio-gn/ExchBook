@@ -101,7 +101,7 @@ class ExchangeOfferServiceTest {
 
         when(exchangeOfferRepository.findById(idExchangeOffer)).thenReturn(exchangeOffer);
 
-        ExchangeOfferDto exchangeOfferDto = exchangeOfferService.getExchangeOfferById(idExchangeOffer);
+        ExchangeOfferDto exchangeOfferDto = exchangeOfferService.findExchangeOfferById(idExchangeOffer);
 
         verify(exchangeOfferRepository,times(1)).findById(idExchangeOffer);
 
@@ -125,7 +125,7 @@ class ExchangeOfferServiceTest {
 
         when(exchangeOfferRepository.findAll()).thenReturn(offersList);
 
-        List<ExchangeOfferDto> result = exchangeOfferService.getAllExchangeOffer(null);
+        List<ExchangeOfferDto> result = exchangeOfferService.findAllExchangeOffer(null);
 
         verify(exchangeOfferRepository,times(1)).findAll();
         verify(exchangeOfferRepository,never()).findByStatusExchangeOffer(any());
@@ -154,7 +154,7 @@ class ExchangeOfferServiceTest {
 
         when(exchangeOfferRepository.findByStatusExchangeOffer(StatusExchangeOffer.OPEN)).thenReturn(offersList);
 
-        List<ExchangeOfferDto> result = exchangeOfferService.getAllExchangeOffer(StatusExchangeOffer.OPEN);
+        List<ExchangeOfferDto> result = exchangeOfferService.findAllExchangeOffer(StatusExchangeOffer.OPEN);
 
         verify(exchangeOfferRepository,never()).findAll();
         verify(exchangeOfferRepository,times(1)).findByStatusExchangeOffer(any());

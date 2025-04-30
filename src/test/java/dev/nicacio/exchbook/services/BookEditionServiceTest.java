@@ -84,7 +84,7 @@ class BookEditionServiceTest {
 
         when(editionBookRepository.findById(1)).thenReturn(bookEdition);
 
-        BookEditionDto bookEditionDto = bookEditionService.getBookEditionById(1);
+        BookEditionDto bookEditionDto = bookEditionService.findBookEditionById(1);
 
         verify(editionBookRepository,times(1)).findById(1);
 
@@ -121,7 +121,7 @@ class BookEditionServiceTest {
 
         when(editionBookRepository.findAll()).thenReturn(bookEditionList);
 
-        List<BookEditionDto> result = bookEditionService.getAllBookEdition();
+        List<BookEditionDto> result = bookEditionService.findAllBookEdition();
 
         verify(editionBookRepository,times(1)).findAll();
         assertEquals(expectedResult,result);

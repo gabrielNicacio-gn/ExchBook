@@ -33,14 +33,14 @@ public class ExchangeOfferController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
     @GetMapping("/offer/{id}")
-    public ResponseEntity<ExchangeOfferDto> returnExchangeOfferById(@PathVariable("id") int idExchangeOffer) throws ChangeSetPersister.NotFoundException {
-        ExchangeOfferDto response = exchangeOfferService.getExchangeOfferById(idExchangeOffer);
+    public ResponseEntity<ExchangeOfferDto> getExchangeOfferById(@PathVariable("id") int idExchangeOffer) throws ChangeSetPersister.NotFoundException {
+        ExchangeOfferDto response = exchangeOfferService.findExchangeOfferById(idExchangeOffer);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
     @GetMapping("/offers")
-    public ResponseEntity<List<ExchangeOfferDto>> returnAllOffers(@RequestParam(required = false) String status){
+    public ResponseEntity<List<ExchangeOfferDto>> getAllOffers(@RequestParam(required = false) String status){
         StatusExchangeOffer statusOffer = StatusExchangeOffer.valueOf(status.toUpperCase());
-        List<ExchangeOfferDto> response = exchangeOfferService.getAllExchangeOffer(statusOffer);
+        List<ExchangeOfferDto> response = exchangeOfferService.findAllExchangeOffer(statusOffer);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

@@ -31,14 +31,14 @@ public class ExchangeController {
     }
 
     @GetMapping("/exchange/{id}")
-    public ResponseEntity<ExchangeDto> returnExchangeById(@PathVariable("id") int idExchange) throws ChangeSetPersister.NotFoundException {
-        ExchangeDto response = exchangeService.getExchangeById(idExchange);
+    public ResponseEntity<ExchangeDto> getExchangeById(@PathVariable("id") int idExchange) throws ChangeSetPersister.NotFoundException {
+        ExchangeDto response = exchangeService.findExchangeById(idExchange);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping("/exchanges")
-    public ResponseEntity<List<ExchangeDto>> returnAllExchanges(){
-        List<ExchangeDto> response = exchangeService.getAllExchanges();
+    public ResponseEntity<List<ExchangeDto>> getAllExchanges(){
+        List<ExchangeDto> response = exchangeService.findAllExchanges();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

@@ -62,7 +62,7 @@ class AuthorServiceTest {
 
         when(authorRepository.findById(idAuthor)).thenReturn(author);
 
-        AuthorDto authorResponse = authorService.getAuthorById(2);
+        AuthorDto authorResponse = authorService.findAuthorById(2);
 
         verify(authorRepository,times(1)).findById(any());
         assertEquals(authorDto.idAuthor(),authorResponse.idAuthor());
@@ -94,7 +94,7 @@ class AuthorServiceTest {
 
         when(authorRepository.findAll()).thenReturn(authorList);
 
-        List<AuthorDto> result = authorService.getAllAuthors();
+        List<AuthorDto> result = authorService.findAllAuthors();
 
         verify(authorRepository,times(1)).findAll();
 

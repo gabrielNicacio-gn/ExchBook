@@ -26,13 +26,13 @@ public class AuthorService {
         return savedAuthor.getIdAuthor();
     }
 
-    public AuthorDto getAuthorById(int idAuthor) throws ChangeSetPersister.NotFoundException {
+    public AuthorDto findAuthorById(int idAuthor) throws ChangeSetPersister.NotFoundException {
         Author author = authorRepository.findById(idAuthor)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
         return authorMapper.toAuthorDto(author);
     }
 
-    public List<AuthorDto> getAllAuthors(){
+    public List<AuthorDto> findAllAuthors(){
         return authorRepository.findAll().stream().map(authorMapper::toAuthorDto).toList();
     }
 }

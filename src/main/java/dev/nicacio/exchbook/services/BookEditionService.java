@@ -26,12 +26,12 @@ public class BookEditionService {
         BookEdition savedEdition = editionBookRepository.save(edition);
         return savedEdition.getIdEditionBook();
     }
-    public BookEditionDto getBookEditionById(int idBookEdition) throws ChangeSetPersister.NotFoundException {
+    public BookEditionDto findBookEditionById(int idBookEdition) throws ChangeSetPersister.NotFoundException {
         BookEdition bookEdition = editionBookRepository.findById(idBookEdition)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
         return bookEditionMapper.toBookEditionDto(bookEdition);
     }
-    public List<BookEditionDto> getAllBookEdition(){
+    public List<BookEditionDto> findAllBookEdition(){
         return editionBookRepository.findAll().stream().map(bookEditionMapper::toBookEditionDto).toList();
     }
 }

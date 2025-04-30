@@ -34,13 +34,13 @@ public class ExchangeService {
 
         return savedExchange.getIdExchange();
     }
-    public ExchangeDto getExchangeById(int idExchange) throws ChangeSetPersister.NotFoundException {
+    public ExchangeDto findExchangeById(int idExchange) throws ChangeSetPersister.NotFoundException {
         Exchange exchange = exchangeRepository.findById(idExchange)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
         return exchangeMapper.toExchangeDto(exchange);
     }
 
-    public List<ExchangeDto> getAllExchanges(){
+    public List<ExchangeDto> findAllExchanges(){
         return exchangeRepository.findAll().stream().map(exchangeMapper::toExchangeDto).toList();
     }
 

@@ -81,7 +81,7 @@ class BookCopyServiceTest {
 
         when(copyBookRepository.findById(1)).thenReturn(bookCopy);
 
-        BookCopyDto bookCopyDto = bookCopyService.getBookCopyById(1);
+        BookCopyDto bookCopyDto = bookCopyService.findBookCopyById(1);
 
         verify(copyBookRepository,times(1)).findById(1);
 
@@ -118,7 +118,7 @@ class BookCopyServiceTest {
 
         when(copyBookRepository.findAll()).thenReturn(copyList);
 
-        List<BookCopyDto> result = bookCopyService.getAllBookCopies();
+        List<BookCopyDto> result = bookCopyService.findAllBookCopies();
 
         verify(copyBookRepository,times(1)).findAll();
         assertEquals(expectedResult,result);
