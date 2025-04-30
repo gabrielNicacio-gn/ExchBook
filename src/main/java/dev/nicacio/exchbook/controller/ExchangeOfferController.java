@@ -38,9 +38,8 @@ public class ExchangeOfferController {
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
     @GetMapping("/offers")
-    public ResponseEntity<List<ExchangeOfferDto>> getAllOffers(@RequestParam(required = false) String status){
-        StatusExchangeOffer statusOffer = StatusExchangeOffer.valueOf(status.toUpperCase());
-        List<ExchangeOfferDto> response = exchangeOfferService.findAllExchangeOffer(statusOffer);
+    public ResponseEntity<List<ExchangeOfferDto>> getAllOffers(@RequestParam(required = false) StatusExchangeOffer statusExchangeOffer){
+        List<ExchangeOfferDto> response = exchangeOfferService.findAllExchangeOffer(statusExchangeOffer);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

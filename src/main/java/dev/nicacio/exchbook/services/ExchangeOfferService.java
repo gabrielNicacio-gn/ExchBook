@@ -35,10 +35,10 @@ public class ExchangeOfferService {
         return exchangeOfferMapper.toExchangeOfferDto(exchangeOffer);
     }
 
-    public List<ExchangeOfferDto> findAllExchangeOffer(StatusExchangeOffer status){
-        List<ExchangeOffer> list = status==null
+    public List<ExchangeOfferDto> findAllExchangeOffer(StatusExchangeOffer statusOffer){
+        List<ExchangeOffer> list = statusOffer==null
                 ? exchangeOfferRepository.findAll()
-                : exchangeOfferRepository.findByStatusExchangeOffer(status);
+                : exchangeOfferRepository.findByStatusExchangeOffer(statusOffer);
 
         return list.stream().map(exchangeOfferMapper::toExchangeOfferDto).toList();
     }
