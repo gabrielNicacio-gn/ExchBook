@@ -2,6 +2,7 @@ package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateAuthorRequestDto;
 import dev.nicacio.exchbook.dtos.response.AuthorDto;
+import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.mapper.AuthorMapper;
 import dev.nicacio.exchbook.models.Author;
 import dev.nicacio.exchbook.repository.AuthorRepository;
@@ -26,9 +27,9 @@ public class AuthorService {
         return savedAuthor.getIdAuthor();
     }
 
-    public AuthorDto findAuthorById(int idAuthor) throws ChangeSetPersister.NotFoundException {
+    public AuthorDto findAuthorById(int idAuthor) throws ResourceNotFoundException {
         Author author = authorRepository.findById(idAuthor)
-                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+                .orElseThrow(()-> new ResourceNotFoundException("Author not found"));
         return authorMapper.toAuthorDto(author);
     }
 

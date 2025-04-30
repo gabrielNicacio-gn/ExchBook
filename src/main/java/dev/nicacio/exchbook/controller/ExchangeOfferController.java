@@ -3,6 +3,7 @@ package dev.nicacio.exchbook.controller;
 import dev.nicacio.exchbook.dtos.request.CreateExchangeOfferRequestDto;
 import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
 import dev.nicacio.exchbook.enums.StatusExchangeOffer;
+import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.services.ExchangeOfferService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -33,7 +34,7 @@ public class ExchangeOfferController {
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
     @GetMapping("/offer/{id}")
-    public ResponseEntity<ExchangeOfferDto> getExchangeOfferById(@PathVariable("id") int idExchangeOffer) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<ExchangeOfferDto> getExchangeOfferById(@PathVariable("id") int idExchangeOffer) throws ResourceNotFoundException {
         ExchangeOfferDto response = exchangeOfferService.findExchangeOfferById(idExchangeOffer);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }

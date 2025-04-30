@@ -2,6 +2,7 @@ package dev.nicacio.exchbook.controller;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookCopyRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookCopyDto;
+import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.services.BookCopyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -32,7 +33,7 @@ public class BookCopyController {
     }
 
     @GetMapping("/copy/{id}")
-    public ResponseEntity<BookCopyDto> getBookCopyById(@PathVariable("id") int idBookCopy) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<BookCopyDto> getBookCopyById(@PathVariable("id") int idBookCopy) throws ResourceNotFoundException {
         BookCopyDto response = bookCopyServices.findBookCopyById(idBookCopy);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
