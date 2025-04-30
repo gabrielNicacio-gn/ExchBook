@@ -2,6 +2,7 @@ package dev.nicacio.exchbook.controller;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookEditionRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookEditionDto;
+import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.services.BookEditionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -32,7 +33,7 @@ public class BookEditionController {
     }
 
     @GetMapping("/edition/{id}")
-    public  ResponseEntity<BookEditionDto> getBookEditionById(@PathVariable("id") int idBookEdition) throws ChangeSetPersister.NotFoundException {
+    public  ResponseEntity<BookEditionDto> getBookEditionById(@PathVariable("id") int idBookEdition) throws ResourceNotFoundException {
         BookEditionDto response = bookEditionService.findBookEditionById(idBookEdition);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }

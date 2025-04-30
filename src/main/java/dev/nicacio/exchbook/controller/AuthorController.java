@@ -2,6 +2,7 @@ package dev.nicacio.exchbook.controller;
 
 import dev.nicacio.exchbook.dtos.request.CreateAuthorRequestDto;
 import dev.nicacio.exchbook.dtos.response.AuthorDto;
+import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.models.Author;
 import dev.nicacio.exchbook.services.AuthorService;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ public class AuthorController {
     }
 
     @GetMapping("/author/{id}")
-    public ResponseEntity<AuthorDto> getAuthorById(@PathVariable("id") int idAuthor) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<AuthorDto> getAuthorById(@PathVariable("id") int idAuthor) throws ResourceNotFoundException {
         AuthorDto response = authorService.findAuthorById(idAuthor);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

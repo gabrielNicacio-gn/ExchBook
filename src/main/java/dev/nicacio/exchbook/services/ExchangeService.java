@@ -3,6 +3,7 @@ package dev.nicacio.exchbook.services;
 import dev.nicacio.exchbook.dtos.request.CreateExchangeRequestDto;
 import dev.nicacio.exchbook.dtos.response.ExchangeDto;
 import dev.nicacio.exchbook.enums.StatusExchangeOffer;
+import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.mapper.ExchangeMapper;
 import dev.nicacio.exchbook.models.Exchange;
 import dev.nicacio.exchbook.models.ExchangeOffer;
@@ -34,9 +35,9 @@ public class ExchangeService {
 
         return savedExchange.getIdExchange();
     }
-    public ExchangeDto findExchangeById(int idExchange) throws ChangeSetPersister.NotFoundException {
+    public ExchangeDto findExchangeById(int idExchange) throws ResourceNotFoundException {
         Exchange exchange = exchangeRepository.findById(idExchange)
-                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+                .orElseThrow(()-> new ResourceNotFoundException("Exchange not found"));
         return exchangeMapper.toExchangeDto(exchange);
     }
 

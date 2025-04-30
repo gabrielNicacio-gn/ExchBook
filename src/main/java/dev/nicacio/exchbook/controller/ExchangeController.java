@@ -2,6 +2,7 @@ package dev.nicacio.exchbook.controller;
 
 import dev.nicacio.exchbook.dtos.request.CreateExchangeRequestDto;
 import dev.nicacio.exchbook.dtos.response.ExchangeDto;
+import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.services.ExchangeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -31,7 +32,7 @@ public class ExchangeController {
     }
 
     @GetMapping("/exchange/{id}")
-    public ResponseEntity<ExchangeDto> getExchangeById(@PathVariable("id") int idExchange) throws ChangeSetPersister.NotFoundException {
+    public ResponseEntity<ExchangeDto> getExchangeById(@PathVariable("id") int idExchange) throws ResourceNotFoundException {
         ExchangeDto response = exchangeService.findExchangeById(idExchange);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }

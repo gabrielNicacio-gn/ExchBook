@@ -4,6 +4,7 @@ package dev.nicacio.exchbook.services;
 import dev.nicacio.exchbook.dtos.request.CreateExchangeOfferRequestDto;
 import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
 import dev.nicacio.exchbook.enums.StatusExchangeOffer;
+import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.mapper.ExchangeOfferMapper;
 import dev.nicacio.exchbook.models.ExchangeOffer;
 import dev.nicacio.exchbook.repository.BookCopyRepository;
@@ -29,9 +30,9 @@ public class ExchangeOfferService {
         return savedOffer.getIdExchangeOffer();
     }
 
-    public ExchangeOfferDto findExchangeOfferById(int idExchangeOffer) throws ChangeSetPersister.NotFoundException {
+    public ExchangeOfferDto findExchangeOfferById(int idExchangeOffer) throws ResourceNotFoundException {
         ExchangeOffer exchangeOffer = exchangeOfferRepository.findById(idExchangeOffer)
-                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+                .orElseThrow(()-> new ResourceNotFoundException("Exchange Offer not found"));
         return exchangeOfferMapper.toExchangeOfferDto(exchangeOffer);
     }
 

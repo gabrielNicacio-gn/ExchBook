@@ -2,6 +2,7 @@ package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookCopyRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookCopyDto;
+import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.mapper.BookCopyMapper;
 import dev.nicacio.exchbook.models.Book;
 import dev.nicacio.exchbook.models.BookCopy;
@@ -28,9 +29,9 @@ public class BookCopyService {
         BookCopy savedCopy = bookCopyRepository.save(newCopy);
         return savedCopy.getIdCopy();
     }
-    public BookCopyDto findBookCopyById(int idBookCopy) throws ChangeSetPersister.NotFoundException {
+    public BookCopyDto findBookCopyById(int idBookCopy) throws ResourceNotFoundException {
         BookCopy bookCopy = bookCopyRepository.findById(idBookCopy)
-                .orElseThrow(ChangeSetPersister.NotFoundException::new);
+                .orElseThrow(()-> new ResourceNotFoundException("Book Copy not found"));
         return bookCopyMapper.toBookCopyDto(bookCopy);
     }
 
