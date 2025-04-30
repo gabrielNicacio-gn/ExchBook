@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateAuthorRequestDto;
+import dev.nicacio.exchbook.dtos.request.UpdateAuthorRequestDto;
 import dev.nicacio.exchbook.dtos.response.AuthorDto;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.mapper.AuthorMapper;
@@ -35,5 +36,12 @@ public class AuthorService {
 
     public List<AuthorDto> findAllAuthors(){
         return authorRepository.findAll().stream().map(authorMapper::toAuthorDto).toList();
+    }
+
+    public void updateAuthor(int idAuthor, UpdateAuthorRequestDto updateAuthor){
+        Author author = authorRepository.findById(idAuthor)
+                .orElseThrow(()-> new ResourceNotFoundException("Author not found"));
+        Author authorUpdated = authorMapper.toAuthorUpdate(updateAuthor);
+        authorRepository.save(authorUpdated);
     }
 }

@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateAuthorRequestDto;
+import dev.nicacio.exchbook.dtos.request.UpdateAuthorRequestDto;
 import dev.nicacio.exchbook.dtos.response.AuthorDto;
 import dev.nicacio.exchbook.mapper.AuthorMapper;
 import dev.nicacio.exchbook.models.Author;
@@ -99,5 +100,24 @@ class AuthorServiceTest {
         verify(authorRepository,times(1)).findAll();
 
         assertEquals(expectedList,result);
+    }
+
+    @Test
+    public void shouldUpdateAnAuthor(){
+        int idAuthor = 1;
+        UpdateAuthorRequestDto update = new UpdateAuthorRequestDto("NameAuthorOne");
+
+        Optional<Author> savedAuthor =Optional.of(new Author());
+        savedAuthor.get().setIdAuthor(1);
+        savedAuthor.get().setName("Cristiano Ronaldo");
+
+        Author authorUpdated = authorMapper.toAuthorUpdate(update);
+
+        when(authorRepository.findById(1)).thenReturn(savedAuthor);
+        when(authorRepository.save(any(Author.class))).thenReturn(authorUpdated);
+
+        authorService.updateAuthor(idAuthor,update);
+
+        verify(authorRepository,times(1)).save(any());
     }
 }
