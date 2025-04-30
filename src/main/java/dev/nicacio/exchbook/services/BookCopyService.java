@@ -28,13 +28,13 @@ public class BookCopyService {
         BookCopy savedCopy = bookCopyRepository.save(newCopy);
         return savedCopy.getIdCopy();
     }
-    public BookCopyDto getBookCopyById(int idBookCopy) throws ChangeSetPersister.NotFoundException {
+    public BookCopyDto findBookCopyById(int idBookCopy) throws ChangeSetPersister.NotFoundException {
         BookCopy bookCopy = bookCopyRepository.findById(idBookCopy)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
         return bookCopyMapper.toBookCopyDto(bookCopy);
     }
 
-    public List<BookCopyDto> getAllBookCopies(){
+    public List<BookCopyDto> findAllBookCopies(){
         return bookCopyRepository.findAll().stream().map(bookCopyMapper::toBookCopyDto).toList();
     }
 }

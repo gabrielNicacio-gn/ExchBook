@@ -32,14 +32,14 @@ public class BookEditionController {
     }
 
     @GetMapping("/edition/{id}")
-    public  ResponseEntity<BookEditionDto> returnBookEditionById(@PathVariable("id") int idBookEdition) throws ChangeSetPersister.NotFoundException {
-        BookEditionDto response = bookEditionService.getBookEditionById(idBookEdition);
+    public  ResponseEntity<BookEditionDto> getBookEditionById(@PathVariable("id") int idBookEdition) throws ChangeSetPersister.NotFoundException {
+        BookEditionDto response = bookEditionService.findBookEditionById(idBookEdition);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping("/editions")
-    public ResponseEntity<List<BookEditionDto>> returnAllBookEditions(){
-        List<BookEditionDto> response = bookEditionService.getAllBookEdition();
+    public ResponseEntity<List<BookEditionDto>> getAllBookEditions(){
+        List<BookEditionDto> response = bookEditionService.findAllBookEdition();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

@@ -29,13 +29,13 @@ public class BookService {
             return savedBook.getIdBook();
         }
 
-        public BookDto getBookById(int idBook) throws ChangeSetPersister.NotFoundException {
+        public BookDto findBookById(int idBook) throws ChangeSetPersister.NotFoundException {
             Book book = bookRepository.findById(idBook)
                     .orElseThrow(ChangeSetPersister.NotFoundException::new);
             return bookMapper.toBookDto(book);
         }
 
-        public List<BookDto> getAllBooks(){
+        public List<BookDto> findAllBooks(){
             return bookRepository.findAll().stream().map(bookMapper::toBookDto).toList();
         }
 

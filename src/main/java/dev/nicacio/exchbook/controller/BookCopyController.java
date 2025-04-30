@@ -32,14 +32,14 @@ public class BookCopyController {
     }
 
     @GetMapping("/copy/{id}")
-    public ResponseEntity<BookCopyDto> returnBookCopyById(@PathVariable("id") int idBookCopy) throws ChangeSetPersister.NotFoundException {
-        BookCopyDto response = bookCopyServices.getBookCopyById(idBookCopy);
+    public ResponseEntity<BookCopyDto> getBookCopyById(@PathVariable("id") int idBookCopy) throws ChangeSetPersister.NotFoundException {
+        BookCopyDto response = bookCopyServices.findBookCopyById(idBookCopy);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 
     @GetMapping("/copies")
     public ResponseEntity<List<BookCopyDto>> getAllBookCopies(){
-        List<BookCopyDto> response = bookCopyServices.getAllBookCopies();
+        List<BookCopyDto> response = bookCopyServices.findAllBookCopies();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

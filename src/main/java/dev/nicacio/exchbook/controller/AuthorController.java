@@ -33,14 +33,14 @@ public class AuthorController {
     }
 
     @GetMapping("/author/{id}")
-    public ResponseEntity<AuthorDto> returnAuthorById(@PathVariable("id") int idAuthor) throws ChangeSetPersister.NotFoundException {
-        AuthorDto response = authorService.getAuthorById(idAuthor);
+    public ResponseEntity<AuthorDto> getAuthorById(@PathVariable("id") int idAuthor) throws ChangeSetPersister.NotFoundException {
+        AuthorDto response = authorService.findAuthorById(idAuthor);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/authors")
-    public ResponseEntity<List<AuthorDto>> returnAllAuthors(){
-        List<AuthorDto> response = authorService.getAllAuthors();
+    public ResponseEntity<List<AuthorDto>> getAllAuthors(){
+        List<AuthorDto> response = authorService.findAllAuthors();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }

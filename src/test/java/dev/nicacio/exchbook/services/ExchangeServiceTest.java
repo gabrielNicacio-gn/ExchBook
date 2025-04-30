@@ -79,7 +79,7 @@ class ExchangeServiceTest {
 
         when(exchangeRepository.findById(idExchange)).thenReturn(exchange);
 
-        ExchangeDto exchangeDto = exchangeService.getExchangeById(idExchange);
+        ExchangeDto exchangeDto = exchangeService.findExchangeById(idExchange);
 
         verify(exchangeRepository,times(1)).findById(idExchange);
 
@@ -105,7 +105,7 @@ class ExchangeServiceTest {
 
         when(exchangeRepository.findAll()).thenReturn(exchangeList);
 
-        List<ExchangeDto> result = exchangeService.getAllExchanges();
+        List<ExchangeDto> result = exchangeService.findAllExchanges();
 
         verify(exchangeRepository,times(1)).findAll();
         assertEquals(expectedResult,result);

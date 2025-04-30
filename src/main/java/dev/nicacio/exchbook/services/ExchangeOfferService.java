@@ -29,13 +29,13 @@ public class ExchangeOfferService {
         return savedOffer.getIdExchangeOffer();
     }
 
-    public ExchangeOfferDto getExchangeOfferById(int idExchangeOffer) throws ChangeSetPersister.NotFoundException {
+    public ExchangeOfferDto findExchangeOfferById(int idExchangeOffer) throws ChangeSetPersister.NotFoundException {
         ExchangeOffer exchangeOffer = exchangeOfferRepository.findById(idExchangeOffer)
                 .orElseThrow(ChangeSetPersister.NotFoundException::new);
         return exchangeOfferMapper.toExchangeOfferDto(exchangeOffer);
     }
 
-    public List<ExchangeOfferDto> getAllExchangeOffer(StatusExchangeOffer status){
+    public List<ExchangeOfferDto> findAllExchangeOffer(StatusExchangeOffer status){
         List<ExchangeOffer> list = status==null
                 ? exchangeOfferRepository.findAll()
                 : exchangeOfferRepository.findByStatusExchangeOffer(status);

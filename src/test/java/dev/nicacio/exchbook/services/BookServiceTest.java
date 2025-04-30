@@ -90,7 +90,7 @@ class BookServiceTest {
 
         when(bookRepository.findById(1)).thenReturn(book);
 
-        BookDto bookDto = bookService.getBookById(1);
+        BookDto bookDto = bookService.findBookById(1);
 
         verify(bookRepository,times(1)).findById(1);
 
@@ -124,7 +124,7 @@ class BookServiceTest {
 
         when(bookRepository.findAll()).thenReturn(bookList);
 
-        List<BookDto> result = bookService.getAllBooks();
+        List<BookDto> result = bookService.findAllBooks();
 
         verify(bookRepository,times(1)).findAll();
         assertEquals(expectedResult,result);
