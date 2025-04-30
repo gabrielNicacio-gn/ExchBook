@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.mapper;
 
 import dev.nicacio.exchbook.dtos.request.CreateAuthorRequestDto;
+import dev.nicacio.exchbook.dtos.request.UpdateAuthorRequestDto;
 import dev.nicacio.exchbook.dtos.response.AuthorDto;
 import dev.nicacio.exchbook.models.Author;
 import org.mapstruct.Mapper;
@@ -9,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
+    Author toAuthorUpdate(UpdateAuthorRequestDto requestDto);
     Author toAuthor(CreateAuthorRequestDto requestDto);
     AuthorDto toAuthorDto(Author author);
 }

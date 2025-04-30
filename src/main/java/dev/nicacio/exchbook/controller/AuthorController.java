@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.controller;
 
 import dev.nicacio.exchbook.dtos.request.CreateAuthorRequestDto;
+import dev.nicacio.exchbook.dtos.request.UpdateAuthorRequestDto;
 import dev.nicacio.exchbook.dtos.response.AuthorDto;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.models.Author;
@@ -43,5 +44,11 @@ public class AuthorController {
     public ResponseEntity<List<AuthorDto>> getAllAuthors(){
         List<AuthorDto> response = authorService.findAllAuthors();
         return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @PutMapping("/author/{id}")
+    public ResponseEntity updateAuthor(@PathVariable("id") int idAuthor, @RequestBody UpdateAuthorRequestDto request){
+        authorService.updateAuthor(idAuthor,request);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }
