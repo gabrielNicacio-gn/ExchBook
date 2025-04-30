@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1")
@@ -31,6 +33,12 @@ public class ExchangeController {
     @GetMapping("/exchange/{id}")
     public ResponseEntity<ExchangeDto> returnExchangeById(@PathVariable("id") int idExchange) throws ChangeSetPersister.NotFoundException {
         ExchangeDto response = exchangeService.getExchangeById(idExchange);
+        return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+
+    @GetMapping("/exchanges")
+    public ResponseEntity<List<ExchangeDto>> returnAllExchanges(){
+        List<ExchangeDto> response = exchangeService.getAllExchanges();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }
