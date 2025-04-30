@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Bean;
 
 @Mapper(componentModel = "spring")
 public interface AuthorMapper {
-    Author toAuthorUpdate(UpdateAuthorRequestDto requestDto);
     Author toAuthor(CreateAuthorRequestDto requestDto);
     AuthorDto toAuthorDto(Author author);
 }

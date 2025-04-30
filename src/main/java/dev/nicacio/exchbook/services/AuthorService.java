@@ -41,7 +41,7 @@ public class AuthorService {
     public void updateAuthor(int idAuthor, UpdateAuthorRequestDto updateAuthor){
         Author author = authorRepository.findById(idAuthor)
                 .orElseThrow(()-> new ResourceNotFoundException("Author not found"));
-        Author authorUpdated = authorMapper.toAuthorUpdate(updateAuthor);
-        authorRepository.save(authorUpdated);
+        author.setName(updateAuthor.name());
+        authorRepository.save(author);
     }
 }

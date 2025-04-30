@@ -111,10 +111,10 @@ class AuthorServiceTest {
         savedAuthor.get().setIdAuthor(1);
         savedAuthor.get().setName("Cristiano Ronaldo");
 
-        Author authorUpdated = authorMapper.toAuthorUpdate(update);
+        savedAuthor.get().setName(update.name());
 
         when(authorRepository.findById(1)).thenReturn(savedAuthor);
-        when(authorRepository.save(any(Author.class))).thenReturn(authorUpdated);
+        when(authorRepository.save(any(Author.class))).thenReturn(savedAuthor.get());
 
         authorService.updateAuthor(idAuthor,update);
 
