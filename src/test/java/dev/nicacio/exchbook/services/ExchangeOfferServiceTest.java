@@ -36,22 +36,22 @@ class ExchangeOfferServiceTest {
     private  BookRepository bookRepository;
     @Mock
     private BookCopyRepository bookCopyRepository;
-    private final ExchangeOfferMapper exchangeOfferMapper = Mappers.getMapper(ExchangeOfferMapper.class);
+    @Mock
+    private ExchangeOfferMapper exchangeOfferMapper;
 
     @InjectMocks
     private ExchangeOfferService exchangeOfferService;
     @BeforeEach
     void setup(){
         MockitoAnnotations.openMocks(this);
-        exchangeOfferService = new ExchangeOfferService(exchangeOfferRepository,bookRepository,bookCopyRepository,exchangeOfferMapper);
     }
     @Test
     public void shouldRegisterAnExchangeOffer(){
         CreateExchangeOfferRequestDto create = new CreateExchangeOfferRequestDto(1,2);
 
-        Optional<BookCopy> bookCopyOffered = Optional.of(new BookCopy());
-        bookCopyOffered.get().setIdCopy(1);
-        bookCopyOffered.get().setCondition(Condition.NOVO);
+        Optional<BookCopy> copyOffered = Optional.of(new BookCopy());
+        copyOffered.get().setIdCopy(1);
+        copyOffered.get().setCondition(Condition.NOVO);
 
         Optional<Book> bookDesired = Optional.of(new Book());
         bookDesired.get().setIdBook(2);
@@ -61,10 +61,11 @@ class ExchangeOfferServiceTest {
         savedExchangeOffer.setIdExchangeOffer(1);
         savedExchangeOffer.setStatusExchangeOffer(StatusExchangeOffer.OPEN);
         savedExchangeOffer.setBookDesired(bookDesired.get());
-        savedExchangeOffer.setCopyOffered(bookCopyOffered.get());
+        savedExchangeOffer.setCopyOffered(copyOffered.get());
 
+        when(exchangeOfferMapper.toExchangeOffer(create,bookDesired.get(),copyOffered.get())).thenReturn(savedExchangeOffer);
         when(bookRepository.findById(2)).thenReturn(bookDesired);
-        when(bookCopyRepository.findById(1)).thenReturn(bookCopyOffered);
+        when(bookCopyRepository.findById(1)).thenReturn(copyOffered);
         when(exchangeOfferRepository.save(ArgumentMatchers.any(ExchangeOffer.class))).thenReturn(savedExchangeOffer);
 
         int idCreatedExchangeOffer = exchangeOfferService.registerExchangeOffer(create);

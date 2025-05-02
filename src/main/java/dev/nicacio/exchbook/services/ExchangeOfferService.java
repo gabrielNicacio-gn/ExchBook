@@ -6,6 +6,8 @@ import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
 import dev.nicacio.exchbook.enums.StatusExchangeOffer;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.mapper.ExchangeOfferMapper;
+import dev.nicacio.exchbook.models.Book;
+import dev.nicacio.exchbook.models.BookCopy;
 import dev.nicacio.exchbook.models.ExchangeOffer;
 import dev.nicacio.exchbook.repository.BookCopyRepository;
 import dev.nicacio.exchbook.repository.BookRepository;
@@ -25,7 +27,14 @@ public class ExchangeOfferService {
     private final ExchangeOfferMapper exchangeOfferMapper;
 
     public int registerExchangeOffer(CreateExchangeOfferRequestDto createExchangeOffer){
-        ExchangeOffer offer = exchangeOfferMapper.toExchangeOffer(createExchangeOffer,bookRepository,bookCopyRepository);
+
+        Book bookDesired = bookRepository.findById(createExchangeOffer.idBookDesired())
+                .orElseThrow(()-> new IllegalArgumentException("Book not found, can't create a exchange offer"));
+
+        BookCopy copyOffered = bookCopyRepository.findById(createExchangeOffer.idCopyOffered())
+                .orElseThrow(()-> new IllegalArgumentException("Copy not found, can't create a exchange offer"));
+
+        ExchangeOffer offer = exchangeOfferMapper.toExchangeOffer(createExchangeOffer,bookDesired,copyOffered);
         ExchangeOffer savedOffer = exchangeOfferRepository.save(offer);
         return savedOffer.getIdExchangeOffer();
     }

@@ -14,18 +14,8 @@ import org.mapstruct.Mapping;
 @Mapper(componentModel = "spring")
 public interface ExchangeOfferMapper {
 
-    @Mapping(target = "bookDesired", source = "idBookDesired")
-    @Mapping(target = "copyOffered", source = "idCopyOffered")
-    ExchangeOffer toExchangeOffer(CreateExchangeOfferRequestDto createExchangeOffer, @Context BookRepository bookRepository
-            , @Context BookCopyRepository bookCopyRepository);
-
-    default Book mapIdBookToBook(int idBook,@Context BookRepository bookRepository){
-        return bookRepository.findById(idBook)
-                .orElseThrow(()-> new IllegalArgumentException("Book or Copy not found, can't create a exchange offer"));
-    }
-    default BookCopy mapIdBookCopyToBookCopy(int idBookCopy,@Context BookCopyRepository bookCopyRepository){
-        return bookCopyRepository.findById(idBookCopy)
-                .orElseThrow(()-> new IllegalArgumentException("Book or Copy not found, can't create a exchange offer"));
-    }
+    @Mapping(target = "bookDesired", source = "bookDesired")
+    @Mapping(target = "copyOffered", source = "copyOffered")
+    ExchangeOffer toExchangeOffer(CreateExchangeOfferRequestDto createExchangeOffer, Book bookDesired, BookCopy copyOffered);
     ExchangeOfferDto toExchangeOfferDto(ExchangeOffer offer);
 }
