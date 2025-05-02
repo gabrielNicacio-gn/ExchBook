@@ -70,7 +70,7 @@ class BookServiceTest {
     }
 
     @Test
-    public void shouldNotRegisterAnBookAndThrowResourceNotFoundException(){
+    public void shouldNotRegisterAnBookAndThrowIllegalArgumentException(){
         List<Integer> authorsIds = List.of(99);
         CreateBookRequestDto create = new CreateBookRequestDto("BookOne",authorsIds);
 

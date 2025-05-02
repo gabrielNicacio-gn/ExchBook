@@ -68,7 +68,7 @@ class BookCopyServiceTest {
         assertEquals(bookCopy.getIdCopy(),idCreatedBookCopy);
     }
     @Test
-    public void shouldNotRegisterAnBookCopyAndThrowResourceNotFoundException(){
+    public void shouldNotRegisterAnBookCopyAndThrowIllegalArgumentException(){
         CreateBookCopyRequestDto create = new CreateBookCopyRequestDto(Condition.NOVO,99);
 
         when(copyBookRepository.findById(99)).thenReturn(Optional.empty());
