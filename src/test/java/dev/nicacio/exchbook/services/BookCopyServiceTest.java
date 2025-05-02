@@ -33,13 +33,13 @@ class BookCopyServiceTest {
     private BookRepository bookRepository;
     @Mock
     private BookCopyRepository copyBookRepository;
-    private final BookCopyMapper bookCopyMapper = Mappers.getMapper(BookCopyMapper.class);
+    @Mock
+    private  BookCopyMapper bookCopyMapper;
     @InjectMocks
     private BookCopyService bookCopyService;
     @BeforeEach
     void setup(){
         MockitoAnnotations.openMocks(this);
-        bookCopyService = new BookCopyService(bookRepository,copyBookRepository,bookCopyMapper);
     }
     @Test
     public void shouldRegisterAnBookCopy(){
@@ -53,6 +53,7 @@ class BookCopyServiceTest {
         bookCopy.setCondition(Condition.NOVO);
         bookCopy.setBook(book.get());
 
+        when(bookCopyMapper.toBookCopy(create,book.get())).thenReturn(bookCopy);
         when(bookRepository.findById(any())).thenReturn(book);
         when(copyBookRepository.save(any(BookCopy.class))).thenReturn(bookCopy);
 

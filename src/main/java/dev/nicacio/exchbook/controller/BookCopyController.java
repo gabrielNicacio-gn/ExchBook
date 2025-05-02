@@ -4,6 +4,7 @@ import dev.nicacio.exchbook.dtos.request.CreateBookCopyRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookCopyDto;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.services.BookCopyService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +21,7 @@ import java.util.List;
 public class BookCopyController {
     private final BookCopyService bookCopyServices;
     @PostMapping("/copy")
-    public ResponseEntity addBookCopy(@RequestBody CreateBookCopyRequestDto request){
+    public ResponseEntity addBookCopy(@RequestBody @Valid CreateBookCopyRequestDto request){
         HttpHeaders headers = new HttpHeaders();
         int response = bookCopyServices.registerBookCopy(request);
 
