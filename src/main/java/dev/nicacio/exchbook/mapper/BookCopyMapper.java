@@ -14,16 +14,8 @@ import java.util.Optional;
 
 @Mapper(componentModel = "spring")
 public interface BookCopyMapper {
-    @Mapping(target = "book", source = "idBook")
-    BookCopy toBookCopy(CreateBookCopyRequestDto createBookCopy, @Context BookRepository bookRepository);
 
-    default Book mapBookIdtoBook(int idBook,@Context BookRepository bookRepository){
-        Optional<Book> bookOptional = bookRepository.findById(idBook);
-        if(bookOptional.isEmpty()){
-            throw new IllegalArgumentException("Book not found, cannot create a copy");
-        }
-        return bookOptional.get();
-    }
-
+    @Mapping(target = "book", source = "book")
+    BookCopy toBookCopy(CreateBookCopyRequestDto createBookCopy, Book book);
     BookCopyDto toBookCopyDto(BookCopy copy);
 }

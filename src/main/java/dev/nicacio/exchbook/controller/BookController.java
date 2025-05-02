@@ -5,6 +5,7 @@ import dev.nicacio.exchbook.dtos.request.UpdateBookRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookDto;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.services.BookService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
@@ -22,7 +23,7 @@ public class BookController {
 
     private final BookService bookService;
     @PostMapping("/book")
-    public ResponseEntity addBook(@RequestBody CreateBookRequestDto create){
+    public ResponseEntity addBook(@RequestBody @Valid CreateBookRequestDto create){
         HttpHeaders headers = new HttpHeaders();
         int response = bookService.registerBook(create);
         headers.setLocation(UriComponentsBuilder
