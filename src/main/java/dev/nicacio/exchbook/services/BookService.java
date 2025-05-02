@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookRequestDto;
+import dev.nicacio.exchbook.dtos.request.UpdateBookRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookDto;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.mapper.BookMapper;
@@ -40,4 +41,10 @@ public class BookService {
             return bookRepository.findAll().stream().map(bookMapper::toBookDto).toList();
         }
 
+        public void updateBook(int idBook, UpdateBookRequestDto updateBook){
+            Book book = bookRepository.findById(idBook)
+                    .orElseThrow(()-> new ResourceNotFoundException("Book not found"));
+            book.setTitle(updateBook.title());
+            bookRepository.save(book);
+        }
     }

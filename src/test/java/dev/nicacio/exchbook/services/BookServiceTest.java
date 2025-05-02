@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookRequestDto;
+import dev.nicacio.exchbook.dtos.request.UpdateBookRequestDto;
 import dev.nicacio.exchbook.dtos.response.AuthorDto;
 import dev.nicacio.exchbook.dtos.response.BookDto;
 import dev.nicacio.exchbook.mapper.BookMapper;
@@ -128,5 +129,26 @@ class BookServiceTest {
 
         verify(bookRepository,times(1)).findAll();
         assertEquals(expectedResult,result);
+    }
+
+    @Test
+    public void shouldUpdateAnBook(){
+        int idBook = 1;
+        UpdateBookRequestDto requestDto = new UpdateBookRequestDto("New Title");
+
+        Optional<Book> savedBook = Optional.of(new Book());
+        savedBook.get().setIdBook(1);
+        savedBook.get().setTitle("Current Title");
+
+        when(bookRepository.findById(1)).thenReturn(savedBook);
+        when(bookRepository.save(any(Book.class))).thenReturn(savedBook.get());
+
+        bookService.updateBook(idBook,requestDto);
+
+        verify(bookRepository,times(1)).findById(any());
+        verify(bookRepository,times(1)).save(any(Book.class));
+
+        assertEquals(requestDto.title(),savedBook.get().getTitle());
+
     }
 }
