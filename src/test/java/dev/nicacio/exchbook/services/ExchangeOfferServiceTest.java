@@ -1,5 +1,6 @@
 package dev.nicacio.exchbook.services;
 
+import dev.nicacio.exchbook.dtos.request.CreateBookRequestDto;
 import dev.nicacio.exchbook.dtos.request.CreateExchangeOfferRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookCopyDto;
 import dev.nicacio.exchbook.dtos.response.BookDto;
@@ -23,6 +24,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.crossstore.ChangeSetPersister;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -76,6 +78,31 @@ class ExchangeOfferServiceTest {
 
         assertEquals(savedExchangeOffer.getIdExchangeOffer(),idCreatedExchangeOffer);
     }
+    @Test
+    public void shouldFailToRegisterAnOfferAndThrowIllegalArgumentExceptionWithMessageBookNotFound(){
+        CreateExchangeOfferRequestDto create = new CreateExchangeOfferRequestDto(99,98);
+
+        when(bookRepository.findById(98)).thenReturn(Optional.empty());
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,()->
+               exchangeOfferService.registerExchangeOffer(create));
+
+        assertEquals("Book not found, can't create a exchange offer",ex.getMessage());
+    }
+
+    @Test
+    public void shouldFailToRegisterAnOfferAndThrowIllegalArgumentExceptionWithMessageCopyNotFound(){
+        CreateExchangeOfferRequestDto create = new CreateExchangeOfferRequestDto(99,98);
+
+        when(bookRepository.findById(98)).thenReturn(Optional.of(new Book()));
+        when(bookCopyRepository.findById(99)).thenReturn(Optional.empty());
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,()->
+                exchangeOfferService.registerExchangeOffer(create));
+
+        assertEquals("Copy not found, can't create a exchange offer",ex.getMessage());
+    }
+
     @Test
     public void shouldGetExchangeOfferById() throws ChangeSetPersister.NotFoundException {
         int idExchangeOffer = 1;
