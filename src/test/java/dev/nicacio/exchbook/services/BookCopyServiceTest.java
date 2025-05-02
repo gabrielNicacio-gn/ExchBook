@@ -1,10 +1,12 @@
 package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookCopyRequestDto;
+import dev.nicacio.exchbook.dtos.request.CreateBookRequestDto;
 import dev.nicacio.exchbook.dtos.response.AuthorDto;
 import dev.nicacio.exchbook.dtos.response.BookCopyDto;
 import dev.nicacio.exchbook.dtos.response.BookDto;
 import dev.nicacio.exchbook.enums.Condition;
+import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.mapper.BookCopyMapper;
 import dev.nicacio.exchbook.models.Author;
 import dev.nicacio.exchbook.models.Book;
@@ -21,6 +23,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.crossstore.ChangeSetPersister;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -63,6 +66,17 @@ class BookCopyServiceTest {
         verify(copyBookRepository,times(1)).save(any());
 
         assertEquals(bookCopy.getIdCopy(),idCreatedBookCopy);
+    }
+    @Test
+    public void shouldNotRegisterAnBookCopyAndThrowResourceNotFoundException(){
+        CreateBookCopyRequestDto create = new CreateBookCopyRequestDto(Condition.NOVO,99);
+
+        when(copyBookRepository.findById(99)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class,()->
+                bookCopyService.registerBookCopy(create));
+
+        assertEquals("Book not found",ex.getMessage());
     }
 
     @Test
