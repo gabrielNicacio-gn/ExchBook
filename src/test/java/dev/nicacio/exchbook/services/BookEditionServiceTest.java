@@ -1,8 +1,11 @@
 package dev.nicacio.exchbook.services;
 
+import dev.nicacio.exchbook.dtos.request.CreateBookCopyRequestDto;
 import dev.nicacio.exchbook.dtos.request.CreateBookEditionRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookDto;
 import dev.nicacio.exchbook.dtos.response.BookEditionDto;
+import dev.nicacio.exchbook.enums.Condition;
+import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.mapper.BookEditionMapper;
 import dev.nicacio.exchbook.models.Book;
 import dev.nicacio.exchbook.models.BookEdition;
@@ -62,6 +65,18 @@ class BookEditionServiceTest {
 
         assertEquals(bookEdition.getIdEditionBook(),idCreatedEditionBook);
 
+    }
+    @Test
+    public void shouldNotRegisterAnBookCopyAndThrowResourceNotFoundException(){
+        CreateBookEditionRequestDto create = new CreateBookEditionRequestDto("2025","2",
+                "Hardcover",99);
+
+        when(editionBookRepository.findById(99)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class,()->
+                bookEditionService.registerEdition(create));
+
+        assertEquals("Book not found",ex.getMessage());
     }
 
     @Test
