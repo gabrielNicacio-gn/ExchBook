@@ -26,7 +26,7 @@ public class BookCopyService {
 
     public int registerBookCopy(CreateBookCopyRequestDto createBook) {
         Book book = bookRepository.findById(createBook.idBook())
-                .orElseThrow(()-> new ResourceNotFoundException("Book not found"));
+                .orElseThrow(()-> new IllegalArgumentException("Book not found, can't create a copy"));
 
         BookCopy newCopy = bookCopyMapper.toBookCopy(createBook, book);
         BookCopy savedCopy = bookCopyRepository.save(newCopy);

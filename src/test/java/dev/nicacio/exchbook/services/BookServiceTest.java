@@ -76,10 +76,10 @@ class BookServiceTest {
 
         when(bookRepository.findAllById(List.of(99))).thenReturn(Collections.emptyList());
 
-        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class,()->
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,()->
                 bookService.registerBook(create));
 
-        assertEquals("Author(s) not found",ex.getMessage());
+        assertEquals("Author(s) not found, can't create a book",ex.getMessage());
     }
 
     @Test

@@ -29,7 +29,7 @@ public class BookService {
             List<Author> authors = authorRepository.findAllById(createBookDto.authorIds());
 
             if(authors.isEmpty()){
-                throw new ResourceNotFoundException("Author(s) not found");
+                throw new IllegalArgumentException("Author(s) not found, can't create a book");
             }
 
             Book book = bookMapper.toBook(createBookDto,authors);

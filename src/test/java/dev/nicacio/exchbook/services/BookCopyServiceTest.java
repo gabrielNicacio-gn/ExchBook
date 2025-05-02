@@ -73,10 +73,10 @@ class BookCopyServiceTest {
 
         when(copyBookRepository.findById(99)).thenReturn(Optional.empty());
 
-        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class,()->
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,()->
                 bookCopyService.registerBookCopy(create));
 
-        assertEquals("Book not found",ex.getMessage());
+        assertEquals("Book not found, can't create a copy",ex.getMessage());
     }
 
     @Test
