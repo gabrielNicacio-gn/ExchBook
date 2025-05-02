@@ -14,15 +14,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface BookMapper {
-    @Mapping(target = "authors", source = "authorIds")
-    Book toBook (CreateBookRequestDto createBook, @Context AuthorRepository authorRepository);
-
-    default List<Author> mapAuthorsIdsToAuthors(List<Integer> authorIds, @Context AuthorRepository authorRepository){
-      List<Author> authors =authorIds != null ? authorRepository.findAllById(authorIds): Collections.emptyList();
-      if(authors.isEmpty()){
-          throw new IllegalArgumentException("No Author found, can't create a book");
-      }
-      return authors;
-    }
+    //@Mapping(target = "authors", source = "authorIds")
+    Book toBook (CreateBookRequestDto createBook, List<Author> authors);
     BookDto toBookDto(Book book);
 }
