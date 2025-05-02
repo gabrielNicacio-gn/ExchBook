@@ -29,13 +29,13 @@ class BookEditionServiceTest {
     private BookEditionRepository editionBookRepository;
     @Mock
     private BookRepository bookRepository;
-    private final BookEditionMapper bookEditionMapper = Mappers.getMapper(BookEditionMapper.class);
+    @Mock
+    private BookEditionMapper bookEditionMapper;
     @InjectMocks
     private BookEditionService bookEditionService;
     @BeforeEach
     void setup(){
         MockitoAnnotations.openMocks(this);
-        bookEditionService = new BookEditionService(editionBookRepository,bookRepository,bookEditionMapper);
     }
     @Test
     public void shouldRegisterAnBookEdition(){
@@ -51,6 +51,7 @@ class BookEditionServiceTest {
         bookEdition.setFormat("HardCover");
         bookEdition.setYearOfPublication("2025");
 
+        when(bookEditionMapper.toBookEdition(create,book.get())).thenReturn(bookEdition);
         when(bookRepository.findById(1)).thenReturn(book);
         when(editionBookRepository.save(any(BookEdition.class))).thenReturn(bookEdition);
 
