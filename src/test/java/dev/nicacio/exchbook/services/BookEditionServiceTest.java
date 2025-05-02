@@ -67,7 +67,7 @@ class BookEditionServiceTest {
 
     }
     @Test
-    public void shouldNotRegisterAnBookCopyAndThrowResourceNotFoundException(){
+    public void shouldNotRegisterAnBookCopyAndThrowIllegalArgumentException(){
         CreateBookEditionRequestDto create = new CreateBookEditionRequestDto("2025","2",
                 "Hardcover",99);
 
