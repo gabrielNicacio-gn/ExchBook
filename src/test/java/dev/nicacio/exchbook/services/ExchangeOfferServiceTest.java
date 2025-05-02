@@ -1,5 +1,6 @@
 package dev.nicacio.exchbook.services;
 
+import dev.nicacio.exchbook.dtos.request.CreateBookRequestDto;
 import dev.nicacio.exchbook.dtos.request.CreateExchangeOfferRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookCopyDto;
 import dev.nicacio.exchbook.dtos.response.BookDto;
@@ -23,6 +24,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.data.crossstore.ChangeSetPersister;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -36,22 +38,22 @@ class ExchangeOfferServiceTest {
     private  BookRepository bookRepository;
     @Mock
     private BookCopyRepository bookCopyRepository;
-    private final ExchangeOfferMapper exchangeOfferMapper = Mappers.getMapper(ExchangeOfferMapper.class);
+    @Mock
+    private ExchangeOfferMapper exchangeOfferMapper;
 
     @InjectMocks
     private ExchangeOfferService exchangeOfferService;
     @BeforeEach
     void setup(){
         MockitoAnnotations.openMocks(this);
-        exchangeOfferService = new ExchangeOfferService(exchangeOfferRepository,bookRepository,bookCopyRepository,exchangeOfferMapper);
     }
     @Test
     public void shouldRegisterAnExchangeOffer(){
         CreateExchangeOfferRequestDto create = new CreateExchangeOfferRequestDto(1,2);
 
-        Optional<BookCopy> bookCopyOffered = Optional.of(new BookCopy());
-        bookCopyOffered.get().setIdCopy(1);
-        bookCopyOffered.get().setCondition(Condition.NOVO);
+        Optional<BookCopy> copyOffered = Optional.of(new BookCopy());
+        copyOffered.get().setIdCopy(1);
+        copyOffered.get().setCondition(Condition.NOVO);
 
         Optional<Book> bookDesired = Optional.of(new Book());
         bookDesired.get().setIdBook(2);
@@ -61,10 +63,11 @@ class ExchangeOfferServiceTest {
         savedExchangeOffer.setIdExchangeOffer(1);
         savedExchangeOffer.setStatusExchangeOffer(StatusExchangeOffer.OPEN);
         savedExchangeOffer.setBookDesired(bookDesired.get());
-        savedExchangeOffer.setCopyOffered(bookCopyOffered.get());
+        savedExchangeOffer.setCopyOffered(copyOffered.get());
 
+        when(exchangeOfferMapper.toExchangeOffer(create,bookDesired.get(),copyOffered.get())).thenReturn(savedExchangeOffer);
         when(bookRepository.findById(2)).thenReturn(bookDesired);
-        when(bookCopyRepository.findById(1)).thenReturn(bookCopyOffered);
+        when(bookCopyRepository.findById(1)).thenReturn(copyOffered);
         when(exchangeOfferRepository.save(ArgumentMatchers.any(ExchangeOffer.class))).thenReturn(savedExchangeOffer);
 
         int idCreatedExchangeOffer = exchangeOfferService.registerExchangeOffer(create);
@@ -75,6 +78,31 @@ class ExchangeOfferServiceTest {
 
         assertEquals(savedExchangeOffer.getIdExchangeOffer(),idCreatedExchangeOffer);
     }
+    @Test
+    public void shouldFailToRegisterAnOfferAndThrowIllegalArgumentExceptionWithMessageBookNotFound(){
+        CreateExchangeOfferRequestDto create = new CreateExchangeOfferRequestDto(99,98);
+
+        when(bookRepository.findById(98)).thenReturn(Optional.empty());
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,()->
+               exchangeOfferService.registerExchangeOffer(create));
+
+        assertEquals("Book not found, can't create a exchange offer",ex.getMessage());
+    }
+
+    @Test
+    public void shouldFailToRegisterAnOfferAndThrowIllegalArgumentExceptionWithMessageCopyNotFound(){
+        CreateExchangeOfferRequestDto create = new CreateExchangeOfferRequestDto(99,98);
+
+        when(bookRepository.findById(98)).thenReturn(Optional.of(new Book()));
+        when(bookCopyRepository.findById(99)).thenReturn(Optional.empty());
+
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,()->
+                exchangeOfferService.registerExchangeOffer(create));
+
+        assertEquals("Copy not found, can't create a exchange offer",ex.getMessage());
+    }
+
     @Test
     public void shouldGetExchangeOfferById() throws ChangeSetPersister.NotFoundException {
         int idExchangeOffer = 1;
