@@ -24,7 +24,7 @@ public class BookEditionService {
 
     public int registerEdition(CreateBookEditionRequestDto createEdition){
         Book book = bookRepository.findById(createEdition.idBook())
-                .orElseThrow(()-> new ResourceNotFoundException("Book not found"));
+                .orElseThrow(()-> new IllegalArgumentException("Book not found, can't create a edition"));
 
         BookEdition edition = bookEditionMapper.toBookEdition(createEdition,book);
         BookEdition savedEdition = editionBookRepository.save(edition);

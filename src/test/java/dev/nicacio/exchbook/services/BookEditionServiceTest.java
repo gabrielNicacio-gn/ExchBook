@@ -73,10 +73,10 @@ class BookEditionServiceTest {
 
         when(editionBookRepository.findById(99)).thenReturn(Optional.empty());
 
-        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class,()->
+        IllegalArgumentException ex = assertThrows(IllegalArgumentException.class,()->
                 bookEditionService.registerEdition(create));
 
-        assertEquals("Book not found",ex.getMessage());
+        assertEquals("Book not found, can't create a edition",ex.getMessage());
     }
 
     @Test
