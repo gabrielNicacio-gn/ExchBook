@@ -4,6 +4,7 @@ import dev.nicacio.exchbook.dtos.request.CreateBookRequestDto;
 import dev.nicacio.exchbook.dtos.request.UpdateBookRequestDto;
 import dev.nicacio.exchbook.dtos.response.AuthorDto;
 import dev.nicacio.exchbook.dtos.response.BookDto;
+import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.mapper.BookMapper;
 import dev.nicacio.exchbook.models.Author;
 import dev.nicacio.exchbook.models.Book;
@@ -18,9 +19,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.crossstore.ChangeSetPersister;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -28,7 +27,8 @@ import static org.mockito.Mockito.*;
 
 class BookServiceTest {
 
-    private final BookMapper bookMapper = Mappers.getMapper(BookMapper.class);
+    @Mock
+    private BookMapper bookMapper;
     @Mock
     private AuthorRepository authorRepository;
     @Mock
@@ -39,33 +39,49 @@ class BookServiceTest {
     @BeforeEach
     void setup(){
         MockitoAnnotations.openMocks(this);
-        bookService = new BookService(bookRepository,authorRepository,bookMapper);
     }
 
     @Test
     public void shouldRegisterAnBook(){
         List<Integer> authorsIds = List.of(1);
         CreateBookRequestDto create = new CreateBookRequestDto("BookOne",authorsIds);
-        Optional<Author> author = Optional.of(new Author());
-        author.get().setName("AuthorOne");
-        author.get().setIdAuthor(1);
 
-        Book savedBook = new Book();
-        savedBook.setIdBook(2);
-        savedBook.setTitle("BookOne");
-        savedBook.addAuthors(List.of(author.get()));
+        Author author = new Author();
+        author.setName("AuthorOne");
+        author.setIdAuthor(1);
+        List<Author> authorsList = List.of(author);
 
-        when(bookRepository.save(any(Book.class))).thenReturn(savedBook);
-        when(authorRepository.findAllById(List.of(1))).thenReturn(List.of(author.get()));
+        Book expectedBook = new Book();
+        expectedBook.setIdBook(1);
+        expectedBook.setTitle("BookOne");
+        expectedBook.addAuthors(authorsList);
+
+        when(bookMapper.toBook(any(CreateBookRequestDto.class),any())).thenReturn(expectedBook);
+        when(bookRepository.save(any(Book.class))).thenReturn(expectedBook);
+        when(authorRepository.findAllById(List.of(1))).thenReturn(authorsList);
 
         int idCreatedBook = bookService.registerBook(create);
 
-        verify(authorRepository,times(2)).findAllById(authorsIds);
+        verify(authorRepository,times(1)).findAllById(authorsIds);
         verify(bookRepository,times(1)).save(any());
 
-        assertEquals("BookOne",savedBook.getTitle());
-        assertEquals(savedBook.getIdBook(),idCreatedBook);
+        assertEquals("BookOne",expectedBook.getTitle());
+        assertEquals(expectedBook.getIdBook(),idCreatedBook);
     }
+
+    @Test
+    public void shouldNotRegisterAnBookAndThrowResourceNotFoundException(){
+        List<Integer> authorsIds = List.of(99);
+        CreateBookRequestDto create = new CreateBookRequestDto("BookOne",authorsIds);
+
+        when(bookRepository.findAllById(List.of(99))).thenReturn(Collections.emptyList());
+
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class,()->
+                bookService.registerBook(create));
+
+        assertEquals("Author(s) not found",ex.getMessage());
+    }
+
     @Test
     public void shouldGetBookById() throws ChangeSetPersister.NotFoundException {
         List<Integer> authorsIds = List.of(1,2);

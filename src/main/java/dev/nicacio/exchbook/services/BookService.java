@@ -26,7 +26,13 @@ public class BookService {
     private final BookMapper bookMapper;
 
         public int registerBook(CreateBookRequestDto createBookDto){
-            Book book = bookMapper.toBook(createBookDto,authorRepository);
+            List<Author> authors = authorRepository.findAllById(createBookDto.authorIds());
+
+            if(authors.isEmpty()){
+                throw new ResourceNotFoundException("Author(s) not found");
+            }
+
+            Book book = bookMapper.toBook(createBookDto,authors);
             Book savedBook = bookRepository.save(book);
             return savedBook.getIdBook();
         }
