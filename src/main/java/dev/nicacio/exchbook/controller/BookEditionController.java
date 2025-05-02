@@ -4,6 +4,7 @@ import dev.nicacio.exchbook.dtos.request.CreateBookEditionRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookEditionDto;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.services.BookEditionService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
@@ -20,7 +21,7 @@ import java.util.List;
 public class BookEditionController {
     private final BookEditionService bookEditionService;
     @PostMapping("/edition")
-    public ResponseEntity addBookEdition(@RequestBody CreateBookEditionRequestDto createEdition){
+    public ResponseEntity addBookEdition(@RequestBody @Valid CreateBookEditionRequestDto createEdition){
         HttpHeaders headers = new HttpHeaders();
         int response = bookEditionService.registerEdition(createEdition);
 

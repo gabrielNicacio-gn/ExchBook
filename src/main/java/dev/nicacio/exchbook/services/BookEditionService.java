@@ -23,7 +23,10 @@ public class BookEditionService {
     private final BookEditionMapper bookEditionMapper;
 
     public int registerEdition(CreateBookEditionRequestDto createEdition){
-        BookEdition edition = bookEditionMapper.toBookEdition(createEdition,bookRepository);
+        Book book = bookRepository.findById(createEdition.idBook())
+                .orElseThrow(()-> new ResourceNotFoundException("Book not found"));
+
+        BookEdition edition = bookEditionMapper.toBookEdition(createEdition,book);
         BookEdition savedEdition = editionBookRepository.save(edition);
         return savedEdition.getIdEditionBook();
     }

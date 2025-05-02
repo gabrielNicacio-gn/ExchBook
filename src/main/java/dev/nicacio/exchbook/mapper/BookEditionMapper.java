@@ -13,15 +13,7 @@ import java.util.Optional;
 
 @Mapper(componentModel = "spring")
 public interface BookEditionMapper {
-    @Mapping(target = "book", source = "idBook")
-    BookEdition toBookEdition(CreateBookEditionRequestDto createBookEdition,@Context BookRepository bookRepository);
-
-    default Book mapIdBooktoBook(int idBook, @Context BookRepository bookRepository){
-        Optional<Book> optionalBook = bookRepository.findById(idBook);
-        if(optionalBook.isEmpty()){
-            throw new IllegalArgumentException("No Book found, can't create a edition");
-        }
-        return  optionalBook.get();
-    }
+    @Mapping(target = "book", source = "book")
+    BookEdition toBookEdition(CreateBookEditionRequestDto createBookEdition,Book book);
     BookEditionDto toBookEditionDto (BookEdition bookEdition);
 }

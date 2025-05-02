@@ -1,8 +1,11 @@
 package dev.nicacio.exchbook.services;
 
+import dev.nicacio.exchbook.dtos.request.CreateBookCopyRequestDto;
 import dev.nicacio.exchbook.dtos.request.CreateBookEditionRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookDto;
 import dev.nicacio.exchbook.dtos.response.BookEditionDto;
+import dev.nicacio.exchbook.enums.Condition;
+import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.mapper.BookEditionMapper;
 import dev.nicacio.exchbook.models.Book;
 import dev.nicacio.exchbook.models.BookEdition;
@@ -29,13 +32,13 @@ class BookEditionServiceTest {
     private BookEditionRepository editionBookRepository;
     @Mock
     private BookRepository bookRepository;
-    private final BookEditionMapper bookEditionMapper = Mappers.getMapper(BookEditionMapper.class);
+    @Mock
+    private BookEditionMapper bookEditionMapper;
     @InjectMocks
     private BookEditionService bookEditionService;
     @BeforeEach
     void setup(){
         MockitoAnnotations.openMocks(this);
-        bookEditionService = new BookEditionService(editionBookRepository,bookRepository,bookEditionMapper);
     }
     @Test
     public void shouldRegisterAnBookEdition(){
@@ -51,6 +54,7 @@ class BookEditionServiceTest {
         bookEdition.setFormat("HardCover");
         bookEdition.setYearOfPublication("2025");
 
+        when(bookEditionMapper.toBookEdition(create,book.get())).thenReturn(bookEdition);
         when(bookRepository.findById(1)).thenReturn(book);
         when(editionBookRepository.save(any(BookEdition.class))).thenReturn(bookEdition);
 
@@ -61,6 +65,18 @@ class BookEditionServiceTest {
 
         assertEquals(bookEdition.getIdEditionBook(),idCreatedEditionBook);
 
+    }
+    @Test
+    public void shouldNotRegisterAnBookCopyAndThrowResourceNotFoundException(){
+        CreateBookEditionRequestDto create = new CreateBookEditionRequestDto("2025","2",
+                "Hardcover",99);
+
+        when(editionBookRepository.findById(99)).thenReturn(Optional.empty());
+
+        ResourceNotFoundException ex = assertThrows(ResourceNotFoundException.class,()->
+                bookEditionService.registerEdition(create));
+
+        assertEquals("Book not found",ex.getMessage());
     }
 
     @Test
