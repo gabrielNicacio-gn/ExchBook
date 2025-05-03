@@ -29,14 +29,14 @@ class ExchangeServiceTest {
     private  ExchangeOfferRepository exchangeOfferRepository;
     @Mock
     private  ExchangeRepository exchangeRepository;
-    private final ExchangeMapper exchangeMapper = Mappers.getMapper(ExchangeMapper.class);
+    @Mock
+    private ExchangeMapper exchangeMapper;
     @InjectMocks
     private ExchangeService exchangeService;
 
     @BeforeEach
     void setup(){
         MockitoAnnotations.openMocks(this);
-        exchangeService = new ExchangeService(exchangeOfferRepository,exchangeRepository,exchangeMapper);
     }
     @Test
     public void shouldRegisterAnExchange(){
@@ -48,6 +48,7 @@ class ExchangeServiceTest {
         exchange.setIdExchange(1);
         exchange.setExchangeOffer(exchangeOffer.get());
 
+        when(exchangeMapper.toExchange(create,exchangeOffer.get())).thenReturn(exchange);
         when(exchangeOfferRepository.findById(1)).thenReturn(exchangeOffer);
         when(exchangeRepository.save(any(Exchange.class))).thenReturn(exchange);
         when(exchangeOfferRepository.save(any(ExchangeOffer.class))).thenReturn(exchangeOffer.get());

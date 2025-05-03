@@ -25,7 +25,10 @@ public class ExchangeService {
 
     @Transactional
     public int registerExchange(CreateExchangeRequestDto create){
-        Exchange exchange = exchangeMapper.toExchange(create,exchangeOfferRepository);
+        ExchangeOffer exchangeOffer = exchangeOfferRepository.findById(create.idExchangeOffer())
+                .orElseThrow(()-> new IllegalArgumentException("Exchange not found, can't create a exchange"));
+
+        Exchange exchange = exchangeMapper.toExchange(create,exchangeOffer);
         Exchange savedExchange = exchangeRepository.save(exchange);
 
        ExchangeOffer currentExchangeOffer = exchangeOfferRepository
