@@ -11,13 +11,7 @@ import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface ExchangeMapper {
-    @Mapping(target = "exchangeOffer", source = "idExchangeOffer")
-    Exchange toExchange(CreateExchangeRequestDto createExchange, @Context ExchangeOfferRepository exchangeOfferRepository);
-
-    default ExchangeOffer mapIdExchangeOfferToExchangeOffer( int idExchangeOffer,@Context ExchangeOfferRepository exchangeOfferRepository){
-        return exchangeOfferRepository.findById(idExchangeOffer)
-                .orElseThrow(()-> new IllegalArgumentException("Exchange not found, can't create a exchange"));
-    }
-
+    @Mapping(target = "exchangeOffer", source = "exchangeOffer")
+    Exchange toExchange(CreateExchangeRequestDto createExchange, ExchangeOffer exchangeOffer);
     ExchangeDto toExchangeDto(Exchange exchange);
 }
