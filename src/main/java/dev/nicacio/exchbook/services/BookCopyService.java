@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookCopyRequestDto;
+import dev.nicacio.exchbook.dtos.request.UpdateBookCopyRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookCopyDto;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.mapper.BookCopyMapper;
@@ -9,12 +10,9 @@ import dev.nicacio.exchbook.models.BookCopy;
 import dev.nicacio.exchbook.repository.BookRepository;
 import dev.nicacio.exchbook.repository.BookCopyRepository;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Not;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +38,12 @@ public class BookCopyService {
 
     public List<BookCopyDto> findAllBookCopies(){
         return bookCopyRepository.findAll().stream().map(bookCopyMapper::toBookCopyDto).toList();
+    }
+
+    public void updateBookCopy(int idCopy, UpdateBookCopyRequestDto updateBookCopy){
+        BookCopy bookCopy = bookCopyRepository.findById(idCopy)
+                .orElseThrow(()-> new ResourceNotFoundException("Book Copy Not Found"));
+        bookCopy.setCondition(updateBookCopy.condition());
+        bookCopyRepository.save(bookCopy);
     }
 }

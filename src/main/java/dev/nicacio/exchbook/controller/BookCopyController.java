@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.controller;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookCopyRequestDto;
+import dev.nicacio.exchbook.dtos.request.UpdateBookCopyRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookCopyDto;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.services.BookCopyService;
@@ -43,5 +44,10 @@ public class BookCopyController {
     public ResponseEntity<List<BookCopyDto>> getAllBookCopies(){
         List<BookCopyDto> response = bookCopyServices.findAllBookCopies();
         return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+    @PutMapping("/copy/{id}")
+    public ResponseEntity updateBookCopy(@PathVariable("id") int idCopy, @RequestBody UpdateBookCopyRequestDto updateBookCopyRequestDto){
+        bookCopyServices.updateBookCopy(idCopy,updateBookCopyRequestDto);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

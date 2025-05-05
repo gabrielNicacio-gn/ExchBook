@@ -2,6 +2,7 @@ package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookCopyRequestDto;
 import dev.nicacio.exchbook.dtos.request.CreateBookRequestDto;
+import dev.nicacio.exchbook.dtos.request.UpdateBookCopyRequestDto;
 import dev.nicacio.exchbook.dtos.response.AuthorDto;
 import dev.nicacio.exchbook.dtos.response.BookCopyDto;
 import dev.nicacio.exchbook.dtos.response.BookDto;
@@ -137,5 +138,24 @@ class BookCopyServiceTest {
 
         verify(copyBookRepository,times(1)).findAll();
         assertEquals(expectedResult,result);
+    }
+
+    @Test
+    public void shouldUpdateAnBookCopy(){
+        UpdateBookCopyRequestDto update = new UpdateBookCopyRequestDto(Condition.CONSERVADO);
+
+        Optional<BookCopy> bookCopy = Optional.of(new BookCopy());
+        bookCopy.get().setIdCopy(1);
+        bookCopy.get().setCondition(Condition.NOVO);
+
+        when(copyBookRepository.findById(1)).thenReturn(bookCopy);
+        when(copyBookRepository.save(any(BookCopy.class))).thenReturn(bookCopy.get());
+
+        bookCopyService.updateBookCopy(1,update);
+
+        verify(copyBookRepository,times(1)).findById(1);
+        verify(copyBookRepository,times(1)).save(any());
+
+        assertEquals(bookCopy.get().getCondition(),update.condition());
     }
 }
