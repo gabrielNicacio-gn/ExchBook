@@ -26,13 +26,13 @@ class AuthorServiceTest {
 
     @Mock
     private AuthorRepository authorRepository;
-    private final AuthorMapper authorMapper = Mappers.getMapper(AuthorMapper.class);
+    @Mock
+    private  AuthorMapper authorMapper;
     @InjectMocks
     private AuthorService authorService;
     @BeforeEach
     void setup(){
         MockitoAnnotations.openMocks(this);
-        authorService = new AuthorService(authorRepository,authorMapper);
     }
     @Test
     public void shouldRegisterAnAuthor(){
@@ -107,17 +107,17 @@ class AuthorServiceTest {
         int idAuthor = 1;
         UpdateAuthorRequestDto update = new UpdateAuthorRequestDto("NameAuthorOne");
 
-        Optional<Author> savedAuthor =Optional.of(new Author());
-        savedAuthor.get().setIdAuthor(1);
-        savedAuthor.get().setName("Cristiano Ronaldo");
+        Author savedAuthor =new Author();
+        savedAuthor.setIdAuthor(1);
+        savedAuthor.setName("Cristiano Ronaldo");
 
-        savedAuthor.get().setName(update.name());
-
-        when(authorRepository.findById(1)).thenReturn(savedAuthor);
-        when(authorRepository.save(any(Author.class))).thenReturn(savedAuthor.get());
+        when(authorRepository.findById(1)).thenReturn(Optional.of(savedAuthor));
+        when(authorRepository.save(any(Author.class))).thenReturn(savedAuthor);
 
         authorService.updateAuthor(idAuthor,update);
 
+        verify(authorRepository,times(1)).findById(1);
         verify(authorRepository,times(1)).save(any());
+        verify(authorMapper,times(1)).updateAuthorFromDto(update,savedAuthor);
     }
 }
