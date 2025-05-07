@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookEditionRequestDto;
+import dev.nicacio.exchbook.dtos.request.UpdateEditionRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookEditionDto;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.mapper.BookEditionMapper;
@@ -37,5 +38,11 @@ public class BookEditionService {
     }
     public List<BookEditionDto> findAllBookEdition(){
         return editionBookRepository.findAll().stream().map(bookEditionMapper::toBookEditionDto).toList();
+    }
+    public void updateEdition(int idEdition, UpdateEditionRequestDto update){
+        BookEdition edition = editionBookRepository.findById(idEdition)
+                .orElseThrow(()-> new IllegalArgumentException("Book Edition not found, can't a update"));
+        bookEditionMapper.updateBookEditionFromDto(update,edition);
+        editionBookRepository.save(edition);
     }
 }

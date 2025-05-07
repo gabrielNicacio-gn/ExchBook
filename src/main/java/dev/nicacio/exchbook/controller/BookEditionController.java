@@ -1,6 +1,7 @@
 package dev.nicacio.exchbook.controller;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookEditionRequestDto;
+import dev.nicacio.exchbook.dtos.request.UpdateEditionRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookEditionDto;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.services.BookEditionService;
@@ -32,16 +33,19 @@ public class BookEditionController {
                 .toUri());
         return new ResponseEntity<>(headers, HttpStatus.CREATED);
     }
-
     @GetMapping("/edition/{id}")
     public  ResponseEntity<BookEditionDto> getBookEditionById(@PathVariable("id") int idBookEdition) throws ResourceNotFoundException {
         BookEditionDto response = bookEditionService.findBookEditionById(idBookEdition);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
-
     @GetMapping("/editions")
     public ResponseEntity<List<BookEditionDto>> getAllBookEditions(){
         List<BookEditionDto> response = bookEditionService.findAllBookEdition();
         return new ResponseEntity<>(response,HttpStatus.OK);
+    }
+    @PutMapping("/edition/{id}")
+    public ResponseEntity updateEdition(@PathVariable("id") int idEdition, @RequestBody UpdateEditionRequestDto update){
+        bookEditionService.updateEdition(idEdition,update);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 }

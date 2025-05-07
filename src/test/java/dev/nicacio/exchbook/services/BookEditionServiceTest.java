@@ -2,6 +2,7 @@ package dev.nicacio.exchbook.services;
 
 import dev.nicacio.exchbook.dtos.request.CreateBookCopyRequestDto;
 import dev.nicacio.exchbook.dtos.request.CreateBookEditionRequestDto;
+import dev.nicacio.exchbook.dtos.request.UpdateEditionRequestDto;
 import dev.nicacio.exchbook.dtos.response.BookDto;
 import dev.nicacio.exchbook.dtos.response.BookEditionDto;
 import dev.nicacio.exchbook.enums.Condition;
@@ -141,6 +142,25 @@ class BookEditionServiceTest {
 
         verify(editionBookRepository,times(1)).findAll();
         assertEquals(expectedResult,result);
+    }
+    @Test
+    public void shouldUpdateAnBookEdition(){
+        int idEdition = 1;
+        UpdateEditionRequestDto update = new UpdateEditionRequestDto("2025","2",
+                "Hardcover");
+        BookEdition bookEdition = new BookEdition();
+        bookEdition.setIdEditionBook(1);
+        bookEdition.setNumberEdition("4");
+        bookEdition.setFormat("Normal Cover");
+        bookEdition.setYearOfPublication("2025");
+
+        when(editionBookRepository.findById(1)).thenReturn(Optional.of(bookEdition));
+
+        bookEditionService.updateEdition(idEdition,update);
+
+        verify(editionBookRepository,times(1)).findById(idEdition);
+        verify(bookEditionMapper).updateBookEditionFromDto(update,bookEdition);
+        verify(editionBookRepository,times(1)).save(any(BookEdition.class));
     }
 
 }
