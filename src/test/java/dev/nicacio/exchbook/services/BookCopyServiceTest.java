@@ -144,18 +144,17 @@ class BookCopyServiceTest {
     public void shouldUpdateAnBookCopy(){
         UpdateBookCopyRequestDto update = new UpdateBookCopyRequestDto(Condition.CONSERVADO);
 
-        Optional<BookCopy> bookCopy = Optional.of(new BookCopy());
-        bookCopy.get().setIdCopy(1);
-        bookCopy.get().setCondition(Condition.NOVO);
+        BookCopy bookCopy = new BookCopy();
+        bookCopy.setIdCopy(1);
+        bookCopy.setCondition(Condition.NOVO);
 
-        when(copyBookRepository.findById(1)).thenReturn(bookCopy);
-        when(copyBookRepository.save(any(BookCopy.class))).thenReturn(bookCopy.get());
+        when(copyBookRepository.findById(1)).thenReturn(Optional.of(bookCopy));
+        when(copyBookRepository.save(any(BookCopy.class))).thenReturn(bookCopy);
 
         bookCopyService.updateBookCopy(1,update);
 
         verify(copyBookRepository,times(1)).findById(1);
         verify(copyBookRepository,times(1)).save(any());
-
-        assertEquals(bookCopy.get().getCondition(),update.condition());
+        verify(bookCopyMapper,times(1)).updateBookCopyFromDto(update,bookCopy);
     }
 }
