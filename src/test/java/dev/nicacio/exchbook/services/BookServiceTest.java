@@ -152,19 +152,18 @@ class BookServiceTest {
         int idBook = 1;
         UpdateBookRequestDto requestDto = new UpdateBookRequestDto("New Title");
 
-        Optional<Book> savedBook = Optional.of(new Book());
-        savedBook.get().setIdBook(1);
-        savedBook.get().setTitle("Current Title");
+        Book savedBook = new Book();
+        savedBook.setIdBook(1);
+        savedBook.setTitle("Current Title");
 
-        when(bookRepository.findById(1)).thenReturn(savedBook);
-        when(bookRepository.save(any(Book.class))).thenReturn(savedBook.get());
+        when(bookRepository.findById(1)).thenReturn(Optional.of(savedBook));
+        when(bookRepository.save(any(Book.class))).thenReturn(savedBook);
 
         bookService.updateBook(idBook,requestDto);
 
+        verify(bookMapper,times(1)).updateBookFromDto(requestDto,savedBook);
         verify(bookRepository,times(1)).findById(any());
         verify(bookRepository,times(1)).save(any(Book.class));
-
-        assertEquals(requestDto.title(),savedBook.get().getTitle());
 
     }
 }
