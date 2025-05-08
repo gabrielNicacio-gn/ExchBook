@@ -46,4 +46,11 @@ public class BookCopyService {
         bookCopyMapper.updateBookCopyFromDto(updateBookCopy,bookCopy);
         bookCopyRepository.save(bookCopy);
     }
+
+    public void deleteBookCopy(int idCopy){
+        BookCopy copy = bookCopyRepository.findById(idCopy)
+                .orElseThrow(()-> new IllegalArgumentException("Book Copy not found"));
+        copy.makeAsDeleted();
+        bookCopyRepository.save(copy);
+    }
 }

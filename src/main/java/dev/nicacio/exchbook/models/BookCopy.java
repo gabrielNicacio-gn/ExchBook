@@ -30,7 +30,15 @@ public class BookCopy {
     @Setter(AccessLevel.NONE)
     private List<ExchangeOffer> offers = new ArrayList<>();
 
+    @Column(name = "is_deleted", nullable = false)
+    @Setter(AccessLevel.PRIVATE)
+    private boolean isDeleted = false;
+
     //@ManyToOne
     //@JoinColumn(name = "id_user_owner")
     //private UserOwner user;
+
+    public void makeAsDeleted(){
+        isDeleted = true;
+    }
 }

@@ -157,4 +157,23 @@ class BookCopyServiceTest {
         verify(copyBookRepository,times(1)).save(any());
         verify(bookCopyMapper,times(1)).updateBookCopyFromDto(update,bookCopy);
     }
+
+    @Test
+    public void shouldDeletedAnBookCopy(){
+        int idBookCopy = 1;
+
+        BookCopy bookCopy = new BookCopy();
+        bookCopy.setIdCopy(1);
+        bookCopy.setCondition(Condition.NOVO);
+
+        when(copyBookRepository.findById(1)).thenReturn(Optional.of(bookCopy));
+        when(copyBookRepository.save(any(BookCopy.class))).thenReturn(bookCopy);
+
+        bookCopyService.deleteBookCopy(idBookCopy);
+
+        verify(copyBookRepository,times(1)).findById(1);
+        verify(copyBookRepository,times(1)).save(any());
+
+        assertTrue(bookCopy.isDeleted());
+    }
 }
