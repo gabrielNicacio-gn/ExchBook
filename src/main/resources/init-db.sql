@@ -39,11 +39,12 @@ CREATE TABLE book_author(
 CREATE TABLE book_copy(
     id_book_copy SERIAL PRIMARY KEY,
     id_book INTEGER NOT NULL,
-    id_user_owner INTEGER NOT NULL,
+    --id_user_owner INTEGER NOT NULL,
     condition VARCHAR(30),
     is_deleted BOOLEAN NOT NULL,
     FOREIGN KEY (id_book) REFERENCES book(id_book),
-    FOREIGN KEY (id_user_owner) REFERENCES user_owner(id_user)
+    FOREIGN KEY (id_book) REFERENCES book(id_book)
+    --FOREIGN KEY (id_user_owner) REFERENCES user_owner(id_user)
 );
 
 CREATE TABLE book_review(
@@ -68,28 +69,29 @@ CREATE TABLE book_edition(
     FOREIGN KEY (id_book) REFERENCES book(id_book)
 );
 
-CREATE TABLE exchenge_offer(
-    id_exchenge_offer SERIAL PRIMARY KEY,
+CREATE TABLE exchange_offer(
+    id_exchange_offer SERIAL PRIMARY KEY,
     id_copy_offered INTEGER NOT NULL,
-    id_book_disired INTEGER NOT NULL,
-    id_offering_user INTEGER NOT NULL,
-    status_exchenge VARCHAR(30) NOT NULL,
+    id_book_desired INTEGER NOT NULL,
+   -- id_offering_user INTEGER NOT NULL,
+    status_exchange VARCHAR(30) NOT NULL,
     date_of_offer TIMESTAMP NOT NULL,
     is_deleted BOOLEAN NOT NULL,
     FOREIGN KEY (id_copy_offered) REFERENCES book_copy(id_book_copy),
-    FOREIGN KEY (id_book_disired) REFERENCES book(id_book),
-    FOREIGN KEY (id_offering_user) REFERENCES user_owner(id_user)
+    FOREIGN KEY (id_book_desired) REFERENCES book(id_book)
+   -- FOREIGN KEY (id_offering_user) REFERENCES user_owner(id_user)
 );
 
-CREATE TABLE exchenge(
-    id_exchenge SERIAL PRIMARY KEY,
-    id_user_accepted INTEGER NOT NULL,
-    id_exchenge_offer INTEGER NOT NULL,
+CREATE TABLE exchange(
+    id_exchange SERIAL PRIMARY KEY,
+   -- id_user_accepted INTEGER NOT NULL,
+    id_exchange_offer INTEGER NOT NULL,
     is_approved BOOLEAN NOT NULL,
     date_of_offer TIMESTAMP NOT NULL,
     is_deleted BOOLEAN NOT NULL,
-    FOREIGN KEY (id_user_accepted) REFERENCES user_owner(id_user),
-    FOREIGN KEY (id_exchenge_offer) REFERENCES exchenge_offer(id_exchenge_offer)
+    date_of_exchange TIMESTAMP NOT NULL,
+   -- FOREIGN KEY (id_user_accepted) REFERENCES user_owner(id_user),
+    FOREIGN KEY (id_exchange_offer) REFERENCES exchange_offer(id_exchange_offer)
 );
 
 

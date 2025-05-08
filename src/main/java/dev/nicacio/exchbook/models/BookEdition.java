@@ -8,12 +8,11 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
-@Table(name = "edition_book")
-public class EditionBook {
+@Table(name = "book_edition")
+public class BookEdition {
 
-    @Id @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id_edition_book")
-    @Setter(AccessLevel.NONE)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id_book_edition")
     private int IdEditionBook;
 
     @Column(name = "year_of_publication")

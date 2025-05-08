@@ -30,15 +30,17 @@ public class Book {
     private List<Author> authors = new ArrayList<>();
 
     @OneToMany(mappedBy = "book")
-    List<EditionBook> editions = new ArrayList<>();
+    @Setter(AccessLevel.NONE)
+    private List<BookEdition> editions = new ArrayList<>();
 
     @OneToMany(mappedBy = "book")
+    @Setter(AccessLevel.NONE)
     private List<BookCopy> copies = new ArrayList<>();
 
-    public void addEditions(EditionBook edition){
-        editions.add(edition);
-        edition.setBook(this);
-    }
+    @OneToMany(mappedBy = "bookDesired")
+    @Setter(AccessLevel.NONE)
+    private List<ExchangeOffer> offers = new ArrayList<>();
+
     public void addAuthors(List<Author> authors){
         this.authors.addAll(authors);
     }

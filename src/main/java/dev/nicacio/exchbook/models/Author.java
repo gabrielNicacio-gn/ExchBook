@@ -16,16 +16,12 @@ public class Author {
 
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_author")
-    @Setter(AccessLevel.NONE)
     private int idAuthor;
 
     @Column(name = "name")
     private String name;
 
     @ManyToMany(mappedBy = "authors")
+    @Setter(AccessLevel.NONE)
     private List<Book> books = new ArrayList<>();
-
-    public void addBooks(Book book){
-        books.add(book);
-    }
 }

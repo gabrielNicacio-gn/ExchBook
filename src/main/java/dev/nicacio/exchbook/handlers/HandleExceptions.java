@@ -1,5 +1,6 @@
 package dev.nicacio.exchbook.handlers;
 
+import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import org.apache.tomcat.websocket.AuthenticationException;
 import org.springframework.boot.context.config.ConfigDataResourceNotFoundException;
 import org.springframework.data.crossstore.ChangeSetPersister;
@@ -30,5 +31,9 @@ public class HandleExceptions {
     public ResponseEntity<String> handleAuthenticationException(AuthenticationException ex) {
         return new ResponseEntity<>(ex.getMessage(), HttpStatus.UNAUTHORIZED);
     }
-    
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleResourceNotFoundException(ResourceNotFoundException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);
+    }
 }
