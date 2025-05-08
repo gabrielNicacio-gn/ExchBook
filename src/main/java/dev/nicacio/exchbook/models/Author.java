@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DialectOverride;
+import org.hibernate.annotations.Where;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,4 +26,13 @@ public class Author {
     @ManyToMany(mappedBy = "authors")
     @Setter(AccessLevel.NONE)
     private List<Book> books = new ArrayList<>();
+
+    @Column(name = "is_deleted",nullable = false)
+    @Setter(AccessLevel.PRIVATE)
+    private boolean is_deleted = false;
+
+    public void makeAsDeleted(){
+        is_deleted = true;
+    }
+
 }

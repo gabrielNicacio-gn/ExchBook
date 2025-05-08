@@ -120,4 +120,21 @@ class AuthorServiceTest {
         verify(authorRepository,times(1)).save(any());
         verify(authorMapper,times(1)).updateAuthorFromDto(update,savedAuthor);
     }
+
+    @Test
+    public void shouldDeletedAnAuthor(){
+        int idAuthor = 1;
+
+        Author savedAuthor =new Author();
+        savedAuthor.setIdAuthor(1);
+        savedAuthor.setName("Cristiano Ronaldo");
+
+        when(authorRepository.findById(1)).thenReturn(Optional.of(savedAuthor));
+        when(authorRepository.save(any(Author.class))).thenReturn(savedAuthor);
+
+        authorService.deleteAuthor(idAuthor);
+
+        verify(authorRepository,times(1)).findById(1);
+        verify(authorRepository,times(1)).save(any());
+    }
 }
