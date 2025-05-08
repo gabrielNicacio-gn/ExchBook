@@ -44,4 +44,11 @@ public class AuthorService {
         authorMapper.updateAuthorFromDto(updateAuthor,author);
         authorRepository.save(author);
     }
+
+    public void deleteAuthor(int idAuthor){
+        Author author = authorRepository.findById(idAuthor)
+                .orElseThrow(()-> new IllegalArgumentException("Author not found"));
+        author.makeAsDeleted();
+        authorRepository.save(author);
+    }
 }
