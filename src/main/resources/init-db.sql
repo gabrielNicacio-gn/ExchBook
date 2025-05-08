@@ -31,7 +31,6 @@ CREATE TABLE author(
 CREATE TABLE book_author(
     id_book INTEGER NOT NULL,
     id_author INTEGER NOT NULL,
-    is_deleted BOOLEAN NOT NULL,
     FOREIGN KEY (id_book) REFERENCES book(id_book),
     FOREIGN KEY (id_author) REFERENCES author(id_author)
 );
