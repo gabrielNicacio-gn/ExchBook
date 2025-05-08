@@ -50,4 +50,10 @@ public class BookCopyController {
         bookCopyServices.updateBookCopy(idCopy,updateBookCopyRequestDto);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping("id")
+    public ResponseEntity deleteBookCopy(@PathVariable("id") int idCopy){
+        bookCopyServices.deleteBookCopy(idCopy);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }
