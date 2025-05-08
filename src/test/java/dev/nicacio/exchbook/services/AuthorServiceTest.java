@@ -136,5 +136,7 @@ class AuthorServiceTest {
 
         verify(authorRepository,times(1)).findById(1);
         verify(authorRepository,times(1)).save(any());
+
+        assertTrue(savedAuthor.is_deleted());
     }
 }
