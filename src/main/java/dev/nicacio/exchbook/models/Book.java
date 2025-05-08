@@ -41,11 +41,18 @@ public class Book {
     @Setter(AccessLevel.NONE)
     private List<ExchangeOffer> offers = new ArrayList<>();
 
+    @Column(name = "is_deleted", nullable = false)
+    @Setter(AccessLevel.PRIVATE)
+    private boolean isDeleted = false;
+
     public void addAuthors(List<Author> authors){
         this.authors.addAll(authors);
     }
     public void addCopies(BookCopy copyBook){
         copies.add(copyBook);
         copyBook.setBook(this);
+    }
+    public void makeAsDeleted(){
+        isDeleted = true;
     }
 }

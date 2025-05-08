@@ -166,4 +166,24 @@ class BookServiceTest {
         verify(bookRepository,times(1)).save(any(Book.class));
 
     }
+
+    @Test
+    public void shouldDeletedAnBook(){
+        int idBook = 1;
+
+        Book savedBook = new Book();
+        savedBook.setIdBook(1);
+        savedBook.setTitle("Current Title");
+
+        when(bookRepository.findById(1)).thenReturn(Optional.of(savedBook));
+        when(bookRepository.save(any(Book.class))).thenReturn(savedBook);
+
+        bookService.deleteBook(idBook);
+
+        verify(bookRepository,times(1)).findById(any());
+        verify(bookRepository,times(1)).save(any(Book.class));
+
+        assertTrue(savedBook.isDeleted());
+
+    }
 }
