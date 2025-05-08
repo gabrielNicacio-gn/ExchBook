@@ -53,4 +53,11 @@ public class BookService {
             bookMapper.updateBookFromDto(updateBook,book);
             bookRepository.save(book);
         }
+
+        public void deleteBook(int idBook){
+            Book book = bookRepository.findById(idBook)
+                    .orElseThrow(()-> new IllegalArgumentException("Book not found"));
+            book.makeAsDeleted();
+            bookRepository.save(book);
+        }
     }
