@@ -49,7 +49,7 @@ public class BookEditionController {
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("id")
+    @DeleteMapping("/edition/{id}")
     public ResponseEntity deleteEdition(@PathVariable("id") int idEdition){
         bookEditionService.deleteEdition(idEdition);
         return new ResponseEntity(HttpStatus.NO_CONTENT);

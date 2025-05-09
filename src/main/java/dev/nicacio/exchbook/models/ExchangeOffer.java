@@ -38,8 +38,15 @@ public class ExchangeOffer {
     @Setter(AccessLevel.NONE)
     private Exchange exchange;
 
+    @Column(name = "is_deleted", nullable = false)
+    @Setter(AccessLevel.PRIVATE)
+    private boolean isDeleted = false;
+
     public ExchangeOffer(){
         statusExchangeOffer = StatusExchangeOffer.OPEN;
         dateOfOffer = Calendar.getInstance().getTime();
+    }
+    public void makeAsDeleted(){
+        isDeleted = true;
     }
 }

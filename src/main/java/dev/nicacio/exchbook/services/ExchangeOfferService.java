@@ -52,4 +52,11 @@ public class ExchangeOfferService {
 
         return list.stream().map(exchangeOfferMapper::toExchangeOfferDto).toList();
     }
+    
+    public void deleteExchangeOffer(int idOffer){
+        ExchangeOffer exchangeOffer = exchangeOfferRepository.findById(idOffer)
+                .orElseThrow(()-> new IllegalArgumentException("Exchange Offer not found"));
+        exchangeOffer.makeAsDeleted();
+        exchangeOfferRepository.save(exchangeOffer);
+    }
 }

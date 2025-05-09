@@ -188,4 +188,22 @@ class ExchangeOfferServiceTest {
         verify(exchangeOfferRepository,times(1)).findByStatusExchangeOffer(any());
         assertEquals(expectedResult,result);
     }
+    @Test
+    public void shouldDeleteAnExchangeOffer(){
+        int idOffer = 1;
+
+        ExchangeOffer exchangeOffer = new ExchangeOffer();
+        exchangeOffer.setIdExchangeOffer(1);
+        exchangeOffer.setStatusExchangeOffer(StatusExchangeOffer.OPEN);
+
+        when(exchangeOfferRepository.findById(1)).thenReturn(Optional.of(exchangeOffer));
+        when(exchangeOfferRepository.save(any())).thenReturn(any(ExchangeOffer.class));
+
+        exchangeOfferService.deleteExchangeOffer(idOffer);
+
+        verify(exchangeOfferRepository,times(1)).save(any(ExchangeOffer.class));
+        verify(exchangeOfferRepository,times(1)).findById(1);
+
+        assertTrue(exchangeOffer.isDeleted());
+    }
 }
