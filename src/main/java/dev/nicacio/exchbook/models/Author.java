@@ -29,10 +29,10 @@ public class Author {
 
     @Column(name = "is_deleted",nullable = false)
     @Setter(AccessLevel.PRIVATE)
-    private boolean is_deleted = false;
+    private boolean isDeleted = false;
 
     public void makeAsDeleted(){
-        is_deleted = true;
+        isDeleted = true;
     }
 
 }
