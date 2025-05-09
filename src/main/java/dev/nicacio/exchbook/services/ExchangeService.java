@@ -48,5 +48,11 @@ public class ExchangeService {
         return exchangeRepository.findAll().stream().map(exchangeMapper::toExchangeDto).toList();
     }
 
+    public void deleteExchange(int idExchange){
+        Exchange exchange = exchangeRepository.findById(idExchange)
+                .orElseThrow(()-> new IllegalArgumentException("Exchange not found"));
+        exchange.makeAsDeleted();
+        exchangeRepository.save(exchange);
+    }
 
 }

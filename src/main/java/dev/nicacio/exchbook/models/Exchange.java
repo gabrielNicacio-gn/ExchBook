@@ -5,6 +5,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.swing.*;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -29,8 +30,15 @@ public class Exchange {
     @Setter(AccessLevel.NONE)
     private Date dateOfExchange;
 
+    @Column(name = "is_deleted", nullable = false)
+    @Setter(AccessLevel.PRIVATE)
+    private boolean isDeleted = false;
+
     public Exchange(){
         is_approved = true;
         dateOfExchange = Calendar.getInstance().getTime();
+    }
+    public void makeAsDeleted(){
+        isDeleted = true;
     }
 }
