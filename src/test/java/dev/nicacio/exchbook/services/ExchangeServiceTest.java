@@ -112,4 +112,23 @@ class ExchangeServiceTest {
         assertEquals(expectedResult,result);
     }
 
+    @Test
+    public void shouldDeletedAnExchange(){
+        int idExchange = 1;
+
+        Exchange exchange = new Exchange();
+        exchange.setIdExchange(1);
+        exchange.setExchangeOffer(new ExchangeOffer());
+
+        when(exchangeRepository.findById(1)).thenReturn(Optional.of(exchange));
+        when(exchangeRepository.save(any(Exchange.class))).thenReturn(exchange);
+
+        exchangeService.deleteExchange(idExchange);
+
+        verify(exchangeRepository,times(1)).findById(1);
+        verify(exchangeRepository,times(1)).save(any(Exchange.class));
+
+        assertTrue(exchange.isDeleted());
+    }
+
 }

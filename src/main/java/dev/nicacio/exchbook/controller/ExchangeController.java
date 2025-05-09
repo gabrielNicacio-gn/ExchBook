@@ -42,4 +42,10 @@ public class ExchangeController {
         List<ExchangeDto> response = exchangeService.findAllExchanges();
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
+
+    @DeleteMapping("/exchange/{id}")
+    public ResponseEntity deleteExchange(@PathVariable("id") int idExchange){
+        exchangeService.deleteExchange(idExchange);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }
