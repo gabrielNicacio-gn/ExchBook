@@ -42,7 +42,7 @@ public class BookCopyService {
 
     public void updateBookCopy(int idCopy, UpdateBookCopyRequestDto updateBookCopy){
         BookCopy bookCopy = bookCopyRepository.findById(idCopy)
-                .orElseThrow(()-> new ResourceNotFoundException("Book Copy Not Found"));
+                .orElseThrow(()-> new IllegalArgumentException("Book Copy Not Found"));
         bookCopyMapper.updateBookCopyFromDto(updateBookCopy,bookCopy);
         bookCopyRepository.save(bookCopy);
     }

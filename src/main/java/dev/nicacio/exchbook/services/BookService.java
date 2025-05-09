@@ -49,7 +49,7 @@ public class BookService {
 
         public void updateBook(int idBook, UpdateBookRequestDto updateBook){
             Book book = bookRepository.findById(idBook)
-                    .orElseThrow(()-> new ResourceNotFoundException("Book not found"));
+                    .orElseThrow(()-> new IllegalArgumentException("Book not found"));
             bookMapper.updateBookFromDto(updateBook,book);
             bookRepository.save(book);
         }
