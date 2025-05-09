@@ -28,4 +28,12 @@ public class BookEdition {
     @JoinColumn(name = "id_book")
     private Book book;
 
+    @Setter(AccessLevel.PRIVATE)
+    @Column(name="is_deleted", nullable = false)
+    private boolean isDeleted = false;
+
+    public void makeAsDeleted(){
+        isDeleted = true;
+    }
+
 }

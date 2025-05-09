@@ -45,4 +45,10 @@ public class BookEditionService {
         bookEditionMapper.updateBookEditionFromDto(update,edition);
         editionBookRepository.save(edition);
     }
+    public void deleteEdition(int idEdition){
+        BookEdition edition = editionBookRepository.findById(idEdition)
+                .orElseThrow(()->new IllegalArgumentException("Book Edition not found, can't a update"));
+        edition.makeAsDeleted();
+        editionBookRepository.save(edition);
+    }
 }
