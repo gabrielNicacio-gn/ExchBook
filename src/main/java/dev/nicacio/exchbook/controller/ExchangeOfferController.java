@@ -43,4 +43,9 @@ public class ExchangeOfferController {
         List<ExchangeOfferDto> response = exchangeOfferService.findAllExchangeOffer(statusExchangeOffer);
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
+    @DeleteMapping("/offer/{id}")
+    public ResponseEntity deleteOffer(@PathVariable("id") int idExchangeOffer){
+        exchangeOfferService.deleteExchangeOffer(idExchangeOffer);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }
