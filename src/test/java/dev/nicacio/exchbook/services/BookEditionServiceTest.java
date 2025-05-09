@@ -163,4 +163,24 @@ class BookEditionServiceTest {
         verify(editionBookRepository,times(1)).save(any(BookEdition.class));
     }
 
+    @Test
+    public void shouldDeletedAnBookEdition(){
+        int idEdition = 1;
+
+        BookEdition bookEdition = new BookEdition();
+        bookEdition.setIdEditionBook(1);
+        bookEdition.setNumberEdition("4");
+        bookEdition.setFormat("Normal Cover");
+        bookEdition.setYearOfPublication("2025");
+
+        when(editionBookRepository.findById(1)).thenReturn(Optional.of(bookEdition));
+
+        bookEditionService.deleteEdition(idEdition);
+
+        verify(editionBookRepository,times(1)).findById(idEdition);
+        verify(editionBookRepository,times(1)).save(any(BookEdition.class));
+
+        assertTrue(bookEdition.isDeleted());
+    }
+
 }

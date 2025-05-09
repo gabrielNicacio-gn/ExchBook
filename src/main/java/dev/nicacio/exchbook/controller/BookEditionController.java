@@ -48,4 +48,10 @@ public class BookEditionController {
         bookEditionService.updateEdition(idEdition,update);
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping("id")
+    public ResponseEntity deleteEdition(@PathVariable("id") int idEdition){
+        bookEditionService.deleteEdition(idEdition);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }
