@@ -24,7 +24,7 @@ public class BookEditionService {
     private final BookEditionMapper bookEditionMapper;
 
     public int registerEdition(CreateBookEditionRequestDto createEdition){
-        Book book = bookRepository.findById(createEdition.idBook())
+        Book book = bookRepository.findByIdAndIsDeletedFalse(createEdition.idBook())
                 .orElseThrow(()-> new IllegalArgumentException("Book not found, can't create a edition"));
 
         BookEdition edition = bookEditionMapper.toBookEdition(createEdition,book);
@@ -32,21 +32,21 @@ public class BookEditionService {
         return savedEdition.getIdEditionBook();
     }
     public BookEditionDto findBookEditionById(int idBookEdition) throws ResourceNotFoundException {
-        BookEdition bookEdition = editionBookRepository.findById(idBookEdition)
+        BookEdition bookEdition = editionBookRepository.findByIdAndIsDeletedFalse(idBookEdition)
                 .orElseThrow(()-> new ResourceNotFoundException("Book Edition not found"));
         return bookEditionMapper.toBookEditionDto(bookEdition);
     }
     public List<BookEditionDto> findAllBookEdition(){
-        return editionBookRepository.findAll().stream().map(bookEditionMapper::toBookEditionDto).toList();
+        return editionBookRepository.findAllByIsDeletedFalse().stream().map(bookEditionMapper::toBookEditionDto).toList();
     }
     public void updateEdition(int idEdition, UpdateEditionRequestDto update){
-        BookEdition edition = editionBookRepository.findById(idEdition)
+        BookEdition edition = editionBookRepository.findByIdAndIsDeletedFalse(idEdition)
                 .orElseThrow(()-> new IllegalArgumentException("Book Edition not found, can't a update"));
         bookEditionMapper.updateBookEditionFromDto(update,edition);
         editionBookRepository.save(edition);
     }
     public void deleteEdition(int idEdition){
-        BookEdition edition = editionBookRepository.findById(idEdition)
+        BookEdition edition = editionBookRepository.findByIdAndIsDeletedFalse(idEdition)
                 .orElseThrow(()->new IllegalArgumentException("Book Edition not found, can't a update"));
         edition.makeAsDeleted();
         editionBookRepository.save(edition);

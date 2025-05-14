@@ -89,21 +89,22 @@ class BookEditionServiceTest {
 
         BookDto bookDto = new BookDto(book.getIdBook(),book.getTitle(),new ArrayList<>());
 
-        Optional<BookEdition> bookEdition = Optional.of(new BookEdition());
-        bookEdition.get().setIdEditionBook(1);
-        bookEdition.get().setNumberEdition("2");
-        bookEdition.get().setFormat("Hardcover");
-        bookEdition.get().setYearOfPublication("2025");
-        bookEdition.get().setBook(book);
+        BookEdition bookEdition = new BookEdition();
+        bookEdition.setIdEditionBook(1);
+        bookEdition.setNumberEdition("2");
+        bookEdition.setFormat("Hardcover");
+        bookEdition.setYearOfPublication("2025");
+        bookEdition.setBook(book);
 
-        BookEditionDto expectedBookEditionDto = new BookEditionDto(bookEdition.get().getIdEditionBook(),bookEdition.get().getYearOfPublication()
-                ,bookEdition.get().getNumberEdition(),bookEdition.get().getFormat(),bookDto);
+        BookEditionDto expectedBookEditionDto = new BookEditionDto(bookEdition.getIdEditionBook(),bookEdition.getYearOfPublication()
+                ,bookEdition.getNumberEdition(),bookEdition.getFormat(),bookDto);
 
-        when(editionBookRepository.findById(1)).thenReturn(bookEdition);
+        when(editionBookRepository.findByIdAndIsDeletedFalse(1)).thenReturn(Optional.of(bookEdition));
+        when(bookEditionMapper.toBookEditionDto(bookEdition)).thenReturn(expectedBookEditionDto);
 
         BookEditionDto bookEditionDto = bookEditionService.findBookEditionById(1);
 
-        verify(editionBookRepository,times(1)).findById(1);
+        verify(editionBookRepository,times(1)).findByIdAndIsDeletedFalse(1);
 
         assertEquals(expectedBookEditionDto,bookEditionDto);
     }
@@ -122,25 +123,22 @@ class BookEditionServiceTest {
         bookEditionB.setFormat("Hardcover");
         bookEditionB.setYearOfPublication("2014");
 
-        BookEdition bookEditionC = new BookEdition();
-        bookEditionC.setIdEditionBook(3);
-        bookEditionC.setNumberEdition("2");
-        bookEditionC.setFormat("Hardcover");
-        bookEditionC.setYearOfPublication("2008");
+        List<BookEdition> bookEditionList = List.of(bookEditionA,bookEditionB);
 
-        List<BookEdition> bookEditionList = List.of(bookEditionA,bookEditionB,bookEditionC);
+        BookEditionDto bookEditionDtoA = new BookEditionDto(bookEditionA.getIdEditionBook(),bookEditionA.getYearOfPublication()
+                ,bookEditionA.getNumberEdition(),bookEditionA.getFormat(),null);
+        BookEditionDto bookEditionDtoB = new BookEditionDto(bookEditionB.getIdEditionBook(),bookEditionB.getYearOfPublication()
+                ,bookEditionB.getNumberEdition(),bookEditionB.getFormat(),null);
 
-        BookEditionDto bookEditionADto = bookEditionMapper.toBookEditionDto(bookEditionA);
-        BookEditionDto bookEditionBDto = bookEditionMapper.toBookEditionDto(bookEditionB);
-        BookEditionDto bookEditionCDto = bookEditionMapper.toBookEditionDto(bookEditionC);
+        List<BookEditionDto> expectedResult = List.of(bookEditionDtoA,bookEditionDtoB);
 
-        List<BookEditionDto> expectedResult = List.of(bookEditionADto,bookEditionBDto,bookEditionCDto);
-
-        when(editionBookRepository.findAll()).thenReturn(bookEditionList);
+        when(editionBookRepository.findAllByIsDeletedFalse()).thenReturn(bookEditionList);
+        when(bookEditionMapper.toBookEditionDto(bookEditionA)).thenReturn(bookEditionDtoA);
+        when(bookEditionMapper.toBookEditionDto(bookEditionB)).thenReturn(bookEditionDtoB);
 
         List<BookEditionDto> result = bookEditionService.findAllBookEdition();
 
-        verify(editionBookRepository,times(1)).findAll();
+        verify(editionBookRepository,times(1)).findAllByIsDeletedFalse();
         assertEquals(expectedResult,result);
     }
     @Test
@@ -154,11 +152,11 @@ class BookEditionServiceTest {
         bookEdition.setFormat("Normal Cover");
         bookEdition.setYearOfPublication("2025");
 
-        when(editionBookRepository.findById(1)).thenReturn(Optional.of(bookEdition));
+        when(editionBookRepository.findByIdAndIsDeletedFalse(1)).thenReturn(Optional.of(bookEdition));
 
         bookEditionService.updateEdition(idEdition,update);
 
-        verify(editionBookRepository,times(1)).findById(idEdition);
+        verify(editionBookRepository,times(1)).findByIdAndIsDeletedFalse(idEdition);
         verify(bookEditionMapper).updateBookEditionFromDto(update,bookEdition);
         verify(editionBookRepository,times(1)).save(any(BookEdition.class));
     }
@@ -173,11 +171,11 @@ class BookEditionServiceTest {
         bookEdition.setFormat("Normal Cover");
         bookEdition.setYearOfPublication("2025");
 
-        when(editionBookRepository.findById(1)).thenReturn(Optional.of(bookEdition));
+        when(editionBookRepository.findByIdAndIsDeletedFalse(1)).thenReturn(Optional.of(bookEdition));
 
         bookEditionService.deleteEdition(idEdition);
 
-        verify(editionBookRepository,times(1)).findById(idEdition);
+        verify(editionBookRepository,times(1)).findByIdAndIsDeletedFalse(idEdition);
         verify(editionBookRepository,times(1)).save(any(BookEdition.class));
 
         assertTrue(bookEdition.isDeleted());
