@@ -44,7 +44,7 @@ public class BookCopyController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/copy/{id}")
-    public ResponseEntity updateBookCopy(@PathVariable("id") int idCopy, @RequestBody UpdateBookCopyRequestDto updateBookCopyRequestDto){
+    public ResponseEntity updateBookCopy(@PathVariable("id") int idCopy, @RequestBody @Valid UpdateBookCopyRequestDto updateBookCopyRequestDto){
         bookCopyServices.updateBookCopy(idCopy,updateBookCopyRequestDto);
         return ResponseEntity.noContent().build();
     }
