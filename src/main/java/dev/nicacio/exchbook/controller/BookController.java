@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -24,36 +25,34 @@ public class BookController {
     private final BookService bookService;
     @PostMapping("/book")
     public ResponseEntity addBook(@RequestBody @Valid CreateBookRequestDto create){
-        HttpHeaders headers = new HttpHeaders();
         int response = bookService.registerBook(create);
-        headers.setLocation(UriComponentsBuilder
-                .newInstance()
-                .path("/v1/book/{id}")
-                .buildAndExpand(response)
-                .toUri());
-        return new ResponseEntity<>(headers,HttpStatus.CREATED);
+        URI location = UriComponentsBuilder
+                .fromPath("/v1/book/{id}")
+                .buildAndExpand()
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping("/book/{id}")
     public ResponseEntity<BookDto> getBookById(@PathVariable("id") int idBook) throws ResourceNotFoundException {
         BookDto response = bookService.findBookById(idBook);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/books")
     public ResponseEntity<List<BookDto>> getAllBooks(){
         List<BookDto> response = bookService.findAllBooks();
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return ResponseEntity.ok(response);
     }
 
     @PutMapping("/book/{id}")
     public ResponseEntity updateBook(@PathVariable("id") int idBook, @RequestBody UpdateBookRequestDto updateBook){
         bookService.updateBook(idBook,updateBook);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
     @DeleteMapping("/book/{id}")
     public ResponseEntity deleteBook(@PathVariable("id") int idBook){
         bookService.deleteBook(idBook);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }
