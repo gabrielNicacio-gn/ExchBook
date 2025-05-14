@@ -84,32 +84,29 @@ class BookServiceTest {
 
     @Test
     public void shouldGetBookById() throws ChangeSetPersister.NotFoundException {
-        List<Integer> authorsIds = List.of(1,2);
-        Author firstAuthor = new Author();
-        firstAuthor.setIdAuthor(1);
-        firstAuthor.setName("First Author");
+        List<Integer> authorsIds = List.of(1);
+        Author author = new Author();
+        author.setIdAuthor(1);
+        author.setName("First Author");
 
-        Author secondAuthor = new Author();
-        secondAuthor.setIdAuthor(2);
-        secondAuthor.setName("Second Author");
-        List<Author> authors = List.of(firstAuthor,secondAuthor);
+        List<Author> authors = List.of(author);
 
-        AuthorDto firstAuthorDto = new AuthorDto(firstAuthor.getIdAuthor(),firstAuthor.getName());
-        AuthorDto secondAuthorDto = new AuthorDto(secondAuthor.getIdAuthor(),secondAuthor.getName());
-        List<AuthorDto> authorDtos = List.of(firstAuthorDto,secondAuthorDto);
+        AuthorDto authorDto = new AuthorDto(author.getIdAuthor(),author.getName());
+        List<AuthorDto> authorDtos = List.of(authorDto);
 
-        Optional<Book> book = Optional.of(new Book());
-        book.get().setIdBook(1);
-        book.get().setTitle("My Book");
-        book.get().addAuthors(authors);
+        Book book = new Book();
+        book.setIdBook(1);
+        book.setTitle("My Book");
+        book.addAuthors(authors);
 
-        BookDto expectedBookDto = new BookDto(book.get().getIdBook(),book.get().getTitle(),authorDtos);
+        BookDto expectedBookDto = new BookDto(book.getIdBook(),book.getTitle(),authorDtos);
 
-        when(bookRepository.findById(1)).thenReturn(book);
+        when(bookRepository.findByIdAndIsDeletedFalse(1)).thenReturn(Optional.of(book));
+        when(bookMapper.toBookDto(book)).thenReturn(expectedBookDto);
 
         BookDto bookDto = bookService.findBookById(1);
 
-        verify(bookRepository,times(1)).findById(1);
+        verify(bookRepository,times(1)).findByIdAndIsDeletedFalse(1);
 
         assertEquals(expectedBookDto.idBook(),bookDto.idBook());
         assertEquals(expectedBookDto.title(),bookDto.title());
@@ -139,11 +136,14 @@ class BookServiceTest {
         BookDto bookCDto = new BookDto(bookC.getIdBook(),bookC.getTitle(),new ArrayList<>());
         List<BookDto> expectedResult = List.of(bookADto,bookBDto,bookCDto);
 
-        when(bookRepository.findAll()).thenReturn(bookList);
+        when(bookRepository.findAllByIsDeletedFalse()).thenReturn(bookList);
+        when(bookMapper.toBookDto(bookA)).thenReturn(bookADto);
+        when(bookMapper.toBookDto(bookB)).thenReturn(bookBDto);
+        when(bookMapper.toBookDto(bookC)).thenReturn(bookCDto);
 
         List<BookDto> result = bookService.findAllBooks();
 
-        verify(bookRepository,times(1)).findAll();
+        verify(bookRepository,times(1)).findAllByIsDeletedFalse();
         assertEquals(expectedResult,result);
     }
 
@@ -156,13 +156,13 @@ class BookServiceTest {
         savedBook.setIdBook(1);
         savedBook.setTitle("Current Title");
 
-        when(bookRepository.findById(1)).thenReturn(Optional.of(savedBook));
+        when(bookRepository.findByIdAndIsDeletedFalse(1)).thenReturn(Optional.of(savedBook));
         when(bookRepository.save(any(Book.class))).thenReturn(savedBook);
 
         bookService.updateBook(idBook,requestDto);
 
         verify(bookMapper,times(1)).updateBookFromDto(requestDto,savedBook);
-        verify(bookRepository,times(1)).findById(any());
+        verify(bookRepository,times(1)).findByIdAndIsDeletedFalse(idBook);
         verify(bookRepository,times(1)).save(any(Book.class));
 
     }
@@ -175,12 +175,12 @@ class BookServiceTest {
         savedBook.setIdBook(1);
         savedBook.setTitle("Current Title");
 
-        when(bookRepository.findById(1)).thenReturn(Optional.of(savedBook));
+        when(bookRepository.findByIdAndIsDeletedFalse(idBook)).thenReturn(Optional.of(savedBook));
         when(bookRepository.save(any(Book.class))).thenReturn(savedBook);
 
         bookService.deleteBook(idBook);
 
-        verify(bookRepository,times(1)).findById(any());
+        verify(bookRepository,times(1)).findByIdAndIsDeletedFalse(idBook);
         verify(bookRepository,times(1)).save(any(Book.class));
 
         assertTrue(savedBook.isDeleted());
