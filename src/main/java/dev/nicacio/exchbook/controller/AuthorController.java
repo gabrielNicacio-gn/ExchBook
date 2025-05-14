@@ -6,6 +6,7 @@ import dev.nicacio.exchbook.dtos.response.AuthorDto;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.models.Author;
 import dev.nicacio.exchbook.services.AuthorService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
@@ -25,7 +26,7 @@ public class AuthorController {
 
     private final AuthorService authorService;
     @PostMapping("/author")
-    public ResponseEntity addAuthor(@RequestBody CreateAuthorRequestDto create){
+    public ResponseEntity addAuthor(@RequestBody @Valid CreateAuthorRequestDto create){
         int idAuthor = authorService.registerAuthor(create);
         URI location = UriComponentsBuilder
                 .fromPath("/v1/author/{id}")
@@ -47,7 +48,7 @@ public class AuthorController {
     }
 
     @PutMapping("/author/{id}")
-    public ResponseEntity updateAuthor(@PathVariable("id") int idAuthor, @RequestBody UpdateAuthorRequestDto request){
+    public ResponseEntity updateAuthor(@PathVariable("id") int idAuthor, @RequestBody @Valid UpdateAuthorRequestDto request){
         authorService.updateAuthor(idAuthor,request);
         return ResponseEntity.noContent().build();
     }
