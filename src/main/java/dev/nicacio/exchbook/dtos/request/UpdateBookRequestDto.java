@@ -1,4 +1,7 @@
 package dev.nicacio.exchbook.dtos.request;
 
-public record UpdateBookRequestDto(String title) {
-}
+import jakarta.validation.constraints.NotBlank;
+
+public record UpdateBookRequestDto(
+        @NotBlank(message = "Title is required")
+        String title) { }
