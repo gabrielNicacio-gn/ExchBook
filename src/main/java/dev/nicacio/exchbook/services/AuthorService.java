@@ -29,24 +29,24 @@ public class AuthorService {
     }
 
     public AuthorDto findAuthorById(int idAuthor) throws ResourceNotFoundException {
-        Author author = authorRepository.findById(idAuthor)
+        Author author = authorRepository.findByIdAndIsDeletedFalse(idAuthor)
                 .orElseThrow(()-> new ResourceNotFoundException("Author not found"));
         return authorMapper.toAuthorDto(author);
     }
 
     public List<AuthorDto> findAllAuthors(){
-        return authorRepository.findAll().stream().map(authorMapper::toAuthorDto).toList();
+        return authorRepository.findAllByIsDeletedFalse().stream().map(authorMapper::toAuthorDto).toList();
     }
 
     public void updateAuthor(int idAuthor, UpdateAuthorRequestDto updateAuthor){
-        Author author = authorRepository.findById(idAuthor)
+        Author author = authorRepository.findByIdAndIsDeletedFalse(idAuthor)
                 .orElseThrow(()-> new IllegalArgumentException("Author not found"));
         authorMapper.updateAuthorFromDto(updateAuthor,author);
         authorRepository.save(author);
     }
 
     public void deleteAuthor(int idAuthor){
-        Author author = authorRepository.findById(idAuthor)
+        Author author = authorRepository.findByIdAndIsDeletedFalse(idAuthor)
                 .orElseThrow(()-> new IllegalArgumentException("Author not found"));
         author.makeAsDeleted();
         authorRepository.save(author);

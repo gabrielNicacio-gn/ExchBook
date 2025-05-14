@@ -1,4 +1,7 @@
 package dev.nicacio.exchbook.dtos.request;
 
-public record UpdateAuthorRequestDto(String name) {
-}
+import jakarta.validation.constraints.NotBlank;
+
+public record UpdateAuthorRequestDto(
+        @NotBlank(message = "Name is required")
+        String name) { }
