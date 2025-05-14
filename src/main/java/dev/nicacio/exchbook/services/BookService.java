@@ -38,24 +38,24 @@ public class BookService {
         }
 
         public BookDto findBookById(int idBook) throws ResourceNotFoundException {
-            Book book = bookRepository.findById(idBook)
+            Book book = bookRepository.findByIdAndIsDeletedFalse(idBook)
                     .orElseThrow(()-> new ResourceNotFoundException("Book not found"));
             return bookMapper.toBookDto(book);
         }
 
         public List<BookDto> findAllBooks(){
-            return bookRepository.findAll().stream().map(bookMapper::toBookDto).toList();
+            return bookRepository.findAllByIsDeletedFalse().stream().map(bookMapper::toBookDto).toList();
         }
 
         public void updateBook(int idBook, UpdateBookRequestDto updateBook){
-            Book book = bookRepository.findById(idBook)
+            Book book = bookRepository.findByIdAndIsDeletedFalse(idBook)
                     .orElseThrow(()-> new IllegalArgumentException("Book not found"));
             bookMapper.updateBookFromDto(updateBook,book);
             bookRepository.save(book);
         }
 
         public void deleteBook(int idBook){
-            Book book = bookRepository.findById(idBook)
+            Book book = bookRepository.findByIdAndIsDeletedFalse(idBook)
                     .orElseThrow(()-> new IllegalArgumentException("Book not found"));
             book.makeAsDeleted();
             bookRepository.save(book);
