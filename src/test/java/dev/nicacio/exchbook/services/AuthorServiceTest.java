@@ -53,19 +53,20 @@ class AuthorServiceTest {
 
     @Test
     public void shouldGetAuthorById() throws ChangeSetPersister.NotFoundException {
-        int idAuthor = 2;
+        int idAuthor = 1;
 
-        Optional<Author> author = Optional.of(new Author());
-        author.get().setIdAuthor(2);
-        author.get().setName("First Author");
+        Author author = new Author();
+        author.setIdAuthor(1);
+        author.setName("First Author");
 
-        AuthorDto authorDto = new AuthorDto(author.get().getIdAuthor(),author.get().getName());
+        AuthorDto authorDto = new AuthorDto(author.getIdAuthor(),author.getName());
 
-        when(authorRepository.findById(idAuthor)).thenReturn(author);
+        when(authorRepository.findByIdAndIsDeletedFalse(idAuthor)).thenReturn(Optional.of(author));
+        when(authorMapper.toAuthorDto(author)).thenReturn(authorDto);
 
-        AuthorDto authorResponse = authorService.findAuthorById(2);
+        AuthorDto authorResponse = authorService.findAuthorById(idAuthor);
 
-        verify(authorRepository,times(1)).findById(any());
+        verify(authorRepository,times(1)).findByIdAndIsDeletedFalse(idAuthor);
         assertEquals(authorDto.idAuthor(),authorResponse.idAuthor());
         assertEquals(authorDto.name(),authorResponse.name());
 
