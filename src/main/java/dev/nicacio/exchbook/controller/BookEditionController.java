@@ -43,7 +43,7 @@ public class BookEditionController {
         return ResponseEntity.ok(response);
     }
     @PutMapping("/edition/{id}")
-    public ResponseEntity updateEdition(@PathVariable("id") int idEdition, @RequestBody UpdateEditionRequestDto update){
+    public ResponseEntity updateEdition(@PathVariable("id") int idEdition, @RequestBody @Valid UpdateEditionRequestDto update){
         bookEditionService.updateEdition(idEdition,update);
         return ResponseEntity.noContent().build();
     }
