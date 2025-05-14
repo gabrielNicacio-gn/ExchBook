@@ -28,7 +28,7 @@ public class BookController {
         int response = bookService.registerBook(create);
         URI location = UriComponentsBuilder
                 .fromPath("/v1/book/{id}")
-                .buildAndExpand()
+                .buildAndExpand(response)
                 .toUri();
         return ResponseEntity.created(location).build();
     }

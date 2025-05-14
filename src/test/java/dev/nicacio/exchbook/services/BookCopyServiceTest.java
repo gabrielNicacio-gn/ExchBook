@@ -88,18 +88,19 @@ class BookCopyServiceTest {
 
         BookDto expectedBookDto = new BookDto(book.getIdBook(),book.getTitle(),new ArrayList<AuthorDto>());
 
-        Optional<BookCopy> bookCopy = Optional.of( new BookCopy());
-        bookCopy.get().setIdCopy(1);
-        bookCopy.get().setCondition(Condition.NOVO);
-        bookCopy.get().setBook(book);
+        BookCopy bookCopy = new BookCopy();
+        bookCopy.setIdCopy(1);
+        bookCopy.setCondition(Condition.NOVO);
+        bookCopy.setBook(book);
 
-        BookCopyDto expectedBookCopyDto = new BookCopyDto(bookCopy.get().getIdCopy(),bookCopy.get().getCondition(),expectedBookDto);
+        BookCopyDto expectedBookCopyDto = new BookCopyDto(bookCopy.getIdCopy(),bookCopy.getCondition(),expectedBookDto);
 
-        when(copyBookRepository.findById(1)).thenReturn(bookCopy);
+        when(copyBookRepository.findByIdAndIsDeletedFalse(1)).thenReturn(Optional.of(bookCopy));
+        when(bookCopyMapper.toBookCopyDto(bookCopy)).thenReturn(expectedBookCopyDto);
 
         BookCopyDto bookCopyDto = bookCopyService.findBookCopyById(1);
 
-        verify(copyBookRepository,times(1)).findById(1);
+        verify(copyBookRepository,times(1)).findByIdAndIsDeletedFalse(1);
 
         assertEquals(expectedBookCopyDto.idCopy(),bookCopyDto.idCopy());
         assertEquals(expectedBookCopyDto.condition(),bookCopyDto.condition());
@@ -126,17 +127,20 @@ class BookCopyServiceTest {
 
         List<BookCopy> copyList = List.of(copyA,copyB,copyC);
 
-        BookCopyDto bookCopyADto = bookCopyMapper.toBookCopyDto(copyA);
-        BookCopyDto bookCopyBDto = bookCopyMapper.toBookCopyDto(copyB);
-        BookCopyDto bookCopyCDto = bookCopyMapper.toBookCopyDto(copyC);
+        BookCopyDto bookCopyADto = new BookCopyDto(copyA.getIdCopy(),copyA.getCondition(),new BookDto(1,null,null));
+        BookCopyDto bookCopyBDto = new BookCopyDto(copyB.getIdCopy(),copyB.getCondition(),new BookDto(2,null,null));
+        BookCopyDto bookCopyCDto = new BookCopyDto(copyC.getIdCopy(),copyC.getCondition(),new BookDto(3,null,null));
 
         List<BookCopyDto> expectedResult = List.of(bookCopyADto,bookCopyBDto,bookCopyCDto);
 
-        when(copyBookRepository.findAll()).thenReturn(copyList);
+        when(copyBookRepository.findAllByIsDeletedFalse()).thenReturn(copyList);
+        when(bookCopyMapper.toBookCopyDto(copyA)).thenReturn(bookCopyADto);
+        when(bookCopyMapper.toBookCopyDto(copyB)).thenReturn(bookCopyBDto);
+        when(bookCopyMapper.toBookCopyDto(copyC)).thenReturn(bookCopyCDto);
 
         List<BookCopyDto> result = bookCopyService.findAllBookCopies();
 
-        verify(copyBookRepository,times(1)).findAll();
+        verify(copyBookRepository,times(1)).findAllByIsDeletedFalse();
         assertEquals(expectedResult,result);
     }
 
@@ -148,12 +152,12 @@ class BookCopyServiceTest {
         bookCopy.setIdCopy(1);
         bookCopy.setCondition(Condition.NOVO);
 
-        when(copyBookRepository.findById(1)).thenReturn(Optional.of(bookCopy));
+        when(copyBookRepository.findByIdAndIsDeletedFalse(1)).thenReturn(Optional.of(bookCopy));
         when(copyBookRepository.save(any(BookCopy.class))).thenReturn(bookCopy);
 
         bookCopyService.updateBookCopy(1,update);
 
-        verify(copyBookRepository,times(1)).findById(1);
+        verify(copyBookRepository,times(1)).findByIdAndIsDeletedFalse(1);
         verify(copyBookRepository,times(1)).save(any());
         verify(bookCopyMapper,times(1)).updateBookCopyFromDto(update,bookCopy);
     }
@@ -166,12 +170,12 @@ class BookCopyServiceTest {
         bookCopy.setIdCopy(1);
         bookCopy.setCondition(Condition.NOVO);
 
-        when(copyBookRepository.findById(1)).thenReturn(Optional.of(bookCopy));
+        when(copyBookRepository.findByIdAndIsDeletedFalse(idBookCopy)).thenReturn(Optional.of(bookCopy));
         when(copyBookRepository.save(any(BookCopy.class))).thenReturn(bookCopy);
 
         bookCopyService.deleteBookCopy(idBookCopy);
 
-        verify(copyBookRepository,times(1)).findById(1);
+        verify(copyBookRepository,times(1)).findByIdAndIsDeletedFalse(idBookCopy);
         verify(copyBookRepository,times(1)).save(any());
 
         assertTrue(bookCopy.isDeleted());

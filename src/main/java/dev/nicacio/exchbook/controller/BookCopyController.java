@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -23,37 +24,34 @@ public class BookCopyController {
     private final BookCopyService bookCopyServices;
     @PostMapping("/copy")
     public ResponseEntity addBookCopy(@RequestBody @Valid CreateBookCopyRequestDto request){
-        HttpHeaders headers = new HttpHeaders();
         int response = bookCopyServices.registerBookCopy(request);
-
-        headers.setLocation(UriComponentsBuilder
-                .newInstance()
-                .path("/v1/copy/{id}")
+        URI location = UriComponentsBuilder
+                .fromPath("/v1/copy/{id}")
                 .buildAndExpand(response)
-                .toUri());
-        return new ResponseEntity<>(headers,HttpStatus.CREATED);
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping("/copy/{id}")
     public ResponseEntity<BookCopyDto> getBookCopyById(@PathVariable("id") int idBookCopy) throws ResourceNotFoundException {
         BookCopyDto response = bookCopyServices.findBookCopyById(idBookCopy);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/copies")
     public ResponseEntity<List<BookCopyDto>> getAllBookCopies(){
         List<BookCopyDto> response = bookCopyServices.findAllBookCopies();
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return ResponseEntity.ok(response);
     }
     @PutMapping("/copy/{id}")
-    public ResponseEntity updateBookCopy(@PathVariable("id") int idCopy, @RequestBody UpdateBookCopyRequestDto updateBookCopyRequestDto){
+    public ResponseEntity updateBookCopy(@PathVariable("id") int idCopy, @RequestBody @Valid UpdateBookCopyRequestDto updateBookCopyRequestDto){
         bookCopyServices.updateBookCopy(idCopy,updateBookCopyRequestDto);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/copy/{id}")
     public ResponseEntity deleteBookCopy(@PathVariable("id") int idCopy){
         bookCopyServices.deleteBookCopy(idCopy);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

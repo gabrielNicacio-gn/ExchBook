@@ -23,7 +23,7 @@ public class BookCopyService {
     private final BookCopyMapper bookCopyMapper;
 
     public int registerBookCopy(CreateBookCopyRequestDto createBook) {
-        Book book = bookRepository.findById(createBook.idBook())
+        Book book = bookRepository.findByIdAndIsDeletedFalse(createBook.idBook())
                 .orElseThrow(()-> new IllegalArgumentException("Book not found, can't create a copy"));
 
         BookCopy newCopy = bookCopyMapper.toBookCopy(createBook, book);
@@ -31,24 +31,24 @@ public class BookCopyService {
         return savedCopy.getIdCopy();
     }
     public BookCopyDto findBookCopyById(int idBookCopy) throws ResourceNotFoundException {
-        BookCopy bookCopy = bookCopyRepository.findById(idBookCopy)
+        BookCopy bookCopy = bookCopyRepository.findByIdAndIsDeletedFalse(idBookCopy)
                 .orElseThrow(()-> new ResourceNotFoundException("Book Copy not found"));
         return bookCopyMapper.toBookCopyDto(bookCopy);
     }
 
     public List<BookCopyDto> findAllBookCopies(){
-        return bookCopyRepository.findAll().stream().map(bookCopyMapper::toBookCopyDto).toList();
+        return bookCopyRepository.findAllByIsDeletedFalse().stream().map(bookCopyMapper::toBookCopyDto).toList();
     }
 
     public void updateBookCopy(int idCopy, UpdateBookCopyRequestDto updateBookCopy){
-        BookCopy bookCopy = bookCopyRepository.findById(idCopy)
+        BookCopy bookCopy = bookCopyRepository.findByIdAndIsDeletedFalse(idCopy)
                 .orElseThrow(()-> new IllegalArgumentException("Book Copy Not Found"));
         bookCopyMapper.updateBookCopyFromDto(updateBookCopy,bookCopy);
         bookCopyRepository.save(bookCopy);
     }
 
     public void deleteBookCopy(int idCopy){
-        BookCopy copy = bookCopyRepository.findById(idCopy)
+        BookCopy copy = bookCopyRepository.findByIdAndIsDeletedFalse(idCopy)
                 .orElseThrow(()-> new IllegalArgumentException("Book Copy not found"));
         copy.makeAsDeleted();
         bookCopyRepository.save(copy);
