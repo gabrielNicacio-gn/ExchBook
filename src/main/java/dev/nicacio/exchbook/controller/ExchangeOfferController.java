@@ -5,6 +5,7 @@ import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
 import dev.nicacio.exchbook.enums.StatusExchangeOffer;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.services.ExchangeOfferService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -22,30 +24,28 @@ public class ExchangeOfferController {
     private final ExchangeOfferService exchangeOfferService;
 
     @PostMapping("/offer")
-    public ResponseEntity<ExchangeOfferDto> addExchangeOffer(@RequestBody CreateExchangeOfferRequestDto create){
-        HttpHeaders headers = new HttpHeaders();
+    public ResponseEntity<ExchangeOfferDto> addExchangeOffer(@RequestBody @Valid CreateExchangeOfferRequestDto create){
         int response = exchangeOfferService.registerExchangeOffer(create);
 
-        headers.setLocation(UriComponentsBuilder
-                .newInstance()
-                .path("/v1/offer/{id}")
+        URI location = UriComponentsBuilder
+                .fromPath("/v1/offer/{id}")
                 .buildAndExpand(response)
-                .toUri());
-        return new ResponseEntity<>(headers, HttpStatus.CREATED);
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
     @GetMapping("/offer/{id}")
     public ResponseEntity<ExchangeOfferDto> getExchangeOfferById(@PathVariable("id") int idExchangeOffer) throws ResourceNotFoundException {
         ExchangeOfferDto response = exchangeOfferService.findExchangeOfferById(idExchangeOffer);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return ResponseEntity.ok(response);
     }
     @GetMapping("/offers")
     public ResponseEntity<List<ExchangeOfferDto>> getAllOffers(@RequestParam(required = false) StatusExchangeOffer statusExchangeOffer){
         List<ExchangeOfferDto> response = exchangeOfferService.findAllExchangeOffer(statusExchangeOffer);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return ResponseEntity.ok(response);
     }
     @DeleteMapping("/offer/{id}")
     public ResponseEntity deleteOffer(@PathVariable("id") int idExchangeOffer){
         exchangeOfferService.deleteExchangeOffer(idExchangeOffer);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

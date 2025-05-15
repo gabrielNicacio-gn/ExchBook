@@ -118,20 +118,21 @@ class ExchangeOfferServiceTest {
         BookDto bookDto = new BookDto(bookDesired.getIdBook(),bookDesired.getTitle(),new ArrayList<>());
         BookCopyDto bookCopyDto = new BookCopyDto(bookCopyOffered.getIdCopy(),bookCopyOffered.getCondition(),null);
 
-        Optional<ExchangeOffer> exchangeOffer = Optional.of(new ExchangeOffer());
-        exchangeOffer.get().setIdExchangeOffer(1);
-        exchangeOffer.get().setStatusExchangeOffer(StatusExchangeOffer.OPEN);
-        exchangeOffer.get().setBookDesired(bookDesired);
-        exchangeOffer.get().setCopyOffered(bookCopyOffered);
+        ExchangeOffer exchangeOffer = new ExchangeOffer();
+        exchangeOffer.setIdExchangeOffer(1);
+        exchangeOffer.setStatusExchangeOffer(StatusExchangeOffer.OPEN);
+        exchangeOffer.setBookDesired(bookDesired);
+        exchangeOffer.setCopyOffered(bookCopyOffered);
 
-        ExchangeOfferDto expectedExchangeOfferDto = new ExchangeOfferDto(exchangeOffer.get().getIdExchangeOffer(),bookCopyDto,bookDto,
-                exchangeOffer.get().getDateOfOffer(),exchangeOffer.get().getStatusExchangeOffer());
+        ExchangeOfferDto expectedExchangeOfferDto = new ExchangeOfferDto(exchangeOffer.getIdExchangeOffer(),bookCopyDto,bookDto,
+                exchangeOffer.getDateOfOffer(),exchangeOffer.getStatusExchangeOffer());
 
-        when(exchangeOfferRepository.findById(idExchangeOffer)).thenReturn(exchangeOffer);
+        when(exchangeOfferRepository.findByIdAndIsDeletedFalse(idExchangeOffer)).thenReturn(Optional.of(exchangeOffer));
+        when(exchangeOfferMapper.toExchangeOfferDto(exchangeOffer)).thenReturn(expectedExchangeOfferDto);
 
         ExchangeOfferDto exchangeOfferDto = exchangeOfferService.findExchangeOfferById(idExchangeOffer);
 
-        verify(exchangeOfferRepository,times(1)).findById(idExchangeOffer);
+        verify(exchangeOfferRepository,times(1)).findByIdAndIsDeletedFalse(idExchangeOffer);
 
         assertEquals(expectedExchangeOfferDto,exchangeOfferDto);
     }
@@ -147,15 +148,20 @@ class ExchangeOfferServiceTest {
         exchangeOfferB.setStatusExchangeOffer(StatusExchangeOffer.CLOSED);
         List<ExchangeOffer> offersList = List.of(exchangeOfferA,exchangeOfferB);
 
-        ExchangeOfferDto exchangeOfferADto = exchangeOfferMapper.toExchangeOfferDto(exchangeOfferA);
-        ExchangeOfferDto exchangeOfferBDto = exchangeOfferMapper.toExchangeOfferDto(exchangeOfferB);
+        ExchangeOfferDto exchangeOfferADto = new ExchangeOfferDto(exchangeOfferA.getIdExchangeOffer(),null,null,
+                exchangeOfferA.getDateOfOffer(),exchangeOfferA.getStatusExchangeOffer());
+        ExchangeOfferDto exchangeOfferBDto = new ExchangeOfferDto(exchangeOfferB.getIdExchangeOffer(),null,null,
+                exchangeOfferB.getDateOfOffer(),exchangeOfferB.getStatusExchangeOffer());
+
         List<ExchangeOfferDto> expectedResult = List.of(exchangeOfferADto,exchangeOfferBDto);
 
-        when(exchangeOfferRepository.findAll()).thenReturn(offersList);
+        when(exchangeOfferRepository.findAllByIsDeletedFalse()).thenReturn(offersList);
+        when(exchangeOfferMapper.toExchangeOfferDto(exchangeOfferA)).thenReturn(exchangeOfferADto);
+        when(exchangeOfferMapper.toExchangeOfferDto(exchangeOfferB)).thenReturn(exchangeOfferBDto);
 
         List<ExchangeOfferDto> result = exchangeOfferService.findAllExchangeOffer(null);
 
-        verify(exchangeOfferRepository,times(1)).findAll();
+        verify(exchangeOfferRepository,times(1)).findAllByIsDeletedFalse();
         verify(exchangeOfferRepository,never()).findByStatusExchangeOffer(any());
         assertEquals(expectedResult,result);
     }
@@ -175,16 +181,20 @@ class ExchangeOfferServiceTest {
 
         List<ExchangeOffer> offersList = List.of(exchangeOfferA,exchangeOfferC);
 
-        ExchangeOfferDto exchangeOfferADto = exchangeOfferMapper.toExchangeOfferDto(exchangeOfferA);
-        ExchangeOfferDto exchangeOfferCDto = exchangeOfferMapper.toExchangeOfferDto(exchangeOfferC);
+        ExchangeOfferDto exchangeOfferADto = new ExchangeOfferDto(exchangeOfferA.getIdExchangeOffer(),null,null,
+                exchangeOfferA.getDateOfOffer(),exchangeOfferA.getStatusExchangeOffer());
+        ExchangeOfferDto exchangeOfferCDto = new ExchangeOfferDto(exchangeOfferC.getIdExchangeOffer(),null,null,
+                exchangeOfferC.getDateOfOffer(),exchangeOfferC.getStatusExchangeOffer());
 
         List<ExchangeOfferDto> expectedResult = List.of(exchangeOfferADto,exchangeOfferCDto);
 
         when(exchangeOfferRepository.findByStatusExchangeOffer(StatusExchangeOffer.OPEN)).thenReturn(offersList);
+        when(exchangeOfferMapper.toExchangeOfferDto(exchangeOfferA)).thenReturn(exchangeOfferADto);
+        when(exchangeOfferMapper.toExchangeOfferDto(exchangeOfferC)).thenReturn(exchangeOfferCDto);
 
         List<ExchangeOfferDto> result = exchangeOfferService.findAllExchangeOffer(StatusExchangeOffer.OPEN);
 
-        verify(exchangeOfferRepository,never()).findAll();
+        verify(exchangeOfferRepository,never()).findAllByIsDeletedFalse();
         verify(exchangeOfferRepository,times(1)).findByStatusExchangeOffer(any());
         assertEquals(expectedResult,result);
     }
@@ -196,13 +206,13 @@ class ExchangeOfferServiceTest {
         exchangeOffer.setIdExchangeOffer(1);
         exchangeOffer.setStatusExchangeOffer(StatusExchangeOffer.OPEN);
 
-        when(exchangeOfferRepository.findById(1)).thenReturn(Optional.of(exchangeOffer));
+        when(exchangeOfferRepository.findByIdAndIsDeletedFalse(idOffer)).thenReturn(Optional.of(exchangeOffer));
         when(exchangeOfferRepository.save(any())).thenReturn(any(ExchangeOffer.class));
 
         exchangeOfferService.deleteExchangeOffer(idOffer);
 
         verify(exchangeOfferRepository,times(1)).save(any(ExchangeOffer.class));
-        verify(exchangeOfferRepository,times(1)).findById(1);
+        verify(exchangeOfferRepository,times(1)).findByIdAndIsDeletedFalse(idOffer);
 
         assertTrue(exchangeOffer.isDeleted());
     }

@@ -1,3 +1,13 @@
 package dev.nicacio.exchbook.dtos.request;
 
-    public record CreateExchangeOfferRequestDto(int idCopyOffered, int idBookDesired){ }
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
+public record CreateExchangeOfferRequestDto(
+            @NotNull()
+            @NotEmpty(message = "At least one Id must be passed")
+            int idCopyOffered,
+
+            @NotNull()
+            @NotEmpty(message = "At least one Id must be passed")
+            int idBookDesired){ }

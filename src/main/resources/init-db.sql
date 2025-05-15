@@ -81,6 +81,8 @@ CREATE TABLE exchange_offer(
    -- FOREIGN KEY (id_offering_user) REFERENCES user_owner(id_user)
 );
 
+CREATE INDEX ON exchange_offer(status_exchange);
+
 CREATE TABLE exchange(
     id_exchange SERIAL PRIMARY KEY,
    -- id_user_accepted INTEGER NOT NULL,
