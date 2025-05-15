@@ -5,6 +5,7 @@ import dev.nicacio.exchbook.dtos.response.ExchangeOfferDto;
 import dev.nicacio.exchbook.enums.StatusExchangeOffer;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.services.ExchangeOfferService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
@@ -23,7 +24,7 @@ public class ExchangeOfferController {
     private final ExchangeOfferService exchangeOfferService;
 
     @PostMapping("/offer")
-    public ResponseEntity<ExchangeOfferDto> addExchangeOffer(@RequestBody CreateExchangeOfferRequestDto create){
+    public ResponseEntity<ExchangeOfferDto> addExchangeOffer(@RequestBody @Valid CreateExchangeOfferRequestDto create){
         int response = exchangeOfferService.registerExchangeOffer(create);
 
         URI location = UriComponentsBuilder
