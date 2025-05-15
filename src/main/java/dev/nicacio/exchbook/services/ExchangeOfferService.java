@@ -28,10 +28,10 @@ public class ExchangeOfferService {
 
     public int registerExchangeOffer(CreateExchangeOfferRequestDto createExchangeOffer){
 
-        Book bookDesired = bookRepository.findById(createExchangeOffer.idBookDesired())
+        Book bookDesired = bookRepository.findByIdAndIsDeletedFalse(createExchangeOffer.idBookDesired())
                 .orElseThrow(()-> new IllegalArgumentException("Book not found, can't create a exchange offer"));
 
-        BookCopy copyOffered = bookCopyRepository.findById(createExchangeOffer.idCopyOffered())
+        BookCopy copyOffered = bookCopyRepository.findByIdAndIsDeletedFalse(createExchangeOffer.idCopyOffered())
                 .orElseThrow(()-> new IllegalArgumentException("Copy not found, can't create a exchange offer"));
 
         ExchangeOffer offer = exchangeOfferMapper.toExchangeOffer(createExchangeOffer,bookDesired,copyOffered);
@@ -40,21 +40,21 @@ public class ExchangeOfferService {
     }
 
     public ExchangeOfferDto findExchangeOfferById(int idExchangeOffer) throws ResourceNotFoundException {
-        ExchangeOffer exchangeOffer = exchangeOfferRepository.findById(idExchangeOffer)
+        ExchangeOffer exchangeOffer = exchangeOfferRepository.findByIdAndIsDeletedFalse(idExchangeOffer)
                 .orElseThrow(()-> new ResourceNotFoundException("Exchange Offer not found"));
         return exchangeOfferMapper.toExchangeOfferDto(exchangeOffer);
     }
 
     public List<ExchangeOfferDto> findAllExchangeOffer(StatusExchangeOffer statusOffer){
         List<ExchangeOffer> list = statusOffer==null
-                ? exchangeOfferRepository.findAll()
+                ? exchangeOfferRepository.findAllByIsDeletedFalse()
                 : exchangeOfferRepository.findByStatusExchangeOffer(statusOffer);
 
         return list.stream().map(exchangeOfferMapper::toExchangeOfferDto).toList();
     }
     
     public void deleteExchangeOffer(int idOffer){
-        ExchangeOffer exchangeOffer = exchangeOfferRepository.findById(idOffer)
+        ExchangeOffer exchangeOffer = exchangeOfferRepository.findByIdAndIsDeletedFalse(idOffer)
                 .orElseThrow(()-> new IllegalArgumentException("Exchange Offer not found"));
         exchangeOffer.makeAsDeleted();
         exchangeOfferRepository.save(exchangeOffer);
