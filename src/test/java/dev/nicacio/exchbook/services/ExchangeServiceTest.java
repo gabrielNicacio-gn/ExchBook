@@ -70,19 +70,20 @@ class ExchangeServiceTest {
         ExchangeOffer exchangeOffer = new ExchangeOffer();
         exchangeOffer.setIdExchangeOffer(1);
 
-        Optional<Exchange> exchange = Optional.of(new Exchange());
-        exchange.get().setIdExchange(1);
-        exchange.get().setExchangeOffer(exchangeOffer);
+        Exchange exchange = new Exchange();
+        exchange.setIdExchange(1);
+        exchange.setExchangeOffer(exchangeOffer);
 
         ExchangeOfferDto exchangeOfferDto = new ExchangeOfferDto(exchangeOffer.getIdExchangeOffer(),null,null,exchangeOffer.getDateOfOffer()
                 ,exchangeOffer.getStatusExchangeOffer());
-        ExchangeDto expectedExchangeDto = new ExchangeDto(exchange.get().getIdExchange(),exchange.get().getDateOfExchange(),exchangeOfferDto);
+        ExchangeDto expectedExchangeDto = new ExchangeDto(exchange.getIdExchange(),exchange.getDateOfExchange(),exchangeOfferDto);
 
-        when(exchangeRepository.findById(idExchange)).thenReturn(exchange);
+        when(exchangeRepository.findByIdAndIsDeletedFalse(idExchange)).thenReturn(Optional.of(exchange));
+        when(exchangeMapper.toExchangeDto(exchange)).thenReturn(expectedExchangeDto);
 
         ExchangeDto exchangeDto = exchangeService.findExchangeById(idExchange);
 
-        verify(exchangeRepository,times(1)).findById(idExchange);
+        verify(exchangeRepository,times(1)).findByIdAndIsDeletedFalse(idExchange);
 
         assertEquals(expectedExchangeDto,exchangeDto);
     }
@@ -99,16 +100,18 @@ class ExchangeServiceTest {
 
         List<Exchange> exchangeList = List.of(exchangeA,exchangeB);
 
-        ExchangeDto exchangeADto = exchangeMapper.toExchangeDto(exchangeA);
-        ExchangeDto exchangeBDto = exchangeMapper.toExchangeDto(exchangeB);
+        ExchangeDto exchangeADto = new ExchangeDto(exchangeA.getIdExchange(),exchangeA.getDateOfExchange(),null);
+        ExchangeDto exchangeBDto = new ExchangeDto(exchangeB.getIdExchange(),exchangeB.getDateOfExchange(),null);
 
         List<ExchangeDto> expectedResult = List.of(exchangeADto,exchangeBDto);
 
-        when(exchangeRepository.findAll()).thenReturn(exchangeList);
+        when(exchangeRepository.findAllByIsDeletedFalse()).thenReturn(exchangeList);
+        when(exchangeMapper.toExchangeDto(exchangeA)).thenReturn(exchangeADto);
+        when(exchangeMapper.toExchangeDto(exchangeB)).thenReturn(exchangeBDto);
 
         List<ExchangeDto> result = exchangeService.findAllExchanges();
 
-        verify(exchangeRepository,times(1)).findAll();
+        verify(exchangeRepository,times(1)).findAllByIsDeletedFalse();
         assertEquals(expectedResult,result);
     }
 
@@ -120,12 +123,12 @@ class ExchangeServiceTest {
         exchange.setIdExchange(1);
         exchange.setExchangeOffer(new ExchangeOffer());
 
-        when(exchangeRepository.findById(1)).thenReturn(Optional.of(exchange));
+        when(exchangeRepository.findByIdAndIsDeletedFalse(idExchange)).thenReturn(Optional.of(exchange));
         when(exchangeRepository.save(any(Exchange.class))).thenReturn(exchange);
 
         exchangeService.deleteExchange(idExchange);
 
-        verify(exchangeRepository,times(1)).findById(1);
+        verify(exchangeRepository,times(1)).findByIdAndIsDeletedFalse(idExchange);
         verify(exchangeRepository,times(1)).save(any(Exchange.class));
 
         assertTrue(exchange.isDeleted());

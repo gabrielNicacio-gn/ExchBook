@@ -4,6 +4,7 @@ import dev.nicacio.exchbook.dtos.request.CreateExchangeRequestDto;
 import dev.nicacio.exchbook.dtos.response.ExchangeDto;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.services.ExchangeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -20,32 +22,30 @@ import java.util.List;
 public class ExchangeController {
     private final ExchangeService exchangeService;
     @PostMapping("/exchange")
-    public ResponseEntity addExchange(@RequestBody CreateExchangeRequestDto create){
-        HttpHeaders headers = new HttpHeaders();
+    public ResponseEntity addExchange(@RequestBody  @Valid CreateExchangeRequestDto create){
         int response = exchangeService.registerExchange(create);
-        headers.setLocation(UriComponentsBuilder
-                .newInstance()
-                .path("/v1/exchange/{id}")
+        URI location = UriComponentsBuilder
+                .fromPath("/v1/exchange/{id}")
                 .buildAndExpand(response)
-                .toUri());
-        return new ResponseEntity(headers,HttpStatus.CREATED);
+                .toUri();
+        return ResponseEntity.created(location).build();
     }
 
     @GetMapping("/exchange/{id}")
     public ResponseEntity<ExchangeDto> getExchangeById(@PathVariable("id") int idExchange) throws ResourceNotFoundException {
         ExchangeDto response = exchangeService.findExchangeById(idExchange);
-        return new ResponseEntity<>(response,HttpStatus.OK);
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/exchanges")
     public ResponseEntity<List<ExchangeDto>> getAllExchanges(){
         List<ExchangeDto> response = exchangeService.findAllExchanges();
-        return new ResponseEntity<>(response,HttpStatus.OK);
+            return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/exchange/{id}")
     public ResponseEntity deleteExchange(@PathVariable("id") int idExchange){
         exchangeService.deleteExchange(idExchange);
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+        return ResponseEntity.noContent().build();
     }
 }

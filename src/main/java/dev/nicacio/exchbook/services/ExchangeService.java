@@ -25,31 +25,31 @@ public class ExchangeService {
 
     @Transactional
     public int registerExchange(CreateExchangeRequestDto create){
-        ExchangeOffer exchangeOffer = exchangeOfferRepository.findById(create.idExchangeOffer())
+        ExchangeOffer exchangeOffer = exchangeOfferRepository.findByIdAndIsDeletedFalse(create.idExchangeOffer())
                 .orElseThrow(()-> new IllegalArgumentException("Exchange not found, can't create a exchange"));
 
         Exchange exchange = exchangeMapper.toExchange(create,exchangeOffer);
         Exchange savedExchange = exchangeRepository.save(exchange);
 
        ExchangeOffer currentExchangeOffer = exchangeOfferRepository
-               .findById(exchange.getExchangeOffer().getIdExchangeOffer()).get();
+               .findByIdAndIsDeletedFalse(exchange.getExchangeOffer().getIdExchangeOffer()).get();
        currentExchangeOffer.setStatusExchangeOffer(StatusExchangeOffer.CLOSED);
        exchangeOfferRepository.save(currentExchangeOffer);
 
         return savedExchange.getIdExchange();
     }
     public ExchangeDto findExchangeById(int idExchange) throws ResourceNotFoundException {
-        Exchange exchange = exchangeRepository.findById(idExchange)
+        Exchange exchange = exchangeRepository.findByIdAndIsDeletedFalse(idExchange)
                 .orElseThrow(()-> new ResourceNotFoundException("Exchange not found"));
         return exchangeMapper.toExchangeDto(exchange);
     }
 
     public List<ExchangeDto> findAllExchanges(){
-        return exchangeRepository.findAll().stream().map(exchangeMapper::toExchangeDto).toList();
+        return exchangeRepository.findAllByIsDeletedFalse().stream().map(exchangeMapper::toExchangeDto).toList();
     }
 
     public void deleteExchange(int idExchange){
-        Exchange exchange = exchangeRepository.findById(idExchange)
+        Exchange exchange = exchangeRepository.findByIdAndIsDeletedFalse(idExchange)
                 .orElseThrow(()-> new IllegalArgumentException("Exchange not found"));
         exchange.makeAsDeleted();
         exchangeRepository.save(exchange);
