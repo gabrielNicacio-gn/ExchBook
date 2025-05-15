@@ -4,6 +4,7 @@ import dev.nicacio.exchbook.dtos.request.CreateExchangeRequestDto;
 import dev.nicacio.exchbook.dtos.response.ExchangeDto;
 import dev.nicacio.exchbook.exceptions.ResourceNotFoundException;
 import dev.nicacio.exchbook.services.ExchangeService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.http.HttpHeaders;
@@ -21,7 +22,7 @@ import java.util.List;
 public class ExchangeController {
     private final ExchangeService exchangeService;
     @PostMapping("/exchange")
-    public ResponseEntity addExchange(@RequestBody CreateExchangeRequestDto create){
+    public ResponseEntity addExchange(@RequestBody  @Valid CreateExchangeRequestDto create){
         int response = exchangeService.registerExchange(create);
         URI location = UriComponentsBuilder
                 .fromPath("/v1/exchange/{id}")
