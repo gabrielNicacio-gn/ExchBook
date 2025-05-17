@@ -82,23 +82,20 @@ class AuthorServiceTest {
         authorB.setIdAuthor(2);
         authorB.setName("AuthorB");
 
-        Author authorC = new Author();
-        authorC.setIdAuthor(3);
-        authorC.setName("AuthorC");
-
-        List<Author> authorList = List.of(authorA,authorB,authorC);
+        List<Author> authorList = List.of(authorA,authorB);
 
         AuthorDto authorADto = new AuthorDto(authorA.getIdAuthor(),authorA.getName());
         AuthorDto authorBDto = new AuthorDto(authorB.getIdAuthor(),authorB.getName());
-        AuthorDto authorCDto = new AuthorDto(authorC.getIdAuthor(),authorC.getName());
 
-        List<AuthorDto> expectedList = List.of(authorADto,authorBDto,authorCDto);
+        List<AuthorDto> expectedList = List.of(authorADto,authorBDto);
 
-        when(authorRepository.findAll()).thenReturn(authorList);
+        when(authorRepository.findAllByIsDeletedFalse()).thenReturn(authorList);
+        when(authorMapper.toAuthorDto(authorA)).thenReturn(authorADto);
+        when(authorMapper.toAuthorDto(authorB)).thenReturn(authorBDto);
 
         List<AuthorDto> result = authorService.findAllAuthors();
 
-        verify(authorRepository,times(1)).findAll();
+        verify(authorRepository,times(1)).findAllByIsDeletedFalse();
 
         assertEquals(expectedList,result);
     }
@@ -112,12 +109,12 @@ class AuthorServiceTest {
         savedAuthor.setIdAuthor(1);
         savedAuthor.setName("Cristiano Ronaldo");
 
-        when(authorRepository.findById(1)).thenReturn(Optional.of(savedAuthor));
+        when(authorRepository.findByIdAndIsDeletedFalse(idAuthor)).thenReturn(Optional.of(savedAuthor));
         when(authorRepository.save(any(Author.class))).thenReturn(savedAuthor);
 
         authorService.updateAuthor(idAuthor,update);
 
-        verify(authorRepository,times(1)).findById(1);
+        verify(authorRepository,times(1)).findByIdAndIsDeletedFalse(idAuthor);
         verify(authorRepository,times(1)).save(any());
         verify(authorMapper,times(1)).updateAuthorFromDto(update,savedAuthor);
     }
@@ -130,12 +127,12 @@ class AuthorServiceTest {
         savedAuthor.setIdAuthor(1);
         savedAuthor.setName("Cristiano Ronaldo");
 
-        when(authorRepository.findById(1)).thenReturn(Optional.of(savedAuthor));
+        when(authorRepository.findByIdAndIsDeletedFalse(idAuthor)).thenReturn(Optional.of(savedAuthor));
         when(authorRepository.save(any(Author.class))).thenReturn(savedAuthor);
 
         authorService.deleteAuthor(idAuthor);
 
-        verify(authorRepository,times(1)).findById(1);
+        verify(authorRepository,times(1)).findByIdAndIsDeletedFalse(idAuthor);
         verify(authorRepository,times(1)).save(any());
 
         assertTrue(savedAuthor.isDeleted());
