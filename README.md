@@ -35,7 +35,6 @@ Wait for docker to upload all the dependencies and generate the tables in the da
 - Stack -> Java 21, Spring, JPA, Postgres for database and Docker for infrastructure
 
 ## API Endpoints
--------------------------------------------------------------------------------------------------------
   Method      |       Route           |     Description
 :------------:|:---------------------:|:---------------------------------------------------------------
   **GET**     |    /author/{id}       | Get author by Id
