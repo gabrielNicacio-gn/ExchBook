@@ -35,6 +35,7 @@ Wait for docker to upload all the dependencies and generate the tables in the da
 - Stack -> Java 21, Spring, JPA, Postgres for database and Docker for infrastructure
 
 ## API Endpoints
+-------------------------------------------------------------------------------------------------------
   Method      |       Route           |     Description
 :------------:|:---------------------:|:---------------------------------------------------------------
   **GET**     |    /author/{id}       | Get author by Id
@@ -48,6 +49,7 @@ Wait for docker to upload all the dependencies and generate the tables in the da
  **POST**     |    /expense           | Create a new expense
  **PUT**      |   /expense/{id}        | Update a expense by Id
  **DELETE**   |   /expense/{id}        | Delete a expense by Id
+ -------------------------------------------------------------------------------------------------------
  **GET**      | /category-expense/{id} | Get category by Id
  **GET**      | /categorys-expense    | Get all categorys
  **POST**     | /category-expense     | Create a new category
