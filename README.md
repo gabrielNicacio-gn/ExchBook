@@ -35,6 +35,8 @@ Wait for docker to upload all the dependencies and generate the tables in the da
 - Stack -> Java 21, Spring, JPA, Postgres for database and Docker for infrastructure
 
 ## API Endpoints
+
+
   Method      |       Route           |     Description
 :------------:|:---------------------:|:---------------------------------------------------------------
   **GET**     |    /author/{id}       | Get author by Id
@@ -43,23 +45,24 @@ Wait for docker to upload all the dependencies and generate the tables in the da
   **PUT**     |    /author/{id}       | Update a author by Id 
 **DELETE**    |     /author/{id}      | Delete a author by Id
 
--------------:|:---------------------:|:-----------------------------------------------------------------
- **GET**      |     /book/{id}        | Get book by Id
- **GET**      |    /expenses          | Get all expenses
- **POST**     |    /expense           | Create a new expense
- **PUT**      |   /expense/{id}        | Update a expense by Id
- **DELETE**   |   /expense/{id}        | Delete a expense by Id
- -------------------------------------------------------------------------------------------------------
- **GET**      | /category-expense/{id} | Get category by Id
- **GET**      | /categorys-expense    | Get all categorys
- **POST**     | /category-expense     | Create a new category
- **PUT**      | /category-expense/{id} | Update a category
- **DELETE**   | /category-expense/{id} | Delete a category
- **GET**      | /financial-target/{id} | Get target by Id
- **GET**      |  /financial-targets   | Get all targets
- **POST**     |  /financial-target    | Create a new target
- **PUT**      | /financial-target/{id} | Update target by Id
- **DELETE**   | /financial-target/{id} | Delete target by Id
+
+ Method      |       Route           |     Description
+:------------:|:---------------------:|:---------------------------------------------------------------
+  **GET**     |    /book/{id}         | Get book by Id
+  **GET**     |    /books             | Get all books
+ **POST**     |     /book             | Create a new book
+  **PUT**     |    /book/{id}         | Update a book by Id 
+**DELETE**    |     /book/{id}        | Delete a book by Id
+
+Method      |       Route           |     Description
+:------------:|:---------------------:|:---------------------------------------------------------------
+  **GET**     |    /author/{id}       | Get author by Id
+  **GET**     |    /authors           | Get all authors
+ **POST**     |     /author           | Create a new author
+  **PUT**     |    /author/{id}       | Update a author by Id 
+**DELETE**    |     /author/{id}      | Delete a author by Id
+
+
 
 
  
