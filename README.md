@@ -43,6 +43,7 @@ Wait for docker to upload all the dependencies and generate the tables in the da
  **POST**     |     /author           | Create a new author
   **PUT**     |    /author/{id}       | Update a author by Id 
 **DELETE**    |     /author/{id}      | Delete a author by Id
+
 -------------:|:---------------------:|:-----------------------------------------------------------------
  **GET**      |     /book/{id}        | Get book by Id
  **GET**      |    /expenses          | Get all expenses
