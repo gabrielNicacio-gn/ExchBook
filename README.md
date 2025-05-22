@@ -46,7 +46,7 @@ Wait for docker to upload all the dependencies and generate the tables in the da
 **DELETE**    |     /author/{id}      | Delete a author by Id
 
 
- Method      |       Route           |     Description
+ Method       |       Route           |     Description
 :------------:|:---------------------:|:---------------------------------------------------------------
   **GET**     |    /book/{id}         | Get book by Id
   **GET**     |    /books             | Get all books
@@ -54,13 +54,42 @@ Wait for docker to upload all the dependencies and generate the tables in the da
   **PUT**     |    /book/{id}         | Update a book by Id 
 **DELETE**    |     /book/{id}        | Delete a book by Id
 
-Method      |       Route           |     Description
+
+Method        |       Route             |     Description
 :------------:|:---------------------:|:---------------------------------------------------------------
-  **GET**     |    /author/{id}       | Get author by Id
-  **GET**     |    /authors           | Get all authors
- **POST**     |     /author           | Create a new author
-  **PUT**     |    /author/{id}       | Update a author by Id 
-**DELETE**    |     /author/{id}      | Delete a author by Id
+  **GET**     |    /copy/{id}         | Get copy by Id
+  **GET**     |    /copys             | Get all copys
+ **POST**     |     /copy             | Create a new copy
+  **PUT**     |    /copy/{id}         | Update a copy by Id 
+**DELETE**    |     /copy/{id}        | Delete a copy by Id
+
+
+Method        |       Route             |     Description
+:------------:|:---------------------:|:---------------------------------------------------------------
+  **GET**     |    /edition/{id}         | Get edition by Id
+  **GET**     |    /editions             | Get all editions
+ **POST**     |     /edition             | Create a new edition
+  **PUT**     |    /edition/{id}         | Update a edition by Id 
+**DELETE**    |     /edition/{id}        | Delete a edition by Id
+
+
+Method        |       Route             |     Description
+:------------:|:---------------------:|:---------------------------------------------------------------
+  **GET**     |    /offer/{id}         | Get offer by Id
+  **GET**     |    /offers             | Get all offers
+ **POST**     |     /offer             | Create a new offer
+  **PUT**     |    /offer/{id}         | Update a offer by Id 
+**DELETE**    |     /offer/{id}        | Delete a offer by Id
+
+
+Method        |       Route             |     Description
+:------------:|:---------------------:|:---------------------------------------------------------------
+  **GET**     |    /exchange/{id}         | Get exchange by Id
+  **GET**     |    /exchanges             | Get all exchanges
+ **POST**     |     /exchange             | Create a new exchange
+  **PUT**     |    /exchange/{id}         | Update a exchange by Id 
+**DELETE**    |     /exchange/{id}        | Delete a exchange by Id
+
 
 
 
